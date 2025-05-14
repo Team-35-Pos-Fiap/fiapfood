@@ -84,14 +84,4 @@ public class UsuarioController implements UsuarioDoc {
 
 		return ResponseEntity.ok().body(usuarioService.buscarUsuarios(pagina));
 	}
-
-	@Override
-	@PatchMapping("/{id}/senha/altera")
-	public ResponseEntity<SucessoResponse> trocarSenha(Integer id, SenhaRecordRequest dadosSenha) {
-		log.info("trocar senha():id {} - senha {}", id, dadosSenha.senha());
-
-		//usuarioService.trocarSenha(id, dadosSenha.senha());
-		
-		return ResponseEntity.ok(new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_TROCA_SENHA_USUARIO)));
-	}
 }

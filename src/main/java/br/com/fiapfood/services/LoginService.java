@@ -14,15 +14,25 @@ import br.com.fiapfood.utils.MensagensUtil;
 public class LoginService {
 	
 	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private LoginRepository loginRepository;
 	
-	public String gerarTokenAcesso(LoginRecordRequest dados)  {
+	public String validar(LoginRecordRequest dados)  {
 		try {
-			usuarioRepository.recuperaDadosUsuarioPorLoginSenha(dados.matricula(), dados.senha());
+			loginRepository.buscarPorMatriculaSenha(dados.matricula(), dados.senha());
 			
 			return "Acesso liberado";
 		} catch(UsuarioNaoEncontradoException e) {
-			throw new UsuarioSemAcessoException(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_USUARIO_SEM_PERMISSAO));
+			throw new LoginSemAcessoException(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_LOGIN_SEM_PERMISSAO));
 		}
+	}	
+	
+	public void trocarSenha(Integer id, String senha) { UsuarioEntity usuario =
+		//Aqui poderia entrar a regra de negócio para validar que o usuário está ativo.
+
+		LoginEntity login = loginRepository.buscarPorIdUsuario(id);
+
+		login.atualizarSenha(senha);	 
+	 	
+		loginRepository.salvar(login);
 	}
 }

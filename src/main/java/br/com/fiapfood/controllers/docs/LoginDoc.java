@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-@Tag(name = "Login", description = "Classe responsável por realizar o login do usuário.")
+@Tag(name = "Login", description = "Classe responsável por realizar as operações associadas ao login do usuário.")
 public interface LoginDoc {
 
 	@Operation(summary = "Realização a autenticação do usuário utilizando o seu usuário e a sua senha.")
@@ -22,5 +22,19 @@ public interface LoginDoc {
 					content = { @Content(mediaType = "application/json", schema = @Schema(implementation = TokenRecordResponse.class)) }),
 		@ApiResponse(responseCode = "400", description = "Falha ao realizar a geração do token de acesso.", content = @Content)
 	})	
-	ResponseEntity<TokenRecordResponse> realizaLogin(@RequestBody @Valid LoginRecordRequest dados)/* throws TokenInvalidoException */;
+	ResponseEntity<SucessoResponse> validar(@RequestBody @Valid LoginRecordRequest dados);
+
+	
+	@Operation(summary = "Realiza a alteração da senha do usuário.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "204"),
+		@ApiResponse(responseCode = "400", 
+				     description = "Bad Request.", 
+					 content = { @Content(mediaType = "application/json", 
+					    				  schema = @Schema(implementation = ErroResponse.class), 
+					    				  examples = @ExampleObject(value = "{\r\n"
+						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a troca da senha do usuário.\"\r\n"
+						    				  	  + "}"))})
+	})
+	ResponseEntity<SucessoResponse> trocarSenha(@PathVariable @NotNull Integer id, @RequestBody @NotNull SenhaRecordRequest senha);
 }

@@ -1,9 +1,9 @@
 package br.com.fiapfood.services.exceptions;
 
-public class UsuarioSemAcessoException extends RuntimeException{
+public class LoginSemAcessoException extends RuntimeException{
 	private static final long serialVersionUID = 1L;
 	
-	public UsuarioSemAcessoException(String mensagem) {
+	public LoginSemAcessoException(String mensagem) {
 		super(mensagem);
 	}
 }

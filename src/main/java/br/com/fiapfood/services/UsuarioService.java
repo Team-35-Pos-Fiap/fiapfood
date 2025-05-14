@@ -32,7 +32,10 @@ public class UsuarioService {
 	private PerfilRepository perfilRepository;
 	
 	public UsuarioRecordResponse buscarPorId(Integer id) {
-		return UsuarioMapper.toUsuarioRecord(usuarioRepository.recuperaDadosUsuarioPorId(id));
+		UsuarioEntity usuarioEntity = usuarioRepository.recuperaDadosUsuarioPorId(id);
+		UsuarioDomain usuarioDomain = UsuarioMapper.toUsuario(usuarioEntity);
+		
+		return UsuarioMapper.toUsuarioRecord(usuarioDomain);
 	}
 	
 	public UsuarioRecordPaginacaoResponse buscarUsuarios(final Integer pagina) {
@@ -40,7 +43,10 @@ public class UsuarioService {
 	}
 	
 	public void cadastrar(UsuarioRecordRequest usuario) {
-		salvar(UsuarioMapper.toUsuarioDomain(usuario));
+		UsuarioDomain usuarioDomain = UsuarioMapper.toUsuario(usuario);
+		UsuarioEntity usuarioEntity = UsuarioMapper.toUsuario(usuarioDomain);
+		
+		salvar(usuarioEntity);
 	}
 	
 	public void atualizar(Integer id, UsuarioRecordRequest usuarioRecord) {
@@ -67,24 +73,9 @@ public class UsuarioService {
 		salvar(usuario);
 	}
 	
-	public void salvar(UsuarioDomain usuario) {
-		UsuarioEntity usuarioEntity = UsuarioMapper.toUsuarioEntity(usuario);
-		
-		usuarioRepository.salvar(usuarioEntity);
-	}
-	
 	public void salvar(UsuarioEntity usuario) {
 		usuarioRepository.salvar(usuario);
 	}
-	
-	/*
-	 * public void trocarSenha(Integer id, String senha) { UsuarioEntity usuario =
-	 * usuarioRepository.recuperaDadosUsuarioAtivoPorId(id);
-	 * 
-	 * usuario.trocarSenha(senha);
-	 * 
-	 * salvar(usuario); }
-	 */
 		
 	private void setaDadosAtualizacao(UsuarioRecordRequest usuarioRecord, UsuarioEntity usuario) {
 		usuario.atualizarDadosUsuario(usuarioRecord.nome(), usuarioRecord.email());

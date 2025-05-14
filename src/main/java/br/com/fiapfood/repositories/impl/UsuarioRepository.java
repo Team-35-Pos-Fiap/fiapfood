@@ -21,17 +21,9 @@ public class UsuarioRepository {
 	private IUsuarioRepository usuarioRepository;
 		
 	private final Integer QUANTIDADE_REGISTROS = 5;
-	
-	public UsuarioDomain recuperaDadosUsuarioPorLoginSenha(String usuario, String senha) {
-		return null;//return getUsuarioDomain(usuarioRepository.findUsuarioAtivoPorLoginSenha(usuario, senha));
-	}
 
-	public Optional<UsuarioEntity> recuperaDadosUsuarioPorLogin(String login) {
-		return null;//return usuarioRepository.findByLoginAndIsAtivoTrue(login);
-	}
-
-	public UsuarioDomain recuperaDadosUsuarioPorId(Integer id) {
-		return getUsuarioDomain(usuarioRepository.findById(id));
+	public UsuarioEntity recuperaDadosUsuarioPorId(Integer id) {
+		return getUsuarioEntity(usuarioRepository.findById(id));
 	}
 
 	public UsuarioEntity recuperaDadosUsuarioInativoPorId(Integer id) {
@@ -54,14 +46,6 @@ public class UsuarioRepository {
 	
 	public void salvar(UsuarioEntity usuario) {
 		usuarioRepository.save(usuario);	
-	}
-	
-	protected UsuarioDomain getUsuarioDomain(Optional<UsuarioEntity> dadosUsuario) {
-		if(dadosUsuario.isPresent()) {		
-			return UsuarioMapper.toUsuarioDomain(dadosUsuario.get());
-		} else {
-			throw new UsuarioNaoEncontradoException(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_USUARIO_NAO_ENCONTRADO));
-		}
 	}
 	
 	protected UsuarioEntity getUsuarioEntity(Optional<UsuarioEntity> dadosUsuario) {

@@ -66,16 +66,10 @@ public class ErrorHandler {
 		
 		return getBadRequestResponse(e.getMessage());
 	}
-	
-	/*
-	 * @ExceptionHandler(UsernameNotFoundException.class) public
-	 * ResponseEntity<Erro> trataUsernameNotFoundException(UsernameNotFoundException
-	 * e) { return getExpectationFailedResponse(e.getMessage()); }
-	 */
 
-	@ExceptionHandler(UsuarioSemAcessoException.class)
+	@ExceptionHandler(LoginSemAcessoException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<ErroResponse> trataUsuarioSemAcessoException(UsuarioSemAcessoException e) {
+	public ResponseEntity<ErroResponse> trataLoginSemAcessoException(LoginSemAcessoException e) {
 		log.error(e.getMessage(), e);
 		
 		return getBadRequestResponse(e.getMessage());
@@ -112,12 +106,6 @@ public class ErrorHandler {
 	protected ResponseEntity<ErroResponse> getBadRequestResponse(String mensagem) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErroResponse(mensagem));
 	}
-	
-	/*
-	 * protected ResponseEntity<ErroListResponse> getBadRequestResponse(List<String>
-	 * mensagens) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new
-	 * ErroListResponse(mensagens)); }
-	 */
 	
 	protected ResponseEntity<ErroResponse> getForbiddenResponse(String mensagem) {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErroResponse(mensagem));

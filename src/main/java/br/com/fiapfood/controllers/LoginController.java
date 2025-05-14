@@ -22,9 +22,19 @@ public class LoginController implements LoginDoc {
 	
 	@Override
 	@PostMapping
-	public ResponseEntity<TokenRecordResponse> realizaLogin(LoginRecordRequest dados) {		
+	public ResponseEntity<SucessoResponse> realizaLogin(LoginRecordRequest dados) {		
 		log.info("realizaLogin():dados do login {}", dados);
 
-		return ResponseEntity.ok().body(new TokenRecordResponse(loginService.gerarTokenAcesso(dados)));		
+		return ResponseEntity.ok(new SucessoResponse(loginService.validar(dados)));
+	}
+
+	@Override
+	@PatchMapping("{id}/senha/altera")
+	public ResponseEntity<SucessoResponse> trocarSenha(Integer id, SenhaRecordRequest dados) {		
+		log.info("trocar senha():id {} senha {}", id, dados.senha());
+
+		loginService.trocarSenha(id, dados.senha());
+
+		return ResponseEntity.ok(new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_TROCA_SENHA_USUARIO)));
 	}
 }

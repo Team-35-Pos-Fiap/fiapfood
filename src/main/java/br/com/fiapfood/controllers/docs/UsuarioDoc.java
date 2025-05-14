@@ -143,17 +143,4 @@ public interface UsuarioDoc {
 						    				  	  + "}"))})
 	})
 	ResponseEntity<UsuarioRecordPaginacaoResponse> buscarUsuarios(@RequestParam(defaultValue = "1") Integer pagina);
-
-	@Operation(summary = "Realiza a alteração da senha do usuário.")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "204"),
-		@ApiResponse(responseCode = "400", 
-				     description = "Bad Request.", 
-					 content = { @Content(mediaType = "application/json", 
-					    				  schema = @Schema(implementation = ErroResponse.class), 
-					    				  examples = @ExampleObject(value = "{\r\n"
-						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a troca da senha do usuário.\"\r\n"
-						    				  	  + "}"))})
-	})
-	ResponseEntity<SucessoResponse> trocarSenha(@PathVariable @Valid @NotNull Integer id, @RequestBody @NotNull SenhaRecordRequest dadosSenha);
 }

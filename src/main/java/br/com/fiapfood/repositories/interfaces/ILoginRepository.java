@@ -8,8 +8,6 @@ import org.springframework.data.repository.query.Param;
 
 import br.com.fiapfood.entities.db.UsuarioEntity;
 
-public interface IUsuarioRepository extends JpaRepository<UsuarioEntity, Integer> {
-	Optional<UsuarioEntity> findByIdAndIsAtivoTrue(Integer id);
-
-	Optional<UsuarioEntity> findByIdAndIsAtivoFalse(Integer id);
+public interface ILoginRepository extends JpaRepository<LoginEntity, Integer> {
+	Optional<LoginEntity> findByMatriculaAndSenha(String matricula, String senha);
 }
