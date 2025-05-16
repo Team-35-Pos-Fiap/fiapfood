@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpServerErrorException.InternalServerError;
 
 import br.com.fiapfood.controllers.response.ErroResponse;
+import br.com.fiapfood.repositories.exceptions.LoginNaoEncontradoException;
 import br.com.fiapfood.repositories.exceptions.UsuarioNaoEncontradoException;
-import br.com.fiapfood.services.exceptions.UsuarioSemAcessoException;
+import br.com.fiapfood.services.exceptions.LoginSemAcessoException;
 import br.com.fiapfood.utils.MensagensUtil;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
@@ -27,21 +28,6 @@ public class ErrorHandler {
 		
 		return getInternalServerErrorResponse();
 	}
-		
-	/*
-	 * @ExceptionHandler(ConstraintViolationException.class)
-	 * 
-	 * @ResponseStatus(HttpStatus.BAD_REQUEST) public
-	 * ResponseEntity<ErroListResponse>
-	 * trataViolacaoRegrasNegocioException(ConstraintViolationException e) {
-	 * log.error(e.getMessage(), e);
-	 * 
-	 * List<String> erros = new ArrayList<>();
-	 * 
-	 * e.getConstraintViolations().forEach(err -> erros.add(err.getMessage()));
-	 * 
-	 * return getBadRequestResponse(erros); }
-	 */
 
 	@ExceptionHandler(ValidationException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -62,14 +48,6 @@ public class ErrorHandler {
 	@ExceptionHandler(UsuarioNaoEncontradoException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<ErroResponse> trataUsuarioNaoEncontradoException(UsuarioNaoEncontradoException e) {
-		log.error(e.getMessage(), e);
-		
-		return getBadRequestResponse(e.getMessage());
-	}
-
-	@ExceptionHandler(LoginSemAcessoException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<ErroResponse> trataLoginSemAcessoException(LoginSemAcessoException e) {
 		log.error(e.getMessage(), e);
 		
 		return getBadRequestResponse(e.getMessage());
@@ -98,7 +76,23 @@ public class ErrorHandler {
 		
 		return getBadRequestResponse(e.getMessage());
 	}
+
+	@ExceptionHandler(LoginSemAcessoException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity<ErroResponse> trataLoginSemAcessoException(LoginSemAcessoException e) {
+		log.error(e.getMessage(), e);
 		
+		return getBadRequestResponse(e.getMessage());
+	}
+	
+	@ExceptionHandler(LoginNaoEncontradoException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity<ErroResponse> trataLoginNaoEncontradoException(LoginNaoEncontradoException e) {
+		log.error(e.getMessage(), e);
+		
+		return getBadRequestResponse(e.getMessage());
+	}
+	
 	protected ResponseEntity<ErroResponse> getInternalServerErrorResponse() {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErroResponse(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_INTERNAL_SERVER_ERROR)));
 	}

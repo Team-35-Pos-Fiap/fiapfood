@@ -28,8 +28,6 @@ public class UsuarioEntity {
 	private Integer id;
 	private String nome;
 	private String email;
-	//private String login;
-	//private String senha;
 	
 	@Column(name = "data_criacao", nullable = false)
 	private LocalDateTime dataCriacao;
@@ -42,7 +40,7 @@ public class UsuarioEntity {
 	
 	@OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn(name = "id_usuario")
-	private DadosEnderecoEntity dadosEndereco;
+	private EnderecoEntity dadosEndereco;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_perfil")
@@ -54,37 +52,30 @@ public class UsuarioEntity {
 	
 	public void inativar() {
 		this.isAtivo = false;
-		this.dataAtualizacao = LocalDateTime.now();
+		this.dataAtualizacao = getDataAtual();
 	}
 	
 	public void reativar() {
 		this.isAtivo = true;
-		this.dataAtualizacao = LocalDateTime.now();
+		this.dataAtualizacao = getDataAtual();
 	}
 
-	/*
-	 * public void trocarSenha(String senha) { this.senha = senha;
-	 * this.dataAtualizacao = LocalDateTime.now(); }
-	 */
-	 
-	
-	public void atualizarDadosUsuario(String nome, String email) {
-		this.nome = nome;
-		this.email = email;
-		this.dataAtualizacao = LocalDateTime.now();
-	}
-	
-	public void atualizarDadosEndereco(DadosEnderecoEntity dadosEndereco) {
-		this.dadosEndereco = dadosEndereco;
-		this.dadosEndereco.setUsuario(this);
-	}
-	
-	public void atualizarDadosLogin(LoginEntity dadosLogin) {
-		this.dadosLogin = dadosLogin;
-		this.dadosLogin.setUsuario(this);
-	}
-	
 	public void atualizarPerfil(PerfilEntity perfil) {
 		this.perfil = perfil;
+		this.dataAtualizacao = getDataAtual();
+	}
+	
+	public void atualizarNome(String nome) {
+		this.nome = nome;
+		this.dataAtualizacao = getDataAtual();
+	}
+	
+	public void atualizarEmail(String email) {
+		this.email = email;
+		this.dataAtualizacao = getDataAtual();
+	}
+	
+	private LocalDateTime getDataAtual() {
+		return LocalDateTime.now();
 	}
 }

@@ -15,29 +15,29 @@ insert into usuario (nome, email, ativo, data_criacao, data_atualizacao, id_perf
 insert into usuario (nome, email, ativo, data_criacao, data_atualizacao, id_perfil) values ('Usuario 12', 'usuario12@fiapfood.com', 0, current_timestamp, current_timestamp, 2);
 
 insert into endereco (id_usuario, cidade, bairro, estado, endereco, numero, complemento, sem_numero, cep) 
-values (1, 'Nome da cidade', 'Nome do bairro', 'Rio de Janeiro', 'Descrição do endereço', 1, 'Complemento do endereço', 1, '24455000');
+values (1, 'São Gonçalo', 'Nova Cidade', 'Rio de Janeiro', 'Rua Aquidabã', '79', 'Casa 8', 1, '24455450');
 insert into endereco (id_usuario, cidade, bairro, estado, endereco, numero, complemento, sem_numero, cep) 
-values (2, 'Nome da cidade', 'Nome do bairro', 'Rio de Janeiro', 'Descrição do endereço', null, null, 0, '24455000');
+values (2, 'São Gonçalo', 'Nova Cidade', 'Rio de Janeiro', 'Rua Aquidabã', null, null, 0, '24455450');
 insert into endereco (id_usuario, cidade, bairro, estado, endereco, numero, complemento, sem_numero, cep) 
-values (3, 'Nome da cidade', 'Nome do bairro', 'Rio de Janeiro', 'Descrição do endereço', 1, 'Complemento do endereço', 1, '24455000');
+values (3, 'São Gonçalo', 'Nova Cidade', 'Rio de Janeiro', 'Rua Aquidabã', '79', 'Casa 8', 1, '24455450');
 insert into endereco (id_usuario, cidade, bairro, estado, endereco, numero, complemento, sem_numero, cep) 
-values (4, 'Nome da cidade', 'Nome do bairro', 'Rio de Janeiro', 'Descrição do endereço', null, null, 0, '24455000');
+values (4, 'São Gonçalo', 'Nova Cidade', 'Rio de Janeiro', 'Rua Aquidabã', null, null, 0, '24455450');
 insert into endereco (id_usuario, cidade, bairro, estado, endereco, numero, complemento, sem_numero, cep) 
-values (5, 'Nome da cidade', 'Nome do bairro', 'Rio de Janeiro', 'Descrição do endereço', 1, 'Complemento do endereço', 1, '24455000');
+values (5, 'São Gonçalo', 'Nova Cidade', 'Rio de Janeiro', 'Rua Aquidabã', '79', 'Casa 8', 1, '24455450');
 insert into endereco (id_usuario, cidade, bairro, estado, endereco, numero, complemento, sem_numero, cep) 
-values (6, 'Nome da cidade', 'Nome do bairro', 'Rio de Janeiro', 'Descrição do endereço', null, null, 0, '24455000');
+values (6, 'São Gonçalo', 'Nova Cidade', 'Rio de Janeiro', 'Rua Aquidabã', null, null, 0, '24455450');
 insert into endereco (id_usuario, cidade, bairro, estado, endereco, numero, complemento, sem_numero, cep) 
-values (7, 'Nome da cidade', 'Nome do bairro', 'Rio de Janeiro', 'Descrição do endereço', 1, 'Complemento do endereço', 1, '24455000');
+values (7, 'São Gonçalo', 'Nova Cidade', 'Rio de Janeiro', 'Rua Aquidabã', '79', 'Casa 8', 1, '24455450');
 insert into endereco (id_usuario, cidade, bairro, estado, endereco, numero, complemento, sem_numero, cep) 
-values (8, 'Nome da cidade', 'Nome do bairro', 'Rio de Janeiro', 'Descrição do endereço', null, null, 0, '24455000');
+values (8, 'São Gonçalo', 'Nova Cidade', 'Rio de Janeiro', 'Rua Aquidabã', null, null, 0, '24455450');
 insert into endereco (id_usuario, cidade, bairro, estado, endereco, numero, complemento, sem_numero, cep) 
-values (9, 'Nome da cidade', 'Nome do bairro', 'Rio de Janeiro', 'Descrição do endereço', 1, 'Complemento do endereço', 1, '24455000');
+values (9, 'São Gonçalo', 'Nova Cidade', 'Rio de Janeiro', 'Rua Aquidabã', '79', 'Casa 8', 1, '24455450');
 insert into endereco (id_usuario, cidade, bairro, estado, endereco, numero, complemento, sem_numero, cep) 
-values (10, 'Nome da cidade', 'Nome do bairro', 'Rio de Janeiro', 'Descrição do endereço', null, null, 0, '24455000');
+values (10, 'São Gonçalo', 'Nova Cidade', 'Rio de Janeiro', 'Rua Aquidabã', null, null, 0, '24455450');
 insert into endereco (id_usuario, cidade, bairro, estado, endereco, numero, complemento, sem_numero, cep) 
-values (11, 'Nome da cidade', 'Nome do bairro', 'Rio de Janeiro', 'Descrição do endereço', 1, 'Complemento do endereço', 1, '24455000');
+values (11, 'São Gonçalo', 'Nova Cidade', 'Rio de Janeiro', 'Rua Aquidabã', '79', 'Casa 8', 1, '24455450');
 insert into endereco (id_usuario, cidade, bairro, estado, endereco, numero, complemento, sem_numero, cep) 
-values (12, 'Nome da cidade', 'Nome do bairro', 'Rio de Janeiro', 'Descrição do endereço', null, null, 0, '24455000');
+values (12, 'São Gonçalo', 'Nova Cidade', 'Rio de Janeiro', 'Rua Aquidabã', null, null, 0, '24455450');
 
 insert into login (id_usuario, matricula, senha) values (1, 'us0001', '123');
 insert into login (id_usuario, matricula, senha) values (2, 'us0002', '123');

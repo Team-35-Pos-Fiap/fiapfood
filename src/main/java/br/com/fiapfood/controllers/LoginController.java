@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiapfood.controllers.docs.LoginDoc;
+import br.com.fiapfood.controllers.response.SucessoResponse;
 import br.com.fiapfood.entities.record.request.LoginRecordRequest;
-import br.com.fiapfood.entities.record.response.TokenRecordResponse;
 import br.com.fiapfood.services.LoginService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,19 +22,9 @@ public class LoginController implements LoginDoc {
 	
 	@Override
 	@PostMapping
-	public ResponseEntity<SucessoResponse> realizaLogin(LoginRecordRequest dados) {		
+	public ResponseEntity<SucessoResponse> validar(LoginRecordRequest dados) {		
 		log.info("realizaLogin():dados do login {}", dados);
 
-		return ResponseEntity.ok(new SucessoResponse(loginService.validar(dados)));
-	}
-
-	@Override
-	@PatchMapping("{id}/senha/altera")
-	public ResponseEntity<SucessoResponse> trocarSenha(Integer id, SenhaRecordRequest dados) {		
-		log.info("trocar senha():id {} senha {}", id, dados.senha());
-
-		loginService.trocarSenha(id, dados.senha());
-
-		return ResponseEntity.ok(new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_TROCA_SENHA_USUARIO)));
+		return ResponseEntity.ok().body(new SucessoResponse(loginService.validar(dados)));		
 	}
 }

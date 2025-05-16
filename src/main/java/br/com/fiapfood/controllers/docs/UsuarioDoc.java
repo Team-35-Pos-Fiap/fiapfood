@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.fiapfood.controllers.response.ErroResponse;
 import br.com.fiapfood.controllers.response.SucessoResponse;
+import br.com.fiapfood.entities.record.request.EmailRecordRequest;
+import br.com.fiapfood.entities.record.request.EnderecoRecordRequest;
+import br.com.fiapfood.entities.record.request.LoginRecordRequest;
+import br.com.fiapfood.entities.record.request.NomeRecordRequest;
+import br.com.fiapfood.entities.record.request.PerfilRecordRequest;
 import br.com.fiapfood.entities.record.request.SenhaRecordRequest;
 import br.com.fiapfood.entities.record.request.UsuarioRecordRequest;
 import br.com.fiapfood.entities.record.response.UsuarioRecordPaginacaoResponse;
@@ -36,9 +41,9 @@ public interface UsuarioDoc {
 						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar o cadastro do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<Void> cadastrar(@Valid @RequestBody UsuarioRecordRequest usuario);
+	ResponseEntity<Void> cadastrar(@Valid @RequestBody @NotNull UsuarioRecordRequest usuario);
 	
-	@Operation(summary = "Realiza a atualização do usuário no sistema.")
+	@Operation(summary = "Realiza a atualização do perfil de acesso do usuário no sistema.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "204"), 
 		@ApiResponse(responseCode = "400", 
@@ -46,10 +51,76 @@ public interface UsuarioDoc {
 					 content = { @Content(mediaType = "application/json", 
 					    				  schema = @Schema(implementation = ErroResponse.class), 
 					    				  examples = @ExampleObject(value = "{\r\n"
-						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a atualização do usuário.\"\r\n"
+						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a atualização dos dados do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<Void> atualizar(@Valid @PathVariable @NotNull Integer id, @RequestBody UsuarioRecordRequest usuario);
+	ResponseEntity<Void> atualizarPerfil(@Valid @PathVariable @NotNull Integer id, @RequestBody @NotNull PerfilRecordRequest dadosPerfil);
+	
+	
+	@Operation(summary = "Realiza a atualização dos dados de login do usuário no sistema.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "204"), 
+		@ApiResponse(responseCode = "400", 
+					 description = "Bad Request.", 
+					 content = { @Content(mediaType = "application/json", 
+					    				  schema = @Schema(implementation = ErroResponse.class), 
+					    				  examples = @ExampleObject(value = "{\r\n"
+						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a atualização dos dados do usuário.\"\r\n"
+						    				  	  + "}"))})
+	})
+	ResponseEntity<Void> atualizarLogin(@Valid @PathVariable @NotNull Integer id, @RequestBody @NotNull LoginRecordRequest dadosLogin);
+	
+	@Operation(summary = "Realiza a atualização dos dados do endereço do usuário no sistema.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "204"), 
+		@ApiResponse(responseCode = "400", 
+					 description = "Bad Request.", 
+					 content = { @Content(mediaType = "application/json", 
+					    				  schema = @Schema(implementation = ErroResponse.class), 
+					    				  examples = @ExampleObject(value = "{\r\n"
+						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a atualização dos dados do usuário.\"\r\n"
+						    				  	  + "}"))})
+	})
+	ResponseEntity<Void> atualizarEndereco(@Valid @PathVariable @NotNull Integer id, @RequestBody @NotNull EnderecoRecordRequest dadosEndereco);
+	
+	@Operation(summary = "Realiza a atualização dos dados do endereço do usuário no sistema.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "204"), 
+		@ApiResponse(responseCode = "400", 
+					 description = "Bad Request.", 
+					 content = { @Content(mediaType = "application/json", 
+					    				  schema = @Schema(implementation = ErroResponse.class), 
+					    				  examples = @ExampleObject(value = "{\r\n"
+						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a atualização dos dados do usuário.\"\r\n"
+						    				  	  + "}"))})
+	})
+	ResponseEntity<Void> atualizarNome(@Valid @PathVariable @NotNull Integer id, @RequestBody @NotNull NomeRecordRequest dados);
+	
+	@Operation(summary = "Realiza a atualização dos dados do endereço do usuário no sistema.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "204"), 
+		@ApiResponse(responseCode = "400", 
+					 description = "Bad Request.", 
+					 content = { @Content(mediaType = "application/json", 
+					    				  schema = @Schema(implementation = ErroResponse.class), 
+					    				  examples = @ExampleObject(value = "{\r\n"
+						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a atualização dos dados do usuário.\"\r\n"
+						    				  	  + "}"))})
+	})
+	ResponseEntity<Void> atualizarEmail(@Valid @PathVariable @NotNull Integer id, @RequestBody @NotNull EmailRecordRequest dados);
+	
+	@Operation(summary = "Realiza a alteração da senha do usuário.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "204"),
+		@ApiResponse(responseCode = "400", 
+				     description = "Bad Request.", 
+					 content = { @Content(mediaType = "application/json", 
+					    				  schema = @Schema(implementation = ErroResponse.class), 
+					    				  examples = @ExampleObject(value = "{\r\n"
+						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a troca da senha do usuário.\"\r\n"
+						    				  	  + "}"))})
+	})
+	ResponseEntity<SucessoResponse> atualizarSenha(@PathVariable @Valid @NotNull Integer id, @RequestBody @NotNull SenhaRecordRequest senha);
 	
 	@Operation(summary = "Realiza a inativação do usuário.")
 	@ApiResponses(value = {

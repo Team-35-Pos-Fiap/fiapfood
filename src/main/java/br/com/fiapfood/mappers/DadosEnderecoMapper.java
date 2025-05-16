@@ -1,15 +1,15 @@
 package br.com.fiapfood.mappers;
 
-import br.com.fiapfood.entities.db.DadosEnderecoEntity;
+import br.com.fiapfood.entities.db.EnderecoEntity;
 import br.com.fiapfood.entities.domain.DadosEnderecoDomain;
-import br.com.fiapfood.entities.record.request.DadosEnderecoRecord;
+import br.com.fiapfood.entities.record.request.EnderecoRecordRequest;
 
 public abstract class DadosEnderecoMapper {
 
 	// record -> domain -> entity
 	
 	// 1 - record -> domain
-	public static DadosEnderecoDomain toDadosEndereco(DadosEnderecoRecord dadosEnderecoRecord) {
+	public static DadosEnderecoDomain toDadosEndereco(EnderecoRecordRequest dadosEnderecoRecord) {
 		return new DadosEnderecoDomain(null,
 								 dadosEnderecoRecord.cidade(),
 								 dadosEnderecoRecord.cep(),
@@ -23,8 +23,8 @@ public abstract class DadosEnderecoMapper {
 	}
 	
 	// 2 - domain -> entity
-	public static DadosEnderecoEntity toDadosEndereco(DadosEnderecoDomain dadosEndereco) {
-		return new DadosEnderecoEntity(dadosEndereco.getId(),
+	public static EnderecoEntity toDadosEndereco(DadosEnderecoDomain dadosEndereco) {
+		return new EnderecoEntity(dadosEndereco.getId(),
 									   dadosEndereco.getCidade(),
 									   dadosEndereco.getCep(),
 									   dadosEndereco.getBairro(),
@@ -40,7 +40,7 @@ public abstract class DadosEnderecoMapper {
 	// entity -> domain -> record
 	
 	// 3 - entity -> domain
-	public static DadosEnderecoDomain toDadosEndereco(DadosEnderecoEntity dadosEndereco) {
+	public static DadosEnderecoDomain toDadosEndereco(EnderecoEntity dadosEndereco) {
 		return new DadosEnderecoDomain(dadosEndereco.getId(),
 							     dadosEndereco.getCidade(),
 								 dadosEndereco.getCep(),
@@ -54,8 +54,8 @@ public abstract class DadosEnderecoMapper {
 	}
 	
 	// 4 - domain -> record
-	public static DadosEnderecoRecord toDadosEnderecoRecord(DadosEnderecoDomain dadosEndereco) {
-		return new DadosEnderecoRecord(dadosEndereco.getCidade(), 
+	public static EnderecoRecordRequest toDadosEnderecoRecord(DadosEnderecoDomain dadosEndereco) {
+		return new EnderecoRecordRequest(dadosEndereco.getCidade(), 
 									   dadosEndereco.getCep(),
 									   dadosEndereco.getBairro(), 
 									   dadosEndereco.getEndereco(),

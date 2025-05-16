@@ -20,42 +20,38 @@ public abstract class UsuarioMapper {
 	// record -> domain -> entity
 	
 	// 1 - record -> domain
-	public static UsuarioDomain toUsuarioDomain(UsuarioRecordRequest usuario) {
+	public static UsuarioDomain toUsuario(UsuarioRecordRequest usuario) {
 		return new UsuarioDomain(null,
 							     usuario.nome(), 
 							     usuario.email(), 
 							     LocalDateTime.now(),
 							     null,
 							     true,
-							     DadosEnderecoMapper.toDadosEndereco(usuario.dadosEndereco()),
+							     null, // DadosEnderecoMapper.toDadosEndereco(usuario.dadosEndereco()),
 							     PerfilAcessoMapper.toPerfil(usuario.perfil()),
-							     LoginMapper.toLogin(usuario.dadosLogin()));
+							     null //LoginMapper.toLogin(usuario.dadosLogin())
+							     );
 	}
 
 	// 2 - domain -> entity
 	
-	public static UsuarioEntity toUsuarioEntity(UsuarioDomain usuario) {
-		UsuarioEntity usuarioEntity = new UsuarioEntity(usuario.getId(),
-														usuario.getNome(), 
-														usuario.getEmail(), 
-														usuario.getDataCriacao(),
-														usuario.getDataAtualizacao(),
-														usuario.getIsAtivo(),
-														null,
-														PerfilAcessoMapper.toPerfil(usuario.getPerfil()),
-														null);
-		
-		usuarioEntity.atualizarDadosEndereco(DadosEnderecoMapper.toDadosEndereco(usuario.getDadosEndereco()));
-		usuarioEntity.atualizarDadosLogin(LoginMapper.toLogin(usuario.getDadosLogin()));
-
-		return usuarioEntity;
+	public static UsuarioEntity toUsuario(UsuarioDomain usuario) {	
+		return new UsuarioEntity(usuario.getId(),
+								 usuario.getNome(), 
+								 usuario.getEmail(), 
+								 usuario.getDataCriacao(),
+								 usuario.getDataAtualizacao(),
+								 usuario.getIsAtivo(),
+								 null,
+								 PerfilAcessoMapper.toPerfil(usuario.getPerfil()),
+								 null);
 	}
 	
 	// entity -> domain -> record
 	
 	// 3 - entity -> domain
 	
-	public static UsuarioDomain toUsuarioDomain(UsuarioEntity usuario) {
+	public static UsuarioDomain toUsuario(UsuarioEntity usuario) {
 		return new UsuarioDomain(usuario.getId(),
 								 usuario.getNome(), 
 							     usuario.getEmail(), 
@@ -79,10 +75,10 @@ public abstract class UsuarioMapper {
 										 PerfilAcessoMapper.toPerfilRecord(usuario.getPerfil()));
 	}
 
-	public static UsuarioRecordPaginacaoResponse toUsuarioPaginacaoRecord(Page<UsuarioEntity> dados) {
+	public static UsuarioRecordPaginacaoResponse toUsuario(Page<UsuarioEntity> dados) {
 		List<UsuarioRecordResponse> usuarios = dados.toList()
 													.stream()
-													.map(u -> UsuarioMapper.toUsuarioDomain(u))
+													.map(u -> UsuarioMapper.toUsuario(u))
 													.map(u -> UsuarioMapper.toUsuarioRecord(u))
 													.collect(Collectors.toList());
 		

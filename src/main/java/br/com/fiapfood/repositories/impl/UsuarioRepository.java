@@ -8,8 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import br.com.fiapfood.entities.db.UsuarioEntity;
-import br.com.fiapfood.entities.domain.UsuarioDomain;
-import br.com.fiapfood.mappers.UsuarioMapper;
 import br.com.fiapfood.repositories.exceptions.UsuarioNaoEncontradoException;
 import br.com.fiapfood.repositories.interfaces.IUsuarioRepository;
 import br.com.fiapfood.utils.MensagensUtil;
@@ -21,7 +19,7 @@ public class UsuarioRepository {
 	private IUsuarioRepository usuarioRepository;
 		
 	private final Integer QUANTIDADE_REGISTROS = 5;
-
+	
 	public UsuarioEntity recuperaDadosUsuarioPorId(Integer id) {
 		return getUsuarioEntity(usuarioRepository.findById(id));
 	}
