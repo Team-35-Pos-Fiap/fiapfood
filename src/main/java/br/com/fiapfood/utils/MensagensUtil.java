@@ -18,11 +18,14 @@ public class MensagensUtil {
 	public static final String ERRO_PERFIL_NAO_ENCONTRADO = "exception.perfil_nao_encontrado";
 	public static final String ERRO_LOGIN_NAO_ENCONTRADO = "exception.login_nao_encontrado";
 	public static final String ERRO_LOGIN_SEM_PERMISSAO = "exception.login_sem_permissao_acesso";
+	public static final String ERRO_PARAMETRO_INVALIDO = "exception.erro.parametro.invalido";
+	public static final String ERRO_PAGINA_INVALIDA = "exception.pagina.invalida";
 
 	public static final String SUCESSO_INATIVACAO_USUARIO = "sucesso_inativacao_usuario";
 	public static final String SUCESSO_REATIVACAO_USUARIO = "sucesso_reativacao_usuario";
 	public static final String SUCESSO_TROCA_SENHA_USUARIO = "sucesso_troca_senha_usuario";
 	public static final String SUCESSO_RECUPERACAO_SENHA_USUARIO = "sucesso_recuperacao_senha_usuario";
+
 
 	@Autowired
 	public void setMessageSource(MessageSource messageSource) {
