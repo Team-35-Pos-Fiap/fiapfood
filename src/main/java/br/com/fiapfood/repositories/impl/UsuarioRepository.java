@@ -1,6 +1,7 @@
 package br.com.fiapfood.repositories.impl;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,15 +21,15 @@ public class UsuarioRepository {
 		
 	private final Integer QUANTIDADE_REGISTROS = 5;
 	
-	public UsuarioEntity recuperaDadosUsuarioPorId(Integer id) {
+	public UsuarioEntity recuperaDadosUsuarioPorId(UUID id) {
 		return getUsuarioEntity(usuarioRepository.findById(id));
 	}
 
-	public UsuarioEntity recuperaDadosUsuarioInativoPorId(Integer id) {
+	public UsuarioEntity recuperaDadosUsuarioInativoPorId(UUID id) {
 		return getUsuarioEntity(usuarioRepository.findByIdAndIsAtivoFalse(id));
 	}
 
-	public UsuarioEntity recuperaDadosUsuarioAtivoPorId(Integer id) {
+	public UsuarioEntity recuperaDadosUsuarioAtivoPorId(UUID id) {
 		return getUsuarioEntity(usuarioRepository.findByIdAndIsAtivoTrue(id));
 	}
 	

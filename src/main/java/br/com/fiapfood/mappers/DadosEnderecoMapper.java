@@ -18,8 +18,7 @@ public abstract class DadosEnderecoMapper {
 								 dadosEnderecoRecord.estado(),
 								 dadosEnderecoRecord.numero(),
 								 dadosEnderecoRecord.complemento(),
-								 dadosEnderecoRecord.semNumero(),
-								 null);
+								 dadosEnderecoRecord.semNumero());
 	}
 	
 	// 2 - domain -> entity
@@ -32,9 +31,7 @@ public abstract class DadosEnderecoMapper {
 									   dadosEndereco.getEstado(),
 									   dadosEndereco.getNumero(),
 									   dadosEndereco.getComplemento(),
-									   dadosEndereco.getSemNumero(),
-									   null//UsuarioMapper.toUsuarioEntity(dadosEndereco.getUsuario())
-									   );
+									   dadosEndereco.getSemNumero());
 	}
 	
 	// entity -> domain -> record
@@ -49,8 +46,7 @@ public abstract class DadosEnderecoMapper {
 							     dadosEndereco.getEstado(),
 							     dadosEndereco.getNumero(),
 							     dadosEndereco.getComplemento(),
-							     dadosEndereco.getSemNumero(),
-							     null);
+							     dadosEndereco.getSemNumero());
 	}
 	
 	// 4 - domain -> record

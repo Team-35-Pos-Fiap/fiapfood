@@ -2,7 +2,9 @@
 package br.com.fiapfood.services;
 
 import java.util.Optional;
+import java.util.UUID;
 
+import br.com.fiapfood.entities.db.UsuarioEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,24 +22,23 @@ public class EnderecoService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
-	public void atualizarEndereco(Integer id, EnderecoRecordRequest dados) {
-			
-		EnderecoEntity endereco = trataDadosEndereco(id, dados);
+	public void atualizarEndereco(UUID idUsuario, EnderecoRecordRequest dados) {
+
+		EnderecoEntity endereco = trataDadosEndereco(idUsuario, dados);
 		
 		enderecoRepository.salvar(endereco);
 	}
 	
-	private EnderecoEntity trataDadosEndereco(Integer id, EnderecoRecordRequest enderecoRecord) {
+	private EnderecoEntity trataDadosEndereco(UUID idUsuario, EnderecoRecordRequest enderecoRecord) {
 		EnderecoEntity endereco = null;
-		
-		Optional<EnderecoEntity> dados = enderecoRepository.buscarPorIdUsuario(id);
+		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(idUsuario);
+
+		Optional<EnderecoEntity> dados = enderecoRepository.buscarPorId(usuario.getDadosEndereco().getId());
 		
 		if (dados.isPresent()) {
 			endereco = dados.get();
 		} else {
 			endereco = new EnderecoEntity();
-			
-			endereco.atualizarUsuario(usuarioRepository.recuperaDadosUsuarioAtivoPorId(id));
 		}
 
 		endereco.atualizarDados(enderecoRecord.endereco(), 

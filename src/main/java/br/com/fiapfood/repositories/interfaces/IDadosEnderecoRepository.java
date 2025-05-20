@@ -4,4 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.fiapfood.entities.db.DadosEnderecoEntity;
 
-public interface IDadosEnderecoRepository extends JpaRepository<DadosEnderecoEntity, Integer>{ }
+import java.util.UUID;
+
+public interface IDadosEnderecoRepository extends JpaRepository<DadosEnderecoEntity, UUID>{ }

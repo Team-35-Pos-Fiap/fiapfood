@@ -17,4 +17,20 @@ public record UsuarioRecordRequest(@Schema(description = "Nome do usuário", exa
 									   
 								   @NotNull(message = "É necessário informar o perfil de acesso para o usuário.")
 								   @Schema(description = "IDs dos perfil de acesso do usuário.", example = "1") 
-								   Integer perfil) { }
+								   Integer perfil,
+
+								   @NotNull(message = "É necessário informar os dados de endereço para o usuário.")
+								   @Schema(
+										   description = "Dados de endereço do usuário.",
+										   example = "{'cidade': 'São Gonçalo', 'cep': '24455451', 'bairro': 'Nova Cidade'," +
+												   " 'endereco': 'Rua Aquidaba', 'estado': 'Rio de Janeiro', 'numero': '7'," +
+												   " 'complemento': 'Casa 8', 'semNumero': 'false'}"
+								   )
+								   EnderecoRecordRequest dadosEndereco,
+
+								   @NotNull(message = "É necessário informar os dados de login para o usuário.")
+								   @Schema(
+										   description = "Dados de login do usuário.",
+										   example = "{'matricula': 'user', 'senha': '123'}"
+								   )
+								   LoginRecordRequest dadosLogin) { }

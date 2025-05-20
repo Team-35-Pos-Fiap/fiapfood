@@ -27,9 +27,9 @@ public abstract class UsuarioMapper {
 							     LocalDateTime.now(),
 							     null,
 							     true,
-							     null, // DadosEnderecoMapper.toDadosEndereco(usuario.dadosEndereco()),
+								 DadosEnderecoMapper.toDadosEndereco(usuario.dadosEndereco()),
 							     PerfilAcessoMapper.toPerfil(usuario.perfil()),
-							     null //LoginMapper.toLogin(usuario.dadosLogin())
+							     LoginMapper.toLogin(usuario.dadosLogin())
 							     );
 	}
 
@@ -42,9 +42,9 @@ public abstract class UsuarioMapper {
 								 usuario.getDataCriacao(),
 								 usuario.getDataAtualizacao(),
 								 usuario.getIsAtivo(),
-								 null,
+								 DadosEnderecoMapper.toDadosEndereco(usuario.getDadosEndereco()),
 								 PerfilAcessoMapper.toPerfil(usuario.getPerfil()),
-								 null);
+								 LoginMapper.toLogin(usuario.getDadosLogin()));
 	}
 	
 	// entity -> domain -> record

@@ -1,6 +1,8 @@
 
 package br.com.fiapfood.services;
 
+import br.com.fiapfood.entities.db.UsuarioEntity;
+import br.com.fiapfood.repositories.impl.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +13,16 @@ import br.com.fiapfood.repositories.impl.LoginRepository;
 import br.com.fiapfood.services.exceptions.LoginSemAcessoException;
 import br.com.fiapfood.utils.MensagensUtil;
 
+import java.util.UUID;
+
 @Service
 public class LoginService {
 
 	@Autowired
 	private LoginRepository loginRepository;
+
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 	
 	public String validar(LoginRecordRequest dados) {
 		try {
@@ -27,17 +34,19 @@ public class LoginService {
 		}
 	}
 
-	public void trocarSenha(Integer id, String senha) {
+	public void trocarSenha(UUID idUsuario, String senha) {
 		// Aqui poderia entrar a regra de negócio para validar que o usuário está ativo.
-		LoginEntity login = loginRepository.buscarPorIdUsuario(id);
+		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(idUsuario);
+		LoginEntity login = loginRepository.buscarPorId(usuario.getDadosLogin().getId());
 		
 		login.atualizarSenha(senha);
 
 		loginRepository.salvar(login);
 	}
 	
-	public void atualizarMatricula(Integer id, String matricula) {
-		LoginEntity login = loginRepository.buscarPorIdUsuario(id);
+	public void atualizarMatricula(UUID idUsuario, String matricula) {
+		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(idUsuario);
+		LoginEntity login = loginRepository.buscarPorId(usuario.getDadosLogin().getId());
 		
 		login.atualizarMatricula(matricula);
 
