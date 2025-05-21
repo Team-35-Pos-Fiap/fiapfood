@@ -56,8 +56,8 @@ public interface UsuarioDoc {
 						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a atualização dos dados do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<Void> atualizarPerfil(@Valid @PathVariable @NotNull UUID id, @RequestBody @NotNull PerfilRecordRequest dadosPerfil);
-	
+	ResponseEntity<Void> atualizarPerfil(@Valid @PathVariable @NotNull UUID id, @Valid @RequestBody @NotNull PerfilRecordRequest dadosPerfil);
+
 	
 	@Operation(summary = "Realiza a atualização dos dados de login do usuário no sistema.")
 	@ApiResponses(value = {
@@ -83,7 +83,7 @@ public interface UsuarioDoc {
 						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a atualização dos dados do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<Void> atualizarEndereco(@Valid @PathVariable @NotNull UUID id, @RequestBody @NotNull EnderecoRecordRequest dadosEndereco);
+	ResponseEntity<Void> atualizarEndereco(@Valid @PathVariable @NotNull UUID id, @Valid @RequestBody @NotNull EnderecoRecordRequest dadosEndereco);
 	
 	@Operation(summary = "Realiza a atualização dos dados do endereço do usuário no sistema.")
 	@ApiResponses(value = {
@@ -96,7 +96,7 @@ public interface UsuarioDoc {
 						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a atualização dos dados do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<Void> atualizarNome(@Valid @PathVariable @NotNull UUID id, @RequestBody @NotNull NomeRecordRequest dados);
+	ResponseEntity<Void> atualizarNome(@Valid @PathVariable @NotNull UUID id, @Valid @RequestBody @NotNull NomeRecordRequest dados);
 	
 	@Operation(summary = "Realiza a atualização dos dados do endereço do usuário no sistema.")
 	@ApiResponses(value = {
@@ -109,7 +109,7 @@ public interface UsuarioDoc {
 						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a atualização dos dados do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<Void> atualizarEmail(@Valid @PathVariable @NotNull UUID id, @RequestBody @NotNull EmailRecordRequest dados);
+	ResponseEntity<Void> atualizarEmail(@Valid @PathVariable @NotNull UUID id, @Valid @RequestBody @NotNull EmailRecordRequest dados);
 	
 	@Operation(summary = "Realiza a alteração da senha do usuário.")
 	@ApiResponses(value = {
@@ -122,7 +122,7 @@ public interface UsuarioDoc {
 						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a troca da senha do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<SucessoResponse> atualizarSenha(@PathVariable @Valid @NotNull UUID id, @RequestBody @NotNull SenhaRecordRequest senha);
+	ResponseEntity<SucessoResponse> atualizarSenha(@PathVariable @Valid @NotNull UUID id, @Valid @RequestBody @NotNull SenhaRecordRequest senha);
 	
 	@Operation(summary = "Realiza a inativação do usuário.")
 	@ApiResponses(value = {

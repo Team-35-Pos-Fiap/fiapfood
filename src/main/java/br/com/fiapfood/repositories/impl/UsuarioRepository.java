@@ -3,6 +3,7 @@ package br.com.fiapfood.repositories.impl;
 import java.util.Optional;
 import java.util.UUID;
 
+import br.com.fiapfood.services.exceptions.PaginaInvalidaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +35,9 @@ public class UsuarioRepository {
 	}
 	
 	public Page<UsuarioEntity> recuperaDadosUsuarios(final Integer pagina) {
+		if (pagina == null || pagina < 1) {
+			throw new PaginaInvalidaException();
+		}
 		Page<UsuarioEntity> usuarios = usuarioRepository.findAll(PageRequest.of(pagina - 1, QUANTIDADE_REGISTROS));
 		
 		if(usuarios.toList().isEmpty()) {		
