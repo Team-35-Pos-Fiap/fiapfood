@@ -1,15 +1,11 @@
 package br.com.fiapfood.entities.db;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -18,15 +14,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "login")
 public class LoginEntity {
 	@Id
-	@Column(name = "id_usuario")
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private UUID id;
 	private String matricula;
 	private String senha;
-	
-	@OneToOne
-	@MapsId
-	@JoinColumn(name = "id_usuario")
-	private UsuarioEntity usuario;
 
 	public void atualizarSenha(String senha) {
 		this.senha = senha;

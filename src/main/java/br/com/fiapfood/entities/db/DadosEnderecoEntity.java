@@ -1,15 +1,11 @@
 package br.com.fiapfood.entities.db;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -18,8 +14,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "endereco")
 public class DadosEnderecoEntity {
 	@Id
-	@Column(name = "id_usuario")
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private UUID id;
 	private String cidade;
 	private String cep;
 	private String bairro;
@@ -30,11 +26,6 @@ public class DadosEnderecoEntity {
 	@Column(name = "sem_numero", columnDefinition = "tinyint")
 	private Boolean semNumero;
 
-	@OneToOne
-	@MapsId
-	@JoinColumn(name = "id_usuario")
-	private UsuarioEntity usuario;
-	
 	public void atualizarDados(String endereco, String cidade, String bairro, 
 							   String estado, Integer numero, String cep, String complemento, 
 							   Boolean semNumero) {

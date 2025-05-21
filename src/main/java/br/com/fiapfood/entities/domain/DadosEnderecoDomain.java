@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class DadosEnderecoDomain {
-	private Integer id;
+	private UUID id;
 	private String cidade;
 	private String cep;
 	private String bairro;
@@ -17,5 +19,4 @@ public class DadosEnderecoDomain {
 	private Integer numero;
 	private String complemento;
 	private Boolean semNumero;
-	private UsuarioDomain usuario;
 }

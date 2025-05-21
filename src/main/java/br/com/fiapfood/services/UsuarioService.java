@@ -15,6 +15,8 @@ import br.com.fiapfood.repositories.impl.UsuarioRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.UUID;
+
 @Service
 public class UsuarioService {
 	
@@ -24,7 +26,7 @@ public class UsuarioService {
 	@Autowired
 	private PerfilRepository perfilRepository;
 	
-	public UsuarioRecordResponse buscarPorId(Integer id) {
+	public UsuarioRecordResponse buscarPorId(UUID id) {
 		UsuarioEntity usuarioEntity = usuarioRepository.recuperaDadosUsuarioPorId(id);
 		UsuarioDomain usuarioDomain = UsuarioMapper.toUsuario(usuarioEntity);
 		
@@ -42,7 +44,7 @@ public class UsuarioService {
 		salvar(usuarioEntity);
 	}
 	
-	public void atualizarStatus(Integer id, boolean isAtivo) {
+	public void atualizarStatus(UUID id, boolean isAtivo) {
 		UsuarioEntity usuario; 
 		
 		if(isAtivo) { 
@@ -62,7 +64,7 @@ public class UsuarioService {
 		usuarioRepository.salvar(usuario);
 	}
 			
-	public void atualizarPerfil(Integer id, Integer idPerfil) {
+	public void atualizarPerfil(UUID id, Integer idPerfil) {
 		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(id);
 		
 		if(!idPerfil.equals(usuario.getPerfil().getId())) {
@@ -74,7 +76,7 @@ public class UsuarioService {
 		}
 	}
 
-	public void atualizarNome(@Valid @NotNull Integer id, String nome) {
+	public void atualizarNome(@Valid @NotNull UUID id, String nome) {
 		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(id);
 		
 		usuario.atualizarNome(nome);
@@ -82,7 +84,7 @@ public class UsuarioService {
 		salvar(usuario);
 	}
 
-	public void atualizarEmail(@Valid @NotNull Integer id, String email) {
+	public void atualizarEmail(@Valid @NotNull UUID id, String email) {
 		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(id);
 		
 		usuario.atualizarEmail(email);

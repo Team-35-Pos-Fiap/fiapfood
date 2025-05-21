@@ -1,6 +1,7 @@
 package br.com.fiapfood.repositories.impl;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -14,8 +15,8 @@ public class EnderecoRepository {
 	@Autowired
 	private IEnderecoRepository enderecoRepository;
 	
-	public Optional<EnderecoEntity> buscarPorIdUsuario(Integer idUsuario) {
-		return enderecoRepository.findById(idUsuario);
+	public Optional<EnderecoEntity> buscarPorId(UUID id) {
+		return enderecoRepository.findById(id);
 	}
 
 	public void salvar(EnderecoEntity endereco) {

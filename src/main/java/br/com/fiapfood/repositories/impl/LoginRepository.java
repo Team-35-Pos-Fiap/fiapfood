@@ -1,6 +1,7 @@
 package br.com.fiapfood.repositories.impl;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,7 +17,7 @@ public class LoginRepository {
 	@Autowired
 	ILoginRepository loginRepository;
 	
-	public LoginEntity buscarPorIdUsuario(Integer id) {
+	public LoginEntity buscarPorId(UUID id) {
 		return getLoginEntity(loginRepository.findById(id));
 	}
 

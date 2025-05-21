@@ -14,13 +14,13 @@ public abstract class LoginMapper {
 	
 	// 1 - record -> domain
 	public static LoginDomain toLogin(LoginRecordRequest login) {
-		return new LoginDomain(null, login.matricula(), login.senha(), null);
+		return new LoginDomain(null, login.matricula(), login.senha());
 	}
 
 	// 2 - domain -> entity
 	
 	public static LoginEntity toLogin(LoginDomain login) {
-		return new LoginEntity(login.getId(), login.getMatricula(), login.getSenha(), null);
+		return new LoginEntity(login.getId(), login.getMatricula(), login.getSenha());
 	}
 	
 	// entity -> domain -> record
@@ -28,7 +28,7 @@ public abstract class LoginMapper {
 	// 3 - entity -> domain
 	
 	public static LoginDomain toLogin(LoginEntity login) {
-		return new LoginDomain(login.getId(), login.getMatricula(), login.getSenha(), null);
+		return new LoginDomain(login.getId(), login.getMatricula(), login.getSenha());
 	}
 	
 	// 4 - domain -> record

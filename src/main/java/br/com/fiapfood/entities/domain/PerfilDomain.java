@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class PerfilDomain {
-	private Integer id;	
+	private Integer id;
 	private String nome;
 }

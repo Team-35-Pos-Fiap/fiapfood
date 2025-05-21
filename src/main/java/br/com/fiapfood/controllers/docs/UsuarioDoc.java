@@ -27,6 +27,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.UUID;
+
 @Tag(name = "Usuario", description = "Classe responsável por realizar as operações do usuário.")
 public interface UsuarioDoc {
 
@@ -54,8 +56,8 @@ public interface UsuarioDoc {
 						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a atualização dos dados do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<Void> atualizarPerfil(@Valid @PathVariable @NotNull Integer id, @Valid @RequestBody @NotNull PerfilRecordRequest dadosPerfil);
-	
+	ResponseEntity<Void> atualizarPerfil(@Valid @PathVariable @NotNull UUID id, @Valid @RequestBody @NotNull PerfilRecordRequest dadosPerfil);
+
 	
 	@Operation(summary = "Realiza a atualização dos dados de login do usuário no sistema.")
 	@ApiResponses(value = {
@@ -68,7 +70,7 @@ public interface UsuarioDoc {
 						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a atualização dos dados do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<Void> atualizarLogin(@Valid @PathVariable @NotNull Integer id, @RequestBody @NotNull LoginRecordRequest dadosLogin);
+	ResponseEntity<Void> atualizarLogin(@Valid @PathVariable @NotNull UUID id, @RequestBody @NotNull LoginRecordRequest dadosLogin);
 	
 	@Operation(summary = "Realiza a atualização dos dados do endereço do usuário no sistema.")
 	@ApiResponses(value = {
@@ -81,7 +83,7 @@ public interface UsuarioDoc {
 						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a atualização dos dados do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<Void> atualizarEndereco(@Valid @PathVariable @NotNull Integer id, @Valid @RequestBody @NotNull EnderecoRecordRequest dadosEndereco);
+	ResponseEntity<Void> atualizarEndereco(@Valid @PathVariable @NotNull UUID id, @Valid @RequestBody @NotNull EnderecoRecordRequest dadosEndereco);
 	
 	@Operation(summary = "Realiza a atualização dos dados do endereço do usuário no sistema.")
 	@ApiResponses(value = {
@@ -94,7 +96,7 @@ public interface UsuarioDoc {
 						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a atualização dos dados do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<Void> atualizarNome(@Valid @PathVariable @NotNull Integer id, @Valid @RequestBody @NotNull NomeRecordRequest dados);
+	ResponseEntity<Void> atualizarNome(@Valid @PathVariable @NotNull UUID id, @Valid @RequestBody @NotNull NomeRecordRequest dados);
 	
 	@Operation(summary = "Realiza a atualização dos dados do endereço do usuário no sistema.")
 	@ApiResponses(value = {
@@ -107,7 +109,7 @@ public interface UsuarioDoc {
 						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a atualização dos dados do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<Void> atualizarEmail(@Valid @PathVariable @NotNull Integer id, @Valid @RequestBody @NotNull EmailRecordRequest dados);
+	ResponseEntity<Void> atualizarEmail(@Valid @PathVariable @NotNull UUID id, @Valid @RequestBody @NotNull EmailRecordRequest dados);
 	
 	@Operation(summary = "Realiza a alteração da senha do usuário.")
 	@ApiResponses(value = {
@@ -120,7 +122,7 @@ public interface UsuarioDoc {
 						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a troca da senha do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<SucessoResponse> atualizarSenha(@PathVariable @Valid @NotNull Integer id, @Valid @RequestBody @NotNull SenhaRecordRequest senha);
+	ResponseEntity<SucessoResponse> atualizarSenha(@PathVariable @Valid @NotNull UUID id, @Valid @RequestBody @NotNull SenhaRecordRequest senha);
 	
 	@Operation(summary = "Realiza a inativação do usuário.")
 	@ApiResponses(value = {
@@ -138,7 +140,7 @@ public interface UsuarioDoc {
 						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar ao realizar a inativação do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<SucessoResponse> inativar(@Schema(description = "ID do usuário", example = "1") @Valid @PathVariable @NotNull Integer id);
+	ResponseEntity<SucessoResponse> inativar(@Schema(description = "ID do usuário", example = "1") @Valid @PathVariable @NotNull UUID id);
 	
 	@Operation(summary = "Realiza a reativação do usuário.")
 	@ApiResponses(value = {
@@ -156,7 +158,7 @@ public interface UsuarioDoc {
 						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a reativação do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<SucessoResponse> reativar(@Schema(description = "ID do usuário", example = "1") @Valid @PathVariable @NotNull Integer id);
+	ResponseEntity<SucessoResponse> reativar(@Schema(description = "ID do usuário", example = "1") @Valid @PathVariable @NotNull UUID id);
 	
 	@Operation(summary = "Realiza a busca do usuário utilizando o campo id como filtro.")
 	@ApiResponses(value = {
@@ -171,7 +173,7 @@ public interface UsuarioDoc {
 						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a busca do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<UsuarioRecordResponse> buscarUsuarioPorId(@Schema(description = "ID do usuário", example = "1") @PathVariable @NotNull @Valid Integer id);
+	ResponseEntity<UsuarioRecordResponse> buscarUsuarioPorId(@Schema(description = "ID do usuário", example = "1") @PathVariable @NotNull @Valid UUID id);
 
 	@Operation(summary = "Realiza a busca dos usuários.")
 	@ApiResponses(value = {

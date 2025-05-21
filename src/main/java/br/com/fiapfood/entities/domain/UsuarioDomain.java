@@ -1,6 +1,7 @@
 package br.com.fiapfood.entities.domain;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class UsuarioDomain {
-	private Integer id;
+	private UUID id;
 	private String nome;
 	private String email;
 	private LocalDateTime dataCriacao;

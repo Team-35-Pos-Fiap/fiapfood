@@ -27,6 +27,8 @@ import br.com.fiapfood.services.UsuarioService;
 import br.com.fiapfood.utils.MensagensUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/usuarios")
 @Slf4j
@@ -53,7 +55,7 @@ public class UsuarioController implements UsuarioDoc {
 
 	@Override
 	@DeleteMapping("/{id}/status")
-	public ResponseEntity<SucessoResponse> inativar(Integer id) {
+	public ResponseEntity<SucessoResponse> inativar(UUID id) {
 		log.info("inativar():id {}", id);
 
 		usuarioService.atualizarStatus(id, false);
@@ -63,7 +65,7 @@ public class UsuarioController implements UsuarioDoc {
 	
 	@Override
 	@PatchMapping("/{id}/status")
-	public ResponseEntity<SucessoResponse> reativar(Integer id) {
+	public ResponseEntity<SucessoResponse> reativar(UUID id) {
 		log.info("reativar():id {}", id);
 
 		usuarioService.atualizarStatus(id, true);
@@ -73,7 +75,7 @@ public class UsuarioController implements UsuarioDoc {
 	
 	@Override
 	@GetMapping("/{id}")
-	public ResponseEntity<UsuarioRecordResponse> buscarUsuarioPorId(Integer id) {
+	public ResponseEntity<UsuarioRecordResponse> buscarUsuarioPorId(UUID id) {
 		log.info("buscarUsuarioPorId():id {}", id);
 		
 		return ResponseEntity.ok().body(usuarioService.buscarPorId(id));
@@ -89,7 +91,7 @@ public class UsuarioController implements UsuarioDoc {
 
 	@Override
 	@PatchMapping("/{id}/perfil")
-	public ResponseEntity<Void> atualizarPerfil(Integer id, PerfilRecordRequest dadosPerfil) {
+	public ResponseEntity<Void> atualizarPerfil(UUID id, PerfilRecordRequest dadosPerfil) {
 		usuarioService.atualizarPerfil(id, dadosPerfil.idPerfil());
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
@@ -97,7 +99,7 @@ public class UsuarioController implements UsuarioDoc {
 
 	@Override
 	@PatchMapping("/{id}/login")
-	public ResponseEntity<Void> atualizarLogin(Integer id, LoginRecordRequest dadosLogin) {
+	public ResponseEntity<Void> atualizarLogin(UUID id, LoginRecordRequest dadosLogin) {
 		log.info("atualizarLogin() - id {} dados login: {}", id, dadosLogin);
 
 		loginService.atualizarMatricula(id, dadosLogin.matricula());
@@ -107,7 +109,7 @@ public class UsuarioController implements UsuarioDoc {
 
 	@Override
 	@PatchMapping("/{id}/endereco")
-	public ResponseEntity<Void> atualizarEndereco(Integer id, EnderecoRecordRequest dadosEndereco) {
+	public ResponseEntity<Void> atualizarEndereco(UUID id, EnderecoRecordRequest dadosEndereco) {
 		enderecoService.atualizarEndereco(id, dadosEndereco);
 		
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
@@ -115,7 +117,7 @@ public class UsuarioController implements UsuarioDoc {
 
 	@Override
 	@PatchMapping("/{id}/nome")	
-	public ResponseEntity<Void> atualizarNome(Integer id, NomeRecordRequest dados) {
+	public ResponseEntity<Void> atualizarNome(UUID id, NomeRecordRequest dados) {
 		usuarioService.atualizarNome(id, dados.nome());
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
@@ -123,7 +125,7 @@ public class UsuarioController implements UsuarioDoc {
 
 	@Override
 	@PatchMapping("/{id}/email")	
-	public ResponseEntity<Void> atualizarEmail(Integer id, EmailRecordRequest dados) {
+	public ResponseEntity<Void> atualizarEmail(UUID id, EmailRecordRequest dados) {
 		usuarioService.atualizarEmail(id, dados.email());
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
@@ -131,7 +133,7 @@ public class UsuarioController implements UsuarioDoc {
 	
 	@Override
 	@PatchMapping("/{id}/senha")
-	public ResponseEntity<SucessoResponse> atualizarSenha(Integer id, SenhaRecordRequest dados) {
+	public ResponseEntity<SucessoResponse> atualizarSenha(UUID id, SenhaRecordRequest dados) {
 		log.info("trocar senha():id {} - senha {}", id, dados.senha());
 
 		loginService.trocarSenha(id, dados.senha());
