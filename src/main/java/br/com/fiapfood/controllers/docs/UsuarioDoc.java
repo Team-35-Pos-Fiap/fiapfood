@@ -70,7 +70,7 @@ public interface UsuarioDoc {
 						    				  	  + "    \"mensagem\": \"Ocorreu um erro ao realizar a atualização dos dados do usuário.\"\r\n"
 						    				  	  + "}"))})
 	})
-	ResponseEntity<Void> atualizarLogin(@Valid @PathVariable @NotNull UUID id, @RequestBody @NotNull LoginRecordRequest dadosLogin);
+	ResponseEntity<Void> atualizarLogin(@Valid @PathVariable @NotNull UUID id, @Valid @RequestBody @NotNull LoginRecordRequest dadosLogin);
 	
 	@Operation(summary = "Realiza a atualização dos dados do endereço do usuário no sistema.")
 	@ApiResponses(value = {
