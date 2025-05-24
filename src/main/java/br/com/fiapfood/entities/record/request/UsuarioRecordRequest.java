@@ -1,6 +1,7 @@
 package br.com.fiapfood.entities.record.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,6 +23,7 @@ public record UsuarioRecordRequest(@Schema(description = "Nome do usuário", exa
 								   Integer perfil,
 
 								   @NotNull(message = "É necessário informar os dados de endereço para o usuário.")
+								   @Valid
 								   @Schema(
 										   description = "Dados de endereço do usuário.",
 										   example = "{'cidade': 'São Gonçalo', 'cep': '24455451', 'bairro': 'Nova Cidade'," +
@@ -31,6 +33,7 @@ public record UsuarioRecordRequest(@Schema(description = "Nome do usuário", exa
 								   EnderecoRecordRequest dadosEndereco,
 
 								   @NotNull(message = "É necessário informar os dados de login para o usuário.")
+								   @Valid
 								   @Schema(
 										   description = "Dados de login do usuário.",
 										   example = "{'matricula': 'user', 'senha': '123'}"
