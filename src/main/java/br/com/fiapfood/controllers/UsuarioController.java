@@ -1,16 +1,12 @@
 package br.com.fiapfood.controllers;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import br.com.fiapfood.controllers.docs.UsuarioDoc;
 import br.com.fiapfood.controllers.response.SucessoResponse;
 import br.com.fiapfood.entities.record.request.EmailRecordRequest;
 import br.com.fiapfood.entities.record.request.EnderecoRecordRequest;
@@ -32,7 +28,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/usuarios")
 @Slf4j
-public class UsuarioController implements UsuarioDoc {
+public class UsuarioController {
 
 	@Autowired
 	private UsuarioService usuarioService;
@@ -43,9 +39,8 @@ public class UsuarioController implements UsuarioDoc {
 	@Autowired
 	private EnderecoService enderecoService;
 	
-	@Override
 	@PostMapping
-	public ResponseEntity<Void> cadastrar(UsuarioRecordRequest usuario) {
+	public ResponseEntity<Void> cadastrar(@Valid @RequestBody @NotNull UsuarioRecordRequest usuario) {
 		log.info("cadastrar():dados do usuário {}", usuario);
 		
 		usuarioService.cadastrar(usuario);
@@ -53,9 +48,8 @@ public class UsuarioController implements UsuarioDoc {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
-	@Override
 	@DeleteMapping("/{id}/status")
-	public ResponseEntity<SucessoResponse> inativar(UUID id) {
+	public ResponseEntity<SucessoResponse> inativar(@Valid @PathVariable @NotNull UUID id) {
 		log.info("inativar():id {}", id);
 
 		usuarioService.atualizarStatus(id, false);
@@ -63,9 +57,8 @@ public class UsuarioController implements UsuarioDoc {
 		return ResponseEntity.ok(new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_INATIVACAO_USUARIO)));
 	}
 	
-	@Override
 	@PatchMapping("/{id}/status")
-	public ResponseEntity<SucessoResponse> reativar(UUID id) {
+	public ResponseEntity<SucessoResponse> reativar(@Valid @PathVariable @NotNull UUID id) {
 		log.info("reativar():id {}", id);
 
 		usuarioService.atualizarStatus(id, true);
@@ -73,33 +66,29 @@ public class UsuarioController implements UsuarioDoc {
 		return ResponseEntity.ok(new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_REATIVACAO_USUARIO)));
 	}
 	
-	@Override
 	@GetMapping("/{id}")
-	public ResponseEntity<UsuarioRecordResponse> buscarUsuarioPorId(UUID id) {
+	public ResponseEntity<UsuarioRecordResponse> buscarUsuarioPorId(@PathVariable @NotNull @Valid UUID id) {
 		log.info("buscarUsuarioPorId():id {}", id);
 		
 		return ResponseEntity.ok().body(usuarioService.buscarPorId(id));
 	}
 	
-	@Override
 	@GetMapping
-	public ResponseEntity<UsuarioRecordPaginacaoResponse> buscarUsuarios(final Integer pagina) {
+	public ResponseEntity<UsuarioRecordPaginacaoResponse> buscarUsuarios(@RequestParam(defaultValue = "1") final Integer pagina) {
 		log.info("buscarUsuarios() - pagina {}", pagina);
 
 		return ResponseEntity.ok().body(usuarioService.buscarUsuarios(pagina));
 	}
 
-	@Override
 	@PatchMapping("/{id}/perfil")
-	public ResponseEntity<Void> atualizarPerfil(UUID id, PerfilRecordRequest dadosPerfil) {
+	public ResponseEntity<Void> atualizarPerfil(@Valid @PathVariable @NotNull UUID id, @Valid @RequestBody @NotNull PerfilRecordRequest dadosPerfil) {
 		usuarioService.atualizarPerfil(id, dadosPerfil.idPerfil());
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
 	}
 
-	@Override
 	@PatchMapping("/{id}/login")
-	public ResponseEntity<Void> atualizarLogin(UUID id, LoginRecordRequest dadosLogin) {
+	public ResponseEntity<Void> atualizarLogin(@Valid @PathVariable @NotNull UUID id,@Valid @RequestBody @NotNull LoginRecordRequest dadosLogin) {
 		log.info("atualizarLogin() - id {} dados login: {}", id, dadosLogin);
 
 		loginService.atualizarMatricula(id, dadosLogin.matricula());
@@ -107,33 +96,29 @@ public class UsuarioController implements UsuarioDoc {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
 	}
 
-	@Override
 	@PatchMapping("/{id}/endereco")
-	public ResponseEntity<Void> atualizarEndereco(UUID id, EnderecoRecordRequest dadosEndereco) {
+	public ResponseEntity<Void> atualizarEndereco(@Valid @PathVariable @NotNull UUID id, @Valid @RequestBody @NotNull EnderecoRecordRequest dadosEndereco) {
 		enderecoService.atualizarEndereco(id, dadosEndereco);
 		
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
 	}
 
-	@Override
-	@PatchMapping("/{id}/nome")	
-	public ResponseEntity<Void> atualizarNome(UUID id, NomeRecordRequest dados) {
+	@PatchMapping("/{id}/nome")
+	public ResponseEntity<Void> atualizarNome(@Valid @PathVariable @NotNull UUID id, @Valid @RequestBody @NotNull NomeRecordRequest dados) {
 		usuarioService.atualizarNome(id, dados.nome());
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
 	}
 
-	@Override
-	@PatchMapping("/{id}/email")	
-	public ResponseEntity<Void> atualizarEmail(UUID id, EmailRecordRequest dados) {
+	@PatchMapping("/{id}/email")
+	public ResponseEntity<Void> atualizarEmail(@Valid @PathVariable @NotNull UUID id, @Valid @RequestBody @NotNull EmailRecordRequest dados) {
 		usuarioService.atualizarEmail(id, dados.email());
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
 	}
 	
-	@Override
 	@PatchMapping("/{id}/senha")
-	public ResponseEntity<SucessoResponse> atualizarSenha(UUID id, SenhaRecordRequest dados) {
+	public ResponseEntity<SucessoResponse> atualizarSenha(@PathVariable @Valid @NotNull UUID id, @Valid @RequestBody @NotNull SenhaRecordRequest dados) {
 		log.info("trocar senha():id {} - senha {}", id, dados.senha());
 
 		loginService.trocarSenha(id, dados.senha());
