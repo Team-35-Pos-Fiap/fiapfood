@@ -9,4 +9,5 @@ public interface ILoginRepository {
     LoginEntity buscarPorMatriculaSenha(String matricula, String senha);
     LoginEntity buscarPorMatricula(String matricula);
     void salvar(LoginEntity login);
+    boolean matriculaJaCadastrada(String matricula);
 }

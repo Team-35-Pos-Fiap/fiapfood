@@ -27,6 +27,7 @@ public class UsuarioEntity {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
 	private String nome;
+	@Column(unique = true)
 	private String email;
 	
 	@Column(name = "data_criacao", nullable = false)

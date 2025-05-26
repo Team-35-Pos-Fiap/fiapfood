@@ -13,4 +13,5 @@ public interface IUsuarioRepository {
     UsuarioEntity recuperarDadosUsuarioPorIdLogin(UUID loginId);
     Page<UsuarioEntity> recuperaDadosUsuarios(final Integer pagina);
     void salvar(UsuarioEntity usuario);
+    boolean emailJaCadastrado(String email);
 }

@@ -1,16 +1,16 @@
 package br.com.fiapfood.mappers;
 
 import br.com.fiapfood.entities.db.EnderecoEntity;
-import br.com.fiapfood.entities.domain.DadosEnderecoDomain;
+import br.com.fiapfood.entities.domain.EnderecoDomain;
 import br.com.fiapfood.entities.record.request.EnderecoRecordRequest;
 
-public abstract class DadosEnderecoMapper {
+public abstract class EnderecoMapper {
 
 	// record -> domain -> entity
 	
 	// 1 - record -> domain
-	public static DadosEnderecoDomain toDadosEndereco(EnderecoRecordRequest dadosEnderecoRecord) {
-		return new DadosEnderecoDomain(null,
+	public static EnderecoDomain toDadosEndereco(EnderecoRecordRequest dadosEnderecoRecord) {
+		return new EnderecoDomain(null,
 								 dadosEnderecoRecord.cidade(),
 								 dadosEnderecoRecord.cep(),
 								 dadosEnderecoRecord.bairro(),
@@ -22,7 +22,7 @@ public abstract class DadosEnderecoMapper {
 	}
 	
 	// 2 - domain -> entity
-	public static EnderecoEntity toDadosEndereco(DadosEnderecoDomain dadosEndereco) {
+	public static EnderecoEntity toDadosEndereco(EnderecoDomain dadosEndereco) {
 		return new EnderecoEntity(dadosEndereco.getId(),
 									   dadosEndereco.getCidade(),
 									   dadosEndereco.getCep(),
@@ -37,8 +37,8 @@ public abstract class DadosEnderecoMapper {
 	// entity -> domain -> record
 	
 	// 3 - entity -> domain
-	public static DadosEnderecoDomain toDadosEndereco(EnderecoEntity dadosEndereco) {
-		return new DadosEnderecoDomain(dadosEndereco.getId(),
+	public static EnderecoDomain toDadosEndereco(EnderecoEntity dadosEndereco) {
+		return new EnderecoDomain(dadosEndereco.getId(),
 							     dadosEndereco.getCidade(),
 								 dadosEndereco.getCep(),
 							     dadosEndereco.getBairro(),
@@ -50,7 +50,7 @@ public abstract class DadosEnderecoMapper {
 	}
 	
 	// 4 - domain -> record
-	public static EnderecoRecordRequest toDadosEnderecoRecord(DadosEnderecoDomain dadosEndereco) {
+	public static EnderecoRecordRequest toDadosEnderecoRecord(EnderecoDomain dadosEndereco) {
 		return new EnderecoRecordRequest(dadosEndereco.getCidade(), 
 									   dadosEndereco.getCep(),
 									   dadosEndereco.getBairro(), 

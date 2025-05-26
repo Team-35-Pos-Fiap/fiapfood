@@ -9,7 +9,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class DadosEnderecoDomain {
+public class EnderecoDomain {
 	private UUID id;
 	private String cidade;
 	private String cep;

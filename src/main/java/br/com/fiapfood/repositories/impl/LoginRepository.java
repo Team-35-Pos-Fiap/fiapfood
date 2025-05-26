@@ -40,7 +40,12 @@ public class LoginRepository implements ILoginRepository {
 	public void salvar(LoginEntity login) {
 		loginRepository.save(login);		
 	}
-	
+
+	@Override
+	public boolean matriculaJaCadastrada(String matricula) {
+		return loginRepository.existsByMatricula(matricula);
+	}
+
 	private LoginEntity getLoginEntity(Optional<LoginEntity> dadosLogin) {
 		if (dadosLogin.isPresent()) {
 			return dadosLogin.get();

@@ -27,7 +27,7 @@ public abstract class UsuarioMapper {
 							     LocalDateTime.now(),
 							     null,
 							     true,
-								 DadosEnderecoMapper.toDadosEndereco(usuario.dadosEndereco()),
+								 EnderecoMapper.toDadosEndereco(usuario.dadosEndereco()),
 							     PerfilAcessoMapper.toPerfil(usuario.perfil()),
 							     LoginMapper.toLogin(usuario.dadosLogin())
 							     );
@@ -42,7 +42,7 @@ public abstract class UsuarioMapper {
 								 usuario.getDataCriacao(),
 								 usuario.getDataAtualizacao(),
 								 usuario.getIsAtivo(),
-								 DadosEnderecoMapper.toDadosEndereco(usuario.getDadosEndereco()),
+								 EnderecoMapper.toDadosEndereco(usuario.getDadosEndereco()),
 								 PerfilAcessoMapper.toPerfil(usuario.getPerfil()),
 								 LoginMapper.toLogin(usuario.getDadosLogin()));
 	}
@@ -58,7 +58,7 @@ public abstract class UsuarioMapper {
 								 usuario.getDataCriacao(),
 								 usuario.getDataAtualizacao(),
 								 usuario.getIsAtivo(),
-							     DadosEnderecoMapper.toDadosEndereco(usuario.getDadosEndereco()),
+							     EnderecoMapper.toDadosEndereco(usuario.getDadosEndereco()),
 							     PerfilAcessoMapper.toPerfil(usuario.getPerfil()),
 							     LoginMapper.toLogin(usuario.getDadosLogin()));
 	}
@@ -71,7 +71,7 @@ public abstract class UsuarioMapper {
 										 usuario.getEmail(), 
 										 usuario.getDadosLogin().getMatricula(),
 										 usuario.getIsAtivo(),
-										 DadosEnderecoMapper.toDadosEnderecoRecord(usuario.getDadosEndereco()),
+										 EnderecoMapper.toDadosEnderecoRecord(usuario.getDadosEndereco()),
 										 PerfilAcessoMapper.toPerfilRecord(usuario.getPerfil()));
 	}
 

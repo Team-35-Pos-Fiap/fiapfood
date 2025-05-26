@@ -63,7 +63,12 @@ public class UsuarioRepository implements IUsuarioRepository {
 	public void salvar(UsuarioEntity usuario) {
 		usuarioRepository.save(usuario);	
 	}
-	
+
+	@Override
+	public boolean emailJaCadastrado(String email) {
+		return usuarioRepository.existsByEmail(email);
+	}
+
 	private UsuarioEntity getUsuarioEntity(Optional<UsuarioEntity> dadosUsuario) {
 		if(dadosUsuario.isPresent()) {		
 			return dadosUsuario.get();

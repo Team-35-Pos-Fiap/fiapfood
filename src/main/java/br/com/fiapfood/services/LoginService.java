@@ -45,6 +45,11 @@ public class LoginService implements ILoginService {
 		loginRepository.salvar(login);
 	}
 
+	@Override
+	public boolean matriculaJaCadastrada(String matricula) {
+		return loginRepository.matriculaJaCadastrada(matricula);
+	}
+
 //	@Override
 //	public void atualizarMatricula(UUID idUsuario, String matricula) {
 //		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(idUsuario);

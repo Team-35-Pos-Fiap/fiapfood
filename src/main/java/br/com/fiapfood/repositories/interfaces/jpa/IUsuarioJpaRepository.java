@@ -16,4 +16,6 @@ public interface IUsuarioJpaRepository extends JpaRepository<UsuarioEntity, UUID
 
 	@Query("SELECT u FROM UsuarioEntity u INNER JOIN u.dadosLogin dl WHERE dl.id = :id AND u.isAtivo = true")
 	Optional<UsuarioEntity> findByIdLogin(@Param("id") UUID loginId);
+
+	boolean existsByEmail(String email);
 }

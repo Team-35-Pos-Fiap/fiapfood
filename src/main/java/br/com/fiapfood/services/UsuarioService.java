@@ -4,6 +4,7 @@ import br.com.fiapfood.entities.record.request.EnderecoRecordRequest;
 import br.com.fiapfood.repositories.interfaces.IPerfilRepository;
 import br.com.fiapfood.repositories.interfaces.IUsuarioRepository;
 import br.com.fiapfood.services.interfaces.IEnderecoService;
+import br.com.fiapfood.services.interfaces.ILoginService;
 import br.com.fiapfood.services.interfaces.IPerfilService;
 import br.com.fiapfood.services.interfaces.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,16 @@ public class UsuarioService implements IUsuarioService {
 
 	@Override
 	public void cadastrar(UsuarioRecordRequest usuario) {
+		// validar se email ja nao esta cadastrado
+		if(usuarioRepository.emailJaCadastrado(usuario.email())){
+			throw new IllegalArgumentException("Email ja cadastrado");
+		}
+
+		// validar se matricula ja nao esta cadastrada
+//		if(loginService.matriculaJaCadastrada(usuario.dadosLogin().matricula())){
+//			throw new IllegalArgumentException("Matricula ja cadastrada");
+//		}
+
 		UsuarioDomain usuarioDomain = UsuarioMapper.toUsuario(usuario);
 		UsuarioEntity usuarioEntity = UsuarioMapper.toUsuario(usuarioDomain);
 		
@@ -102,6 +113,10 @@ public class UsuarioService implements IUsuarioService {
 	@Override
 	public void atualizarEmail(UUID id, String email) {
 		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(id);
+
+		if(usuarioRepository.emailJaCadastrado(email)){
+			throw new IllegalArgumentException("Email ja cadastrado");
+		}
 		
 		usuario.atualizarEmail(email);
 		

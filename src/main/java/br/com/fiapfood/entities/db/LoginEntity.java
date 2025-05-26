@@ -16,6 +16,7 @@ public class LoginEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
+	@Column(unique = true)
 	private String matricula;
 	private String senha;
 
