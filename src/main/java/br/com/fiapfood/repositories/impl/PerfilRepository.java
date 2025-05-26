@@ -1,5 +1,6 @@
 package br.com.fiapfood.repositories.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import br.com.fiapfood.repositories.interfaces.IPerfilRepository;
@@ -23,6 +24,11 @@ public class PerfilRepository implements IPerfilRepository {
 	@Override
 	public PerfilEntity buscarPorId(Integer id) {
 		return getPerfil(perfilRepository.findById(id));
+	}
+
+	@Override
+	public List<PerfilEntity> buscarTodos() {
+		return perfilRepository.findAll();
 	}
 
 	private PerfilEntity getPerfil(Optional<PerfilEntity> dados) {

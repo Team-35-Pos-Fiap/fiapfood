@@ -1,6 +1,10 @@
 package br.com.fiapfood.services;
 
 import br.com.fiapfood.entities.record.request.EnderecoRecordRequest;
+import br.com.fiapfood.repositories.interfaces.IPerfilRepository;
+import br.com.fiapfood.repositories.interfaces.IUsuarioRepository;
+import br.com.fiapfood.services.interfaces.IEnderecoService;
+import br.com.fiapfood.services.interfaces.IPerfilService;
 import br.com.fiapfood.services.interfaces.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,22 +18,21 @@ import br.com.fiapfood.entities.record.response.UsuarioRecordResponse;
 import br.com.fiapfood.mappers.UsuarioMapper;
 import br.com.fiapfood.repositories.impl.PerfilRepository;
 import br.com.fiapfood.repositories.impl.UsuarioRepository;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
 @Service
 public class UsuarioService implements IUsuarioService {
-	
-	@Autowired
-	private UsuarioRepository usuarioRepository;
 
-	@Autowired
-	private PerfilRepository perfilRepository;
+	private final IUsuarioRepository usuarioRepository;
+	private final IPerfilService perfilService;
+	private final IEnderecoService enderecoService;
 
-	@Autowired
-	private EnderecoService enderecoService;
+	public UsuarioService(IUsuarioRepository usuarioRepository, IPerfilService perfilService, IEnderecoService enderecoService) {
+		this.usuarioRepository = usuarioRepository;
+		this.perfilService = perfilService;
+		this.enderecoService = enderecoService;
+	}
 
 	@Override
 	public UsuarioRecordResponse buscarPorId(UUID id) {
@@ -79,7 +82,7 @@ public class UsuarioService implements IUsuarioService {
 		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(id);
 		
 		if(!idPerfil.equals(usuario.getPerfil().getId())) {
-			PerfilEntity perfil = perfilRepository.buscarPorId(idPerfil);
+			PerfilEntity perfil = perfilService.buscarPorId(idPerfil);
 			
 			usuario.atualizarPerfil(perfil);
 			

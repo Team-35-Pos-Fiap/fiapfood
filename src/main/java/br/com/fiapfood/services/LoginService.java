@@ -1,29 +1,24 @@
 
 package br.com.fiapfood.services;
 
-import br.com.fiapfood.entities.db.UsuarioEntity;
-import br.com.fiapfood.repositories.impl.UsuarioRepository;
+import br.com.fiapfood.repositories.interfaces.ILoginRepository;
 import br.com.fiapfood.services.interfaces.ILoginService;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.com.fiapfood.services.interfaces.IUsuarioService;
 import org.springframework.stereotype.Service;
 
 import br.com.fiapfood.entities.db.LoginEntity;
 import br.com.fiapfood.entities.record.request.LoginRecordRequest;
 import br.com.fiapfood.repositories.exceptions.UsuarioNaoEncontradoException;
-import br.com.fiapfood.repositories.impl.LoginRepository;
 import br.com.fiapfood.services.exceptions.LoginSemAcessoException;
 import br.com.fiapfood.utils.MensagensUtil;
-
-import java.util.UUID;
 
 @Service
 public class LoginService implements ILoginService {
 
-	private final LoginRepository loginRepository;
+	private final ILoginRepository loginRepository;
+	private final IUsuarioService usuarioService;
 
-	private final UsuarioService usuarioService;
-
-	public LoginService(LoginRepository loginRepository, UsuarioService usuarioService) {
+	public LoginService(ILoginRepository loginRepository, IUsuarioService usuarioService) {
 		this.loginRepository = loginRepository;
 		this.usuarioService = usuarioService;
 	}
