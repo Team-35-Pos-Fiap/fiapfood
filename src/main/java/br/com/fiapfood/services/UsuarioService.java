@@ -1,5 +1,7 @@
 package br.com.fiapfood.services;
 
+import br.com.fiapfood.entities.record.request.EnderecoRecordRequest;
+import br.com.fiapfood.services.interfaces.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,32 +20,39 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Service
-public class UsuarioService {
+public class UsuarioService implements IUsuarioService {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
 	@Autowired
 	private PerfilRepository perfilRepository;
-	
+
+	@Autowired
+	private EnderecoService enderecoService;
+
+	@Override
 	public UsuarioRecordResponse buscarPorId(UUID id) {
 		UsuarioEntity usuarioEntity = usuarioRepository.recuperaDadosUsuarioPorId(id);
 		UsuarioDomain usuarioDomain = UsuarioMapper.toUsuario(usuarioEntity);
 		
 		return UsuarioMapper.toUsuarioRecord(usuarioDomain);
 	}
-	
+
+	@Override
 	public UsuarioRecordPaginacaoResponse buscarUsuarios(final Integer pagina) {
 		return UsuarioMapper.toUsuario(usuarioRepository.recuperaDadosUsuarios(pagina));
 	}
-	
+
+	@Override
 	public void cadastrar(UsuarioRecordRequest usuario) {
 		UsuarioDomain usuarioDomain = UsuarioMapper.toUsuario(usuario);
 		UsuarioEntity usuarioEntity = UsuarioMapper.toUsuario(usuarioDomain);
 		
 		salvar(usuarioEntity);
 	}
-	
+
+	@Override
 	public void atualizarStatus(UUID id, boolean isAtivo) {
 		UsuarioEntity usuario; 
 		
@@ -59,11 +68,13 @@ public class UsuarioService {
 		
 		salvar(usuario);
 	}
-	
+
+	@Override
 	public void salvar(UsuarioEntity usuario) {
 		usuarioRepository.salvar(usuario);
 	}
-			
+
+	@Override
 	public void atualizarPerfil(UUID id, Integer idPerfil) {
 		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(id);
 		
@@ -76,7 +87,8 @@ public class UsuarioService {
 		}
 	}
 
-	public void atualizarNome(@Valid @NotNull UUID id, String nome) {
+	@Override
+	public void atualizarNome(UUID id, String nome) {
 		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(id);
 		
 		usuario.atualizarNome(nome);
@@ -84,7 +96,8 @@ public class UsuarioService {
 		salvar(usuario);
 	}
 
-	public void atualizarEmail(@Valid @NotNull UUID id, String email) {
+	@Override
+	public void atualizarEmail(UUID id, String email) {
 		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(id);
 		
 		usuario.atualizarEmail(email);
@@ -92,7 +105,15 @@ public class UsuarioService {
 		salvar(usuario);
 	}
 
+	@Override
 	public UsuarioEntity buscarUsuarioPorIdLogin(UUID loginId){
 		return usuarioRepository.recuperarDadosUsuarioPorIdLogin(loginId);
+	}
+
+	@Override
+	public void atualizarDadosEndereco(UUID id, EnderecoRecordRequest dadosEndereco) {
+		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioPorId(id);
+
+		enderecoService.atualizarEndereco(usuario.getDadosEndereco(), dadosEndereco);
 	}
 }

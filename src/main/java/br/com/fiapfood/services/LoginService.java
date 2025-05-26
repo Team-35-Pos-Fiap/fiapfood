@@ -19,20 +19,20 @@ import java.util.UUID;
 @Service
 public class LoginService implements ILoginService {
 
-	@Autowired
-	private LoginRepository loginRepository;
+	private final LoginRepository loginRepository;
 
-	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private final UsuarioService usuarioService;
 
-	@Autowired
-	private UsuarioService usuarioService;
+	public LoginService(LoginRepository loginRepository, UsuarioService usuarioService) {
+		this.loginRepository = loginRepository;
+		this.usuarioService = usuarioService;
+	}
 
 	@Override
 	public String validar(LoginRecordRequest dados) {
 		try {
 			LoginEntity login = loginRepository.buscarPorMatriculaSenha(dados.matricula(), dados.senha());
-			UsuarioEntity usuario = usuarioService.buscarUsuarioPorIdLogin(login.getId());
+			usuarioService.buscarUsuarioPorIdLogin(login.getId()); // Serve para validar se usuario esta ativo
 
 			return "Acesso liberado";
 		} catch (UsuarioNaoEncontradoException e) {
@@ -41,23 +41,22 @@ public class LoginService implements ILoginService {
 	}
 
 	@Override
-	public void trocarSenha(UUID idUsuario, String senha) {
-		// Aqui poderia entrar a regra de negócio para validar que o usuário está ativo.
-		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(idUsuario);
-		LoginEntity login = loginRepository.buscarPorId(usuario.getDadosLogin().getId());
-		
+	public void trocarSenha(String matricula, String senha) {
+		LoginEntity login = loginRepository.buscarPorMatricula(matricula);
+		usuarioService.buscarUsuarioPorIdLogin(login.getId()); // Serve para validar se usuario esta ativo
+
 		login.atualizarSenha(senha);
 
 		loginRepository.salvar(login);
 	}
 
-	@Override
-	public void atualizarMatricula(UUID idUsuario, String matricula) {
-		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(idUsuario);
-		LoginEntity login = loginRepository.buscarPorId(usuario.getDadosLogin().getId());
-		
-		login.atualizarMatricula(matricula);
-
-		loginRepository.salvar(login);
-	}
+//	@Override
+//	public void atualizarMatricula(UUID idUsuario, String matricula) {
+//		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(idUsuario);
+//		LoginEntity login = loginRepository.buscarPorId(usuario.getDadosLogin().getId());
+//
+//		login.atualizarMatricula(matricula);
+//
+//		loginRepository.salvar(login);
+//	}
 }

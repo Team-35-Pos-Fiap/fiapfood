@@ -22,25 +22,14 @@ public class EnderecoService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
-	public void atualizarEndereco(UUID idUsuario, EnderecoRecordRequest dados) {
+	public void atualizarEndereco(EnderecoEntity enderecoAtual, EnderecoRecordRequest dados) {
 
-		EnderecoEntity endereco = trataDadosEndereco(idUsuario, dados);
+		EnderecoEntity endereco = trataDadosEndereco(enderecoAtual, dados);
 		
 		enderecoRepository.salvar(endereco);
 	}
 	
-	private EnderecoEntity trataDadosEndereco(UUID idUsuario, EnderecoRecordRequest enderecoRecord) {
-		EnderecoEntity endereco = null;
-		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(idUsuario);
-
-		Optional<EnderecoEntity> dados = enderecoRepository.buscarPorId(usuario.getDadosEndereco().getId());
-		
-		if (dados.isPresent()) {
-			endereco = dados.get();
-		} else {
-			endereco = new EnderecoEntity();
-		}
-
+	private EnderecoEntity trataDadosEndereco(EnderecoEntity endereco, EnderecoRecordRequest enderecoRecord) {
 		endereco.atualizarDados(enderecoRecord.endereco(), 
 							 	enderecoRecord.cidade(), 
 							 	enderecoRecord.bairro(), 

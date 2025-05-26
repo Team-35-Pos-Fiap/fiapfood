@@ -1,6 +1,7 @@
 package br.com.fiapfood.controllers;
 
 import br.com.fiapfood.controllers.response.MensagemResponse;
+import br.com.fiapfood.services.interfaces.IUsuarioService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +32,12 @@ import java.util.UUID;
 @Slf4j
 public class UsuarioController {
 
-	@Autowired
-	private UsuarioService usuarioService;
-	
-	@Autowired
-	private LoginService loginService;
+	private final IUsuarioService usuarioService;
 
-	@Autowired
-	private EnderecoService enderecoService;
-	
+	public UsuarioController(IUsuarioService usuarioService) {
+		this.usuarioService = usuarioService;
+	}
+
 	@PostMapping
 	public ResponseEntity<Void> cadastrar(@Valid @RequestBody @NotNull UsuarioRecordRequest usuario) {
 		log.info("cadastrar():dados do usuário {}", usuario);
@@ -90,19 +88,9 @@ public class UsuarioController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
 	}
 
-	@PatchMapping("/{id}/login")
-	public ResponseEntity<Void> atualizarLogin(@Valid @PathVariable @NotNull UUID id,@Valid @RequestBody @NotNull LoginRecordRequest dadosLogin) {
-		log.info("atualizarLogin() - id {} dados login: {}", id, dadosLogin);
-
-		loginService.atualizarMatricula(id, dadosLogin.matricula());
-		
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
-	}
-
 	@PatchMapping("/{id}/endereco")
 	public ResponseEntity<Void> atualizarEndereco(@Valid @PathVariable @NotNull UUID id, @Valid @RequestBody @NotNull EnderecoRecordRequest dadosEndereco) {
-		enderecoService.atualizarEndereco(id, dadosEndereco);
-		
+		usuarioService.atualizarDadosEndereco(id, dadosEndereco);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
 	}
 
@@ -119,14 +107,5 @@ public class UsuarioController {
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
 	}
-	
-	@PatchMapping("/{id}/senha")
-	public ResponseEntity<MensagemResponse> atualizarSenha(@PathVariable @Valid @NotNull UUID id, @Valid @RequestBody @NotNull SenhaRecordRequest dados) {
-		log.info("trocar senha():id {} - senha {}", id, dados.senha());
 
-		loginService.trocarSenha(id, dados.senha());
-
-		MensagemResponse sucessoResponse = new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_TROCA_SENHA_USUARIO));
-		return ResponseEntity.ok(sucessoResponse);
-	}
 }
