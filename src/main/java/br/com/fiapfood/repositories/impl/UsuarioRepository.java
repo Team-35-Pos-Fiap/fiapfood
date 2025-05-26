@@ -33,6 +33,10 @@ public class UsuarioRepository {
 	public UsuarioEntity recuperaDadosUsuarioAtivoPorId(UUID id) {
 		return getUsuarioEntity(usuarioRepository.findByIdAndIsAtivoTrue(id));
 	}
+
+	public UsuarioEntity recuperarDadosUsuarioPorIdLogin(UUID loginId){
+		return getUsuarioEntity(usuarioRepository.findByIdLogin(loginId));
+	}
 	
 	public Page<UsuarioEntity> recuperaDadosUsuarios(final Integer pagina) {
 		if (pagina == null || pagina < 1) {

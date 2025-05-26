@@ -1,5 +1,6 @@
 package br.com.fiapfood.controllers.exceptions;
 
+import br.com.fiapfood.controllers.response.MensagemResponse;
 import br.com.fiapfood.services.exceptions.PaginaInvalidaException;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class ErrorHandler {
 	
 	@ExceptionHandler(NullPointerException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<ErroResponse> trataNullPointerException(NullPointerException e) { 
+	public ResponseEntity<MensagemResponse> trataNullPointerException(NullPointerException e) {
 		log.error(e.getMessage(), e);
 		
 		return getInternalServerErrorResponse();
@@ -39,7 +40,7 @@ public class ErrorHandler {
 
 	@ExceptionHandler(ValidationException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<ErroResponse> trataValidacaoCamposException(ValidationException e) {
+	public ResponseEntity<MensagemResponse> trataValidacaoCamposException(ValidationException e) {
 		log.error(e.getMessage(), e);
 		
 		return getBadRequestResponse(e.getMessage());
@@ -47,7 +48,7 @@ public class ErrorHandler {
 	
 	@ExceptionHandler(InternalServerError.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public ResponseEntity<ErroResponse> trataInternalErrorException(InternalServerError e) {
+	public ResponseEntity<MensagemResponse> trataInternalErrorException(InternalServerError e) {
 		log.error(e.getMessage(), e);
 		
 		return getBadRequestResponse(e.getMessage());
@@ -55,7 +56,7 @@ public class ErrorHandler {
 
 	@ExceptionHandler(UsuarioNaoEncontradoException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<ErroResponse> trataUsuarioNaoEncontradoException(UsuarioNaoEncontradoException e) {
+	public ResponseEntity<MensagemResponse> trataUsuarioNaoEncontradoException(UsuarioNaoEncontradoException e) {
 		log.error(e.getMessage(), e);
 		
 		return getBadRequestResponse(e.getMessage());
@@ -63,7 +64,7 @@ public class ErrorHandler {
 	
 	@ExceptionHandler(IllegalArgumentException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<ErroResponse> trataIllegalArgumentException(IllegalArgumentException e) {
+	public ResponseEntity<MensagemResponse> trataIllegalArgumentException(IllegalArgumentException e) {
 		log.error(e.getMessage(), e);
 		
 		return getBadRequestResponse(e.getMessage());
@@ -71,7 +72,7 @@ public class ErrorHandler {
 	
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<ErroResponse> trataHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+	public ResponseEntity<MensagemResponse> trataHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
 		log.error(e.getMessage(), e);
 		
 		return getBadRequestResponse(e.getMessage());
@@ -79,7 +80,7 @@ public class ErrorHandler {
 
 	@ExceptionHandler(NoSuchMessageException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<ErroResponse> trataNoSuchMessageException(NoSuchMessageException e) {
+	public ResponseEntity<MensagemResponse> trataNoSuchMessageException(NoSuchMessageException e) {
 		log.error(e.getMessage(), e);
 		
 		return getBadRequestResponse(e.getMessage());
@@ -87,7 +88,7 @@ public class ErrorHandler {
 
 	@ExceptionHandler(LoginSemAcessoException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<ErroResponse> trataLoginSemAcessoException(LoginSemAcessoException e) {
+	public ResponseEntity<MensagemResponse> trataLoginSemAcessoException(LoginSemAcessoException e) {
 		log.error(e.getMessage(), e);
 		
 		return getBadRequestResponse(e.getMessage());
@@ -95,27 +96,33 @@ public class ErrorHandler {
 	
 	@ExceptionHandler(LoginNaoEncontradoException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<ErroResponse> trataLoginNaoEncontradoException(LoginNaoEncontradoException e) {
+	public ResponseEntity<MensagemResponse> trataLoginNaoEncontradoException(LoginNaoEncontradoException e) {
 		log.error(e.getMessage(), e);
 		
 		return getBadRequestResponse(e.getMessage());
 	}
 	
-	protected ResponseEntity<ErroResponse> getInternalServerErrorResponse() {
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErroResponse(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_INTERNAL_SERVER_ERROR)));
+	protected ResponseEntity<MensagemResponse> getInternalServerErrorResponse() {
+
+		MensagemResponse erroResponse = new ErroResponse(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_INTERNAL_SERVER_ERROR));
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(erroResponse);
 	}
 	
-	protected ResponseEntity<ErroResponse> getBadRequestResponse(String mensagem) {
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErroResponse(mensagem));
+	protected ResponseEntity<MensagemResponse> getBadRequestResponse(String mensagem) {
+
+		MensagemResponse erroResponse = new ErroResponse(mensagem);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erroResponse);
 	}
 	
-	protected ResponseEntity<ErroResponse> getForbiddenResponse(String mensagem) {
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErroResponse(mensagem));
+	protected ResponseEntity<MensagemResponse> getForbiddenResponse(String mensagem) {
+
+		MensagemResponse erroResponse = new ErroResponse(mensagem);
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(erroResponse);
 	}
 
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<ErroResponse> trataMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+	public ResponseEntity<MensagemResponse> trataMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
 		log.error(e.getMessage(), e);
 		return getBadRequestResponse(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_PARAMETRO_INVALIDO, e.getName(), e.getRequiredType().getSimpleName()));
 	}
@@ -145,7 +152,7 @@ public class ErrorHandler {
 
 	@ExceptionHandler(PaginaInvalidaException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<ErroResponse> handlePaginaInvalidaException(PaginaInvalidaException e) {
+	public ResponseEntity<MensagemResponse> handlePaginaInvalidaException(PaginaInvalidaException e) {
 		return ResponseEntity.badRequest()
 				.body(new ErroResponse(e.getMessage()));
 	}

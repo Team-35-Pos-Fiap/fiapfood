@@ -1,5 +1,7 @@
 package br.com.fiapfood.controllers;
 
+import br.com.fiapfood.controllers.response.MensagemResponse;
+import br.com.fiapfood.services.interfaces.ILoginService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +20,18 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/login")
 @Slf4j
 public class LoginController {
-	
-	@Autowired
-	protected LoginService loginService;
-	
-	@PostMapping
-	public ResponseEntity<SucessoResponse> validar(@RequestBody @Valid @NotNull LoginRecordRequest dados) {
-		log.info("realizaLogin():dados do login {}", dados);
 
-		return ResponseEntity.ok().body(new SucessoResponse(loginService.validar(dados)));		
+	protected ILoginService loginService;
+
+	public LoginController(ILoginService loginService) {
+		this.loginService = loginService;
+	}
+
+	@PostMapping
+	public ResponseEntity<MensagemResponse> validar(@RequestBody @Valid @NotNull LoginRecordRequest dados) {
+		log.info("realizaLogin():dados do login {}", dados);
+		MensagemResponse sucessoResponse = new SucessoResponse(loginService.validar(dados));
+
+		return ResponseEntity.ok().body(sucessoResponse);
 	}
 }

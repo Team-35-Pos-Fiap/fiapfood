@@ -3,6 +3,7 @@ package br.com.fiapfood.services;
 
 import br.com.fiapfood.entities.db.UsuarioEntity;
 import br.com.fiapfood.repositories.impl.UsuarioRepository;
+import br.com.fiapfood.services.interfaces.ILoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +17,22 @@ import br.com.fiapfood.utils.MensagensUtil;
 import java.util.UUID;
 
 @Service
-public class LoginService {
+public class LoginService implements ILoginService {
 
 	@Autowired
 	private LoginRepository loginRepository;
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	
+
+	@Autowired
+	private UsuarioService usuarioService;
+
+	@Override
 	public String validar(LoginRecordRequest dados) {
 		try {
-			loginRepository.buscarPorMatriculaSenha(dados.matricula(), dados.senha());
+			LoginEntity login = loginRepository.buscarPorMatriculaSenha(dados.matricula(), dados.senha());
+			UsuarioEntity usuario = usuarioService.buscarUsuarioPorIdLogin(login.getId());
 
 			return "Acesso liberado";
 		} catch (UsuarioNaoEncontradoException e) {
@@ -34,6 +40,7 @@ public class LoginService {
 		}
 	}
 
+	@Override
 	public void trocarSenha(UUID idUsuario, String senha) {
 		// Aqui poderia entrar a regra de negócio para validar que o usuário está ativo.
 		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(idUsuario);
@@ -43,7 +50,8 @@ public class LoginService {
 
 		loginRepository.salvar(login);
 	}
-	
+
+	@Override
 	public void atualizarMatricula(UUID idUsuario, String matricula) {
 		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(idUsuario);
 		LoginEntity login = loginRepository.buscarPorId(usuario.getDadosLogin().getId());

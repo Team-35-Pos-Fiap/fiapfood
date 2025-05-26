@@ -1,5 +1,6 @@
 package br.com.fiapfood.controllers;
 
+import br.com.fiapfood.controllers.response.MensagemResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,21 +50,23 @@ public class UsuarioController {
 	}
 
 	@DeleteMapping("/{id}/status")
-	public ResponseEntity<SucessoResponse> inativar(@Valid @PathVariable @NotNull UUID id) {
+	public ResponseEntity<MensagemResponse> inativar(@Valid @PathVariable @NotNull UUID id) {
 		log.info("inativar():id {}", id);
 
 		usuarioService.atualizarStatus(id, false);
-		
-		return ResponseEntity.ok(new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_INATIVACAO_USUARIO)));
+
+		MensagemResponse sucessoResponse = new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_INATIVACAO_USUARIO));
+		return ResponseEntity.ok(sucessoResponse);
 	}
 	
 	@PatchMapping("/{id}/status")
-	public ResponseEntity<SucessoResponse> reativar(@Valid @PathVariable @NotNull UUID id) {
+	public ResponseEntity<MensagemResponse> reativar(@Valid @PathVariable @NotNull UUID id) {
 		log.info("reativar():id {}", id);
 
 		usuarioService.atualizarStatus(id, true);
-		
-		return ResponseEntity.ok(new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_REATIVACAO_USUARIO)));
+
+		MensagemResponse sucessoResponse = new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_REATIVACAO_USUARIO));
+		return ResponseEntity.ok(sucessoResponse);
 	}
 	
 	@GetMapping("/{id}")
@@ -118,11 +121,12 @@ public class UsuarioController {
 	}
 	
 	@PatchMapping("/{id}/senha")
-	public ResponseEntity<SucessoResponse> atualizarSenha(@PathVariable @Valid @NotNull UUID id, @Valid @RequestBody @NotNull SenhaRecordRequest dados) {
+	public ResponseEntity<MensagemResponse> atualizarSenha(@PathVariable @Valid @NotNull UUID id, @Valid @RequestBody @NotNull SenhaRecordRequest dados) {
 		log.info("trocar senha():id {} - senha {}", id, dados.senha());
 
 		loginService.trocarSenha(id, dados.senha());
-		
-		return ResponseEntity.ok(new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_TROCA_SENHA_USUARIO)));
+
+		MensagemResponse sucessoResponse = new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_TROCA_SENHA_USUARIO));
+		return ResponseEntity.ok(sucessoResponse);
 	}
 }

@@ -1,10 +1,8 @@
 package br.com.fiapfood.controllers.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+public class SucessoResponse extends MensagemResponse {
 
-@AllArgsConstructor
-@Data
-public class SucessoResponse {
-	private String mensagem;
+	public SucessoResponse(String mensagem){
+		super(mensagem);
+	}
 }

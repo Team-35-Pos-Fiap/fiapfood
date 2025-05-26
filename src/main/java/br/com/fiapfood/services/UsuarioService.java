@@ -91,4 +91,8 @@ public class UsuarioService {
 		
 		salvar(usuario);
 	}
+
+	public UsuarioEntity buscarUsuarioPorIdLogin(UUID loginId){
+		return usuarioRepository.recuperarDadosUsuarioPorIdLogin(loginId);
+	}
 }
