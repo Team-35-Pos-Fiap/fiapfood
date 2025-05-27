@@ -1,19 +1,12 @@
 
 package br.com.fiapfood.services;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import br.com.fiapfood.entities.db.UsuarioEntity;
-import br.com.fiapfood.repositories.interfaces.IEnderecoRepository;
-import br.com.fiapfood.services.interfaces.IEnderecoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.fiapfood.entities.db.EnderecoEntity;
 import br.com.fiapfood.entities.record.request.EnderecoRecordRequest;
-import br.com.fiapfood.repositories.impl.EnderecoRepository;
-import br.com.fiapfood.repositories.impl.UsuarioRepository;
+import br.com.fiapfood.repositories.interfaces.IEnderecoRepository;
+import br.com.fiapfood.services.interfaces.IEnderecoService;
 
 @Service
 public class EnderecoService implements IEnderecoService {

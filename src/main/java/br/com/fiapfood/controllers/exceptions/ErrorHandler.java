@@ -1,7 +1,8 @@
 package br.com.fiapfood.controllers.exceptions;
 
-import br.com.fiapfood.controllers.response.MensagemResponse;
-import br.com.fiapfood.services.exceptions.PaginaInvalidaException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,19 +13,19 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpServerErrorException.InternalServerError;
-
-import br.com.fiapfood.controllers.response.ErroResponse;
-import br.com.fiapfood.repositories.exceptions.LoginNaoEncontradoException;
-import br.com.fiapfood.repositories.exceptions.UsuarioNaoEncontradoException;
-import br.com.fiapfood.services.exceptions.LoginSemAcessoException;
-import br.com.fiapfood.utils.MensagensUtil;
-import jakarta.validation.ValidationException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.util.HashMap;
-import java.util.Map;
+import br.com.fiapfood.controllers.response.ErroResponse;
+import br.com.fiapfood.controllers.response.MensagemResponse;
+import br.com.fiapfood.repositories.exceptions.LoginNaoEncontradoException;
+import br.com.fiapfood.repositories.exceptions.UsuarioNaoEncontradoException;
+import br.com.fiapfood.services.exceptions.EmailDuplicadoException;
+import br.com.fiapfood.services.exceptions.LoginSemAcessoException;
+import br.com.fiapfood.services.exceptions.PaginaInvalidaException;
+import br.com.fiapfood.utils.MensagensUtil;
+import jakarta.validation.ValidationException;
+import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
 @Slf4j
@@ -51,7 +52,7 @@ public class ErrorHandler {
 	public ResponseEntity<MensagemResponse> trataInternalErrorException(InternalServerError e) {
 		log.error(e.getMessage(), e);
 		
-		return getBadRequestResponse(e.getMessage());
+		return getInternalServerErrorResponse();
 	}
 
 	@ExceptionHandler(UsuarioNaoEncontradoException.class)
@@ -102,6 +103,14 @@ public class ErrorHandler {
 		return getBadRequestResponse(e.getMessage());
 	}
 	
+	@ExceptionHandler(EmailDuplicadoException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity<MensagemResponse> trataEmailDuplicadoException(EmailDuplicadoException e) {
+		log.error(e.getMessage(), e);
+		
+		return getBadRequestResponse(e.getMessage());
+	}
+
 	protected ResponseEntity<MensagemResponse> getInternalServerErrorResponse() {
 
 		MensagemResponse erroResponse = new ErroResponse(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_INTERNAL_SERVER_ERROR));
@@ -124,6 +133,7 @@ public class ErrorHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<MensagemResponse> trataMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
 		log.error(e.getMessage(), e);
+
 		return getBadRequestResponse(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_PARAMETRO_INVALIDO, e.getName(), e.getRequiredType().getSimpleName()));
 	}
 

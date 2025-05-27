@@ -1,13 +1,14 @@
 package br.com.fiapfood.services;
 
-import br.com.fiapfood.entities.db.PerfilEntity;
-import br.com.fiapfood.entities.record.response.PerfilRecordResponse;
-import br.com.fiapfood.mappers.PerfilAcessoMapper;
-import br.com.fiapfood.repositories.interfaces.IPerfilRepository;
-import br.com.fiapfood.services.interfaces.IPerfilService;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import br.com.fiapfood.entities.db.PerfilEntity;
+import br.com.fiapfood.entities.record.response.PerfilRecordResponse;
+import br.com.fiapfood.mappers.PerfilMapper;
+import br.com.fiapfood.repositories.interfaces.IPerfilRepository;
+import br.com.fiapfood.services.interfaces.IPerfilService;
 
 @Service
 public class PerfilService implements IPerfilService {
@@ -25,8 +26,6 @@ public class PerfilService implements IPerfilService {
 
     @Override
     public List<PerfilRecordResponse> buscarTodos() {
-
-        return PerfilAcessoMapper.toPerfilRecord(perfilRepository.buscarTodos());
+        return PerfilMapper.toPerfilRecord(perfilRepository.buscarTodos());
     }
-
 }

@@ -3,16 +3,15 @@ package br.com.fiapfood.repositories.impl;
 import java.util.Optional;
 import java.util.UUID;
 
-import br.com.fiapfood.repositories.interfaces.IUsuarioRepository;
-import br.com.fiapfood.services.exceptions.PaginaInvalidaException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import br.com.fiapfood.entities.db.UsuarioEntity;
 import br.com.fiapfood.repositories.exceptions.UsuarioNaoEncontradoException;
+import br.com.fiapfood.repositories.interfaces.IUsuarioRepository;
 import br.com.fiapfood.repositories.interfaces.jpa.IUsuarioJpaRepository;
+import br.com.fiapfood.services.exceptions.PaginaInvalidaException;
 import br.com.fiapfood.utils.MensagensUtil;
 
 @Repository

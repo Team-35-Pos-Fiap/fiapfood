@@ -3,12 +3,11 @@ package br.com.fiapfood.repositories.impl;
 import java.util.List;
 import java.util.Optional;
 
-import br.com.fiapfood.repositories.interfaces.IPerfilRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.fiapfood.entities.db.PerfilEntity;
 import br.com.fiapfood.repositories.exceptions.PerfilNaoEncontradoException;
+import br.com.fiapfood.repositories.interfaces.IPerfilRepository;
 import br.com.fiapfood.repositories.interfaces.jpa.IPerfilJpaRepository;
 import br.com.fiapfood.utils.MensagensUtil;
 

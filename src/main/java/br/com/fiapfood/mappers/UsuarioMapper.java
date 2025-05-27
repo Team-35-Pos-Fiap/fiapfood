@@ -28,9 +28,8 @@ public abstract class UsuarioMapper {
 							     null,
 							     true,
 								 EnderecoMapper.toDadosEndereco(usuario.dadosEndereco()),
-							     PerfilAcessoMapper.toPerfil(usuario.perfil()),
-							     LoginMapper.toLogin(usuario.dadosLogin())
-							     );
+							     PerfilMapper.toPerfil(usuario.perfil()),
+							     LoginMapper.toLogin(usuario.dadosLogin()));
 	}
 
 	// 2 - domain -> entity
@@ -43,7 +42,7 @@ public abstract class UsuarioMapper {
 								 usuario.getDataAtualizacao(),
 								 usuario.getIsAtivo(),
 								 EnderecoMapper.toDadosEndereco(usuario.getDadosEndereco()),
-								 PerfilAcessoMapper.toPerfil(usuario.getPerfil()),
+								 PerfilMapper.toPerfil(usuario.getPerfil()),
 								 LoginMapper.toLogin(usuario.getDadosLogin()));
 	}
 	
@@ -59,7 +58,7 @@ public abstract class UsuarioMapper {
 								 usuario.getDataAtualizacao(),
 								 usuario.getIsAtivo(),
 							     EnderecoMapper.toDadosEndereco(usuario.getDadosEndereco()),
-							     PerfilAcessoMapper.toPerfil(usuario.getPerfil()),
+							     PerfilMapper.toPerfil(usuario.getPerfil()),
 							     LoginMapper.toLogin(usuario.getDadosLogin()));
 	}
 	
@@ -72,7 +71,7 @@ public abstract class UsuarioMapper {
 										 usuario.getDadosLogin().getMatricula(),
 										 usuario.getIsAtivo(),
 										 EnderecoMapper.toDadosEnderecoRecord(usuario.getDadosEndereco()),
-										 PerfilAcessoMapper.toPerfilRecord(usuario.getPerfil()));
+										 PerfilMapper.toPerfilRecord(usuario.getPerfil()));
 	}
 
 	public static UsuarioRecordPaginacaoResponse toUsuario(Page<UsuarioEntity> dados) {

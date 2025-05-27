@@ -1,31 +1,33 @@
 package br.com.fiapfood.controllers;
 
-import br.com.fiapfood.controllers.response.MensagemResponse;
-import br.com.fiapfood.services.interfaces.IUsuarioService;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import br.com.fiapfood.controllers.response.MensagemResponse;
 import br.com.fiapfood.controllers.response.SucessoResponse;
 import br.com.fiapfood.entities.record.request.EmailRecordRequest;
 import br.com.fiapfood.entities.record.request.EnderecoRecordRequest;
-import br.com.fiapfood.entities.record.request.LoginRecordRequest;
 import br.com.fiapfood.entities.record.request.NomeRecordRequest;
 import br.com.fiapfood.entities.record.request.PerfilRecordRequest;
-import br.com.fiapfood.entities.record.request.SenhaRecordRequest;
 import br.com.fiapfood.entities.record.request.UsuarioRecordRequest;
 import br.com.fiapfood.entities.record.response.UsuarioRecordPaginacaoResponse;
 import br.com.fiapfood.entities.record.response.UsuarioRecordResponse;
-import br.com.fiapfood.services.EnderecoService;
-import br.com.fiapfood.services.LoginService;
-import br.com.fiapfood.services.UsuarioService;
+import br.com.fiapfood.services.interfaces.IUsuarioService;
 import br.com.fiapfood.utils.MensagensUtil;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/usuarios")

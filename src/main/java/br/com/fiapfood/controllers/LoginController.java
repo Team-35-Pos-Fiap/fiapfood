@@ -1,22 +1,22 @@
 package br.com.fiapfood.controllers;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import br.com.fiapfood.controllers.response.MensagemResponse;
+import br.com.fiapfood.controllers.response.SucessoResponse;
+import br.com.fiapfood.entities.record.request.LoginRecordRequest;
 import br.com.fiapfood.entities.record.request.SenhaRecordRequest;
 import br.com.fiapfood.services.interfaces.ILoginService;
 import br.com.fiapfood.utils.MensagensUtil;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import br.com.fiapfood.controllers.response.SucessoResponse;
-import br.com.fiapfood.entities.record.request.LoginRecordRequest;
-import br.com.fiapfood.services.LoginService;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/login")

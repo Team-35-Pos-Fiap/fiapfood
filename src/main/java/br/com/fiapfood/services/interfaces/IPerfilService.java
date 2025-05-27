@@ -1,10 +1,9 @@
 package br.com.fiapfood.services.interfaces;
 
+import java.util.List;
+
 import br.com.fiapfood.entities.db.PerfilEntity;
 import br.com.fiapfood.entities.record.response.PerfilRecordResponse;
-
-import java.util.List;
-import java.util.UUID;
 
 public interface IPerfilService {
 

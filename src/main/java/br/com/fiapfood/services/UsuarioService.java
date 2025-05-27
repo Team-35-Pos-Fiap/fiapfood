@@ -1,26 +1,23 @@
 package br.com.fiapfood.services;
 
-import br.com.fiapfood.entities.record.request.EnderecoRecordRequest;
-import br.com.fiapfood.repositories.interfaces.IPerfilRepository;
-import br.com.fiapfood.repositories.interfaces.IUsuarioRepository;
-import br.com.fiapfood.services.interfaces.IEnderecoService;
-import br.com.fiapfood.services.interfaces.ILoginService;
-import br.com.fiapfood.services.interfaces.IPerfilService;
-import br.com.fiapfood.services.interfaces.IUsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import br.com.fiapfood.entities.db.PerfilEntity;
 import br.com.fiapfood.entities.db.UsuarioEntity;
 import br.com.fiapfood.entities.domain.UsuarioDomain;
+import br.com.fiapfood.entities.record.request.EnderecoRecordRequest;
 import br.com.fiapfood.entities.record.request.UsuarioRecordRequest;
 import br.com.fiapfood.entities.record.response.UsuarioRecordPaginacaoResponse;
 import br.com.fiapfood.entities.record.response.UsuarioRecordResponse;
 import br.com.fiapfood.mappers.UsuarioMapper;
-import br.com.fiapfood.repositories.impl.PerfilRepository;
-import br.com.fiapfood.repositories.impl.UsuarioRepository;
-
-import java.util.UUID;
+import br.com.fiapfood.repositories.interfaces.IUsuarioRepository;
+import br.com.fiapfood.services.exceptions.EmailDuplicadoException;
+import br.com.fiapfood.services.interfaces.IEnderecoService;
+import br.com.fiapfood.services.interfaces.IPerfilService;
+import br.com.fiapfood.services.interfaces.IUsuarioService;
+import br.com.fiapfood.utils.MensagensUtil;
 
 @Service
 public class UsuarioService implements IUsuarioService {
@@ -50,9 +47,8 @@ public class UsuarioService implements IUsuarioService {
 
 	@Override
 	public void cadastrar(UsuarioRecordRequest usuario) {
-		// validar se email ja nao esta cadastrado
 		if(usuarioRepository.emailJaCadastrado(usuario.email())){
-			throw new IllegalArgumentException("Email ja cadastrado");
+			throw new EmailDuplicadoException(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_EMAIL_DUPLICADO));
 		}
 
 		// validar se matricula ja nao esta cadastrada
@@ -115,7 +111,7 @@ public class UsuarioService implements IUsuarioService {
 		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(id);
 
 		if(usuarioRepository.emailJaCadastrado(email)){
-			throw new IllegalArgumentException("Email ja cadastrado");
+			throw new EmailDuplicadoException(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_EMAIL_DUPLICADO));
 		}
 		
 		usuario.atualizarEmail(email);
