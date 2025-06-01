@@ -147,7 +147,6 @@ public class ErrorHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Map<String, String>> handleAll(Exception ex) {
 		Map<String, String> error = new HashMap<>();
-		error.put("erro", ex.getClass().getName());
 		error.put("mensagem", ex.getMessage());
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
 	}
