@@ -51,10 +51,6 @@ public class UsuarioService implements IUsuarioService {
 			throw new EmailDuplicadoException(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_EMAIL_DUPLICADO));
 		}
 
-		// validar se matricula ja nao esta cadastrada
-//		if(loginService.matriculaJaCadastrada(usuario.dadosLogin().matricula())){
-//			throw new IllegalArgumentException("Matricula ja cadastrada");
-//		}
 
 		UsuarioDomain usuarioDomain = UsuarioMapper.toUsuario(usuario);
 		UsuarioEntity usuarioEntity = UsuarioMapper.toUsuario(usuarioDomain);

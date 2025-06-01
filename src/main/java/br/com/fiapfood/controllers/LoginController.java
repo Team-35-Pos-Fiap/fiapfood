@@ -37,15 +37,6 @@ public class LoginController {
 		return ResponseEntity.ok().body(sucessoResponse);
 	}
 
-//	@PatchMapping("/{id}/login")
-//	public ResponseEntity<Void> atualizarLogin(@Valid @PathVariable @NotNull UUID id, @Valid @RequestBody @NotNull LoginRecordRequest dadosLogin) {
-//		log.info("atualizarLogin() - id {} dados login: {}", id, dadosLogin);
-//
-//		loginService.atualizarMatricula(id, dadosLogin.matricula());
-//
-//		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-//	}
-
 	@PatchMapping("/{matricula}/senha")
 	public ResponseEntity<MensagemResponse> atualizarSenha(@PathVariable @Valid @NotNull String matricula, @Valid @RequestBody @NotNull SenhaRecordRequest dados) {
 		log.info("trocar senha():id {} - senha {}", matricula, dados.senha());

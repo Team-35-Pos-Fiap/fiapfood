@@ -138,10 +138,9 @@ public class ErrorHandler {
 	}
 
 	@ExceptionHandler(PaginaInvalidaException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<MensagemResponse> handlePaginaInvalidaException(PaginaInvalidaException e) {
-		return ResponseEntity.badRequest()
-				.body(new ErroResponse(e.getMessage()));
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+
 	}
 
 	@ExceptionHandler(Exception.class)

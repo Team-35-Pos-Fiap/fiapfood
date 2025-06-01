@@ -50,13 +50,4 @@ public class LoginService implements ILoginService {
 		return loginRepository.matriculaJaCadastrada(matricula);
 	}
 
-//	@Override
-//	public void atualizarMatricula(UUID idUsuario, String matricula) {
-//		UsuarioEntity usuario = usuarioRepository.recuperaDadosUsuarioAtivoPorId(idUsuario);
-//		LoginEntity login = loginRepository.buscarPorId(usuario.getDadosLogin().getId());
-//
-//		login.atualizarMatricula(matricula);
-//
-//		loginRepository.salvar(login);
-//	}
 }
