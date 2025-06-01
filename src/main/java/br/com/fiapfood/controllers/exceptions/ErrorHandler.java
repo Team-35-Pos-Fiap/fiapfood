@@ -32,109 +32,86 @@ import lombok.extern.slf4j.Slf4j;
 public class ErrorHandler {
 	
 	@ExceptionHandler(NullPointerException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<MensagemResponse> trataNullPointerException(NullPointerException e) {
 		log.error(e.getMessage(), e);
 		
-		return getInternalServerErrorResponse();
+		return getResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 	}
 
 	@ExceptionHandler(ValidationException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<MensagemResponse> trataValidacaoCamposException(ValidationException e) {
 		log.error(e.getMessage(), e);
 		
-		return getBadRequestResponse(e.getMessage());
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
 	}
 	
 	@ExceptionHandler(InternalServerError.class)
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ResponseEntity<MensagemResponse> trataInternalErrorException(InternalServerError e) {
 		log.error(e.getMessage(), e);
 		
-		return getInternalServerErrorResponse();
+		return getResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 	}
 
 	@ExceptionHandler(UsuarioNaoEncontradoException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<MensagemResponse> trataUsuarioNaoEncontradoException(UsuarioNaoEncontradoException e) {
 		log.error(e.getMessage(), e);
 		
-		return getBadRequestResponse(e.getMessage());
+		return getResponse(HttpStatus.NOT_FOUND, e.getMessage());
 	}
 	
 	@ExceptionHandler(IllegalArgumentException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<MensagemResponse> trataIllegalArgumentException(IllegalArgumentException e) {
 		log.error(e.getMessage(), e);
 		
-		return getBadRequestResponse(e.getMessage());
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
 	}
 	
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<MensagemResponse> trataHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
 		log.error(e.getMessage(), e);
 		
-		return getBadRequestResponse(e.getMessage());
+		return getResponse(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
 	}
 
 	@ExceptionHandler(NoSuchMessageException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<MensagemResponse> trataNoSuchMessageException(NoSuchMessageException e) {
 		log.error(e.getMessage(), e);
 		
-		return getBadRequestResponse(e.getMessage());
+		return getResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 	}
 
 	@ExceptionHandler(LoginSemAcessoException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<MensagemResponse> trataLoginSemAcessoException(LoginSemAcessoException e) {
 		log.error(e.getMessage(), e);
 		
-		return getBadRequestResponse(e.getMessage());
+		return getResponse(HttpStatus.UNAUTHORIZED, e.getMessage());
 	}
 	
 	@ExceptionHandler(LoginNaoEncontradoException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<MensagemResponse> trataLoginNaoEncontradoException(LoginNaoEncontradoException e) {
 		log.error(e.getMessage(), e);
 		
-		return getBadRequestResponse(e.getMessage());
+		return getResponse(HttpStatus.NOT_FOUND, e.getMessage());
 	}
 	
 	@ExceptionHandler(EmailDuplicadoException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<MensagemResponse> trataEmailDuplicadoException(EmailDuplicadoException e) {
 		log.error(e.getMessage(), e);
 		
-		return getBadRequestResponse(e.getMessage());
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
 	}
 
-	protected ResponseEntity<MensagemResponse> getInternalServerErrorResponse() {
-
-		MensagemResponse erroResponse = new ErroResponse(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_INTERNAL_SERVER_ERROR));
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(erroResponse);
-	}
-	
-	protected ResponseEntity<MensagemResponse> getBadRequestResponse(String mensagem) {
+	protected ResponseEntity<MensagemResponse> getResponse(HttpStatus status, String mensagem) {
 
 		MensagemResponse erroResponse = new ErroResponse(mensagem);
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erroResponse);
-	}
-	
-	protected ResponseEntity<MensagemResponse> getForbiddenResponse(String mensagem) {
-
-		MensagemResponse erroResponse = new ErroResponse(mensagem);
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(erroResponse);
+		return ResponseEntity.status(status).body(erroResponse);
 	}
 
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<MensagemResponse> trataMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
 		log.error(e.getMessage(), e);
 
-		return getBadRequestResponse(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_PARAMETRO_INVALIDO, e.getName(), e.getRequiredType().getSimpleName()));
+		return getResponse(HttpStatus.BAD_REQUEST, MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_PARAMETRO_INVALIDO, e.getName(), e.getRequiredType().getSimpleName()));
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
