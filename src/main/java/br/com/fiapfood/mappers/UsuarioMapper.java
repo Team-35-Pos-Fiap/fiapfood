@@ -4,6 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import br.com.fiapfood.entities.record.request.EnderecoRecordRequest;
+import br.com.fiapfood.entities.record.request.LoginRecordRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -84,5 +91,15 @@ public abstract class UsuarioMapper {
 		PaginacaoRecordResponse dadosPaginacao = new PaginacaoRecordResponse(dados.getNumber() + 1, dados.getTotalPages(), Long.valueOf(dados.getTotalElements()).intValue());
 		
 		return new UsuarioRecordPaginacaoResponse(usuarios, dadosPaginacao);
+	}
+
+	public static UsuarioRecordRequest toUsuarioRecordRequest(UsuarioDomain usuario) {
+		return new UsuarioRecordRequest(
+				usuario.getNome(),
+				usuario.getEmail(),
+				usuario.getPerfil().getId(),
+				EnderecoMapper.toDadosEnderecoRecord(usuario.getDadosEndereco()),
+				LoginMapper.toLoginRecordRequest(usuario.getDadosLogin())
+		);
 	}
 }

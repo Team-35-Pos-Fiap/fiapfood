@@ -36,4 +36,8 @@ public abstract class LoginMapper {
 	public static LoginRecordResponse toLoginRecord(LoginDomain login) {
 		return new LoginRecordResponse(login.getMatricula());
 	}
+
+	public static LoginRecordRequest toLoginRecordRequest(LoginDomain login) {
+		return new LoginRecordRequest(login.getMatricula(), login.getSenha());
+	}
 }
