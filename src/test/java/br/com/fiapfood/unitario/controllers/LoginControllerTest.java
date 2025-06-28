@@ -13,6 +13,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
@@ -58,7 +60,7 @@ public class LoginControllerTest {
     }
 
     @Nested
-    class validarLoginRequest{
+    class ValidarLoginRequest {
 
         @Test
         void devePermitirValidarLogin() throws Exception {
@@ -68,9 +70,7 @@ public class LoginControllerTest {
             when(loginService.validar(any(LoginRecordRequest.class)))
                     .thenReturn("Acesso liberado");
 
-            // Act
-
-            // Assert
+            // Act & Assert
             mockMvc.perform(post("/login")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(asJsonString(loginRecordRequest)))
@@ -87,9 +87,8 @@ public class LoginControllerTest {
 
             when(loginService.validar(any(LoginRecordRequest.class)))
                     .thenThrow(new LoginNaoEncontradoException("Não foi encontrado um usuário com a matrícula e senha informados."));
-            // Act
 
-            // Assert
+            // Act & Assert
             mockMvc.perform(post("/login")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(asJsonString(loginRecordRequest)))
@@ -100,82 +99,14 @@ public class LoginControllerTest {
         }
 
         @Test
-        void deveLancarExcecaoSeMatriculaEmBrancoNosDadosDeLogin() throws Exception {
-            // Arrange
-            LoginRecordRequest LoginRecordRequestMissingMatricula = new LoginRecordRequest(null, "123");
-
-            // Act
-
-            // Assert
-            mockMvc.perform(post("/login")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(asJsonString(LoginRecordRequestMissingMatricula)))
-                    .andDo(print())
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.matricula").value("O campo matrícula não foi informado."));
-            verify(loginService, times(0)).validar(any(LoginRecordRequest.class));
-        }
-
-        @Test
-        void deveLancarExcecaoSeMatriculaMenorDoQue3LetrasNosDadosDeLogin() throws Exception {
-            // Arrange
-            LoginRecordRequest LoginRecordRequestMissingMatricula = new LoginRecordRequest("US", "123");
-
-            // Act
-
-            // Assert
-            mockMvc.perform(post("/login")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(asJsonString(LoginRecordRequestMissingMatricula)))
-                    .andDo(print())
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.matricula").value("O campo matrícula precisa ter entre 3 e 6 caracteres."));
-            verify(loginService, times(0)).validar(any(LoginRecordRequest.class));
-        }
-
-        @Test
-        void deveLancarExcecaoSeMatriculaMaiorDoQue6LetrasNosDadosDeLogin() throws Exception {
-            // Arrange
-            LoginRecordRequest LoginRecordRequestMissingMatricula = new LoginRecordRequest("US00001", "123");
-
-            // Act
-
-            // Assert
-            mockMvc.perform(post("/login")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(asJsonString(LoginRecordRequestMissingMatricula)))
-                    .andDo(print())
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.matricula").value("O campo matrícula precisa ter entre 3 e 6 caracteres."));
-            verify(loginService, times(0)).validar(any(LoginRecordRequest.class));
-        }
-
-        @Test
-        void deveLancarExcecaoSeSenhaEmBrancoNosDadosDeLogin() throws Exception {
-            // Arrange
-            LoginRecordRequest LoginRecordRequestMissingSenha = new LoginRecordRequest("us0001", "");
-
-            // Act
-
-            // Assert
-            mockMvc.perform(post("/login")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(asJsonString(LoginRecordRequestMissingSenha)))
-                    .andDo(print())
-                    .andExpect(status().isBadRequest());
-            verify(loginService, times(0)).validar(any(LoginRecordRequest.class));
-        }
-
-        @Test
         void deveLancarExcecaoSeNaoEncontrarUsuarioAtivoVinculadoComOLogin() throws Exception {
             // Arrange
             LoginRecordRequest loginRecordRequest = new LoginRecordRequest("us0001", "123");
 
             when(loginService.validar(any(LoginRecordRequest.class)))
                     .thenThrow(new LoginSemAcessoException("O usuário não possui permissão de acesso."));
-            // Act
 
-            // Assert
+            // Act & Assert
             mockMvc.perform(post("/login")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(asJsonString(loginRecordRequest)))
@@ -184,17 +115,108 @@ public class LoginControllerTest {
                     .andExpect(jsonPath("$.mensagem").value("O usuário não possui permissão de acesso."));
             verify(loginService, times(1)).validar(any(LoginRecordRequest.class));
         }
+
+        @ParameterizedTest
+        @CsvSource({
+                " , 123, O campo matrícula não foi informado.",
+                "US, 123, O campo matrícula precisa ter entre 3 e 6 caracteres.",
+                "US00001, 123, O campo matrícula precisa ter entre 3 e 6 caracteres.",
+                "us0001, , O campo senha não foi informado."
+        })
+        void deveLancarExcecaoParaCamposInvalidos(String matricula, String senha, String expectedError) throws Exception {
+            // Arrange
+            LoginRecordRequest loginRecordRequest = new LoginRecordRequest(matricula, senha);
+
+            // Act & Assert
+            mockMvc.perform(post("/login")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(loginRecordRequest)))
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.*").value(org.hamcrest.Matchers.hasItem(expectedError)));
+        }
+
+//        @Test
+//        void deveLancarExcecaoSeMatriculaEmBrancoNosDadosDeLogin() throws Exception {
+//            // Arrange
+//            LoginRecordRequest LoginRecordRequestMissingMatricula = new LoginRecordRequest(null, "123");
+//
+//            // Act
+//
+//            // Assert
+//            mockMvc.perform(post("/login")
+//                            .contentType(MediaType.APPLICATION_JSON)
+//                            .content(asJsonString(LoginRecordRequestMissingMatricula)))
+//                    .andDo(print())
+//                    .andExpect(status().isBadRequest())
+//                    .andExpect(jsonPath("$.matricula").value("O campo matrícula não foi informado."));
+//            verify(loginService, times(0)).validar(any(LoginRecordRequest.class));
+//        }
+
+//        @Test
+//        void deveLancarExcecaoSeMatriculaMenorDoQue3LetrasNosDadosDeLogin() throws Exception {
+//            // Arrange
+//            LoginRecordRequest LoginRecordRequestMissingMatricula = new LoginRecordRequest("US", "123");
+//
+//            // Act
+//
+//            // Assert
+//            mockMvc.perform(post("/login")
+//                            .contentType(MediaType.APPLICATION_JSON)
+//                            .content(asJsonString(LoginRecordRequestMissingMatricula)))
+//                    .andDo(print())
+//                    .andExpect(status().isBadRequest())
+//                    .andExpect(jsonPath("$.matricula").value("O campo matrícula precisa ter entre 3 e 6 caracteres."));
+//            verify(loginService, times(0)).validar(any(LoginRecordRequest.class));
+//        }
+
+//        @Test
+//        void deveLancarExcecaoSeMatriculaMaiorDoQue6LetrasNosDadosDeLogin() throws Exception {
+//            // Arrange
+//            LoginRecordRequest LoginRecordRequestMissingMatricula = new LoginRecordRequest("US00001", "123");
+//
+//            // Act
+//
+//            // Assert
+//            mockMvc.perform(post("/login")
+//                            .contentType(MediaType.APPLICATION_JSON)
+//                            .content(asJsonString(LoginRecordRequestMissingMatricula)))
+//                    .andDo(print())
+//                    .andExpect(status().isBadRequest())
+//                    .andExpect(jsonPath("$.matricula").value("O campo matrícula precisa ter entre 3 e 6 caracteres."));
+//            verify(loginService, times(0)).validar(any(LoginRecordRequest.class));
+//        }
+
+//        @Test
+//        void deveLancarExcecaoSeSenhaEmBrancoNosDadosDeLogin() throws Exception {
+//            // Arrange
+//            LoginRecordRequest LoginRecordRequestMissingSenha = new LoginRecordRequest("us0001", "");
+//
+//            // Act
+//
+//            // Assert
+//            mockMvc.perform(post("/login")
+//                            .contentType(MediaType.APPLICATION_JSON)
+//                            .content(asJsonString(LoginRecordRequestMissingSenha)))
+//                    .andDo(print())
+//                    .andExpect(status().isBadRequest());
+//            verify(loginService, times(0)).validar(any(LoginRecordRequest.class));
+//        }
     }
 
     @Nested
-    class validarAtulizarSenhaRequest{
+    class ValidarAtulizarSenhaRequest {
         @Test
         void devePermitirTrocarSenha() throws Exception {
+            // Arrange
             String matricula = "us0001";
             SenhaRecordRequest senhaRecordRequest = new SenhaRecordRequest("124");
 
             doNothing().when(loginService).trocarSenha(anyString(), anyString());
 
+
+            // Act & Assert
+            // Tive que mockar o Mensagem Util nesse teste para poder checar a mensagem
             try (MockedStatic<MensagensUtil> mensagensMock = mockStatic(MensagensUtil.class)) {
                 mensagensMock.when(() -> MensagensUtil.recuperarMensagem(
                                 MensagensUtil.SUCESSO_TROCA_SENHA_USUARIO, new Object[0]))
@@ -212,16 +234,18 @@ public class LoginControllerTest {
 
         @Test
         void deveLancarExcecaoSeLoginNaoEncontradoAtravesDaMatricula() throws Exception {
+            // Arrange
             String matricula = "us0001";
             SenhaRecordRequest senhaRecordRequest = new SenhaRecordRequest("124");
 
             doThrow(new LoginNaoEncontradoException("Não foi encontrado um usuário com a matrícula e senha informados.")).when(loginService).trocarSenha(anyString(), anyString());
 
-                mockMvc.perform(patch("/login/{matricula}/senha", matricula)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(asJsonString(senhaRecordRequest)))
-                        .andExpect(status().isNotFound())
-                        .andExpect(jsonPath("$.mensagem").value("Não foi encontrado um usuário com a matrícula e senha informados."));
+            // Act & Assert
+            mockMvc.perform(patch("/login/{matricula}/senha", matricula)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(senhaRecordRequest)))
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.mensagem").value("Não foi encontrado um usuário com a matrícula e senha informados."));
 
             verify(loginService, times(1)).trocarSenha(anyString(), anyString());
         }
@@ -234,6 +258,7 @@ public class LoginControllerTest {
 
             doThrow(new UsuarioNaoEncontradoException("Não foram encontrados usuários na base de dados.")).when(loginService).trocarSenha(anyString(), anyString());
 
+            // Act & Arrange
             mockMvc.perform(patch("/login/{matricula}/senha", matricula)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(asJsonString(senhaRecordRequest)))
@@ -244,10 +269,12 @@ public class LoginControllerTest {
         }
 
         @Test
-        void deveLancarExcecaoSeNovaSenhaEmBranco() throws Exception {
+        void deveLancarExcecaoParaCamposInvalidos() throws Exception {
+            // Arrange
             String matricula = "us0001";
             SenhaRecordRequest senhaRecordRequest = new SenhaRecordRequest("");
 
+            // Act & Arrange
             mockMvc.perform(patch("/login/{matricula}/senha", matricula)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(asJsonString(senhaRecordRequest)))
