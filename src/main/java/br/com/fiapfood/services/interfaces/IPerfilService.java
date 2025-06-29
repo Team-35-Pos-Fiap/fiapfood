@@ -9,4 +9,5 @@ public interface IPerfilService {
 
     PerfilEntity buscarPorId(Integer id);
     List<PerfilRecordResponse> buscarTodos();
+    boolean existePorId(Integer id);
 }

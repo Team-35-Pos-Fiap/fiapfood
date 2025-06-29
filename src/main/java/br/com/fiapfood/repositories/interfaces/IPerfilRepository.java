@@ -7,4 +7,5 @@ import java.util.List;
 public interface IPerfilRepository {
     PerfilEntity buscarPorId(Integer id);
     List<PerfilEntity> buscarTodos();
+    boolean idJaCadastrado(Integer id);
 }

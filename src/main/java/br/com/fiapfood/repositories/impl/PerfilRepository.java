@@ -32,6 +32,11 @@ public class PerfilRepository implements IPerfilRepository {
 		return perfilRepository.findAll();
 	}
 
+	@Override
+	public boolean idJaCadastrado(Integer id) {
+		return perfilRepository.existsById(id);
+	}
+
 	private PerfilEntity getPerfil(Optional<PerfilEntity> dados) {
 		if(dados.isPresent()) {
 			return dados.get();

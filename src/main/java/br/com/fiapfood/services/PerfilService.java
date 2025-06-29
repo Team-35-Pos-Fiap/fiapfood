@@ -28,4 +28,9 @@ public class PerfilService implements IPerfilService {
     public List<PerfilRecordResponse> buscarTodos() {
         return PerfilMapper.toPerfilRecord(perfilRepository.buscarTodos());
     }
+
+    @Override
+    public boolean existePorId(Integer id) {
+        return perfilRepository.idJaCadastrado(id);
+    }
 }

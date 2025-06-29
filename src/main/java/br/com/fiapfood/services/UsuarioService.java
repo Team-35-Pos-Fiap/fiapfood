@@ -2,6 +2,7 @@ package br.com.fiapfood.services;
 
 import java.util.UUID;
 
+import br.com.fiapfood.repositories.exceptions.PerfilNaoEncontradoException;
 import org.springframework.stereotype.Service;
 
 import br.com.fiapfood.entities.db.PerfilEntity;
@@ -49,6 +50,10 @@ public class UsuarioService implements IUsuarioService {
 	public void cadastrar(UsuarioRecordRequest usuario) {
 		if(usuarioRepository.emailJaCadastrado(usuario.email())){
 			throw new EmailDuplicadoException(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_EMAIL_DUPLICADO));
+		}
+
+		if(!perfilService.existePorId(usuario.perfil())){
+			throw new PerfilNaoEncontradoException(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_PERFIL_NAO_ENCONTRADO));
 		}
 
 

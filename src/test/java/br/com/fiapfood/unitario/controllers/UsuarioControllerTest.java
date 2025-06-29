@@ -4,7 +4,6 @@ import br.com.fiapfood.controllers.UsuarioController;
 import br.com.fiapfood.controllers.exceptions.ErrorHandler;
 import br.com.fiapfood.entities.record.request.*;
 import br.com.fiapfood.entities.record.response.PaginacaoRecordResponse;
-import br.com.fiapfood.entities.record.response.PerfilRecordResponse;
 import br.com.fiapfood.entities.record.response.UsuarioRecordPaginacaoResponse;
 import br.com.fiapfood.entities.record.response.UsuarioRecordResponse;
 import br.com.fiapfood.repositories.exceptions.PerfilNaoEncontradoException;
@@ -29,6 +28,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import static br.com.fiapfood.utils.DataGenerator.validEnderecoRecordRequest;
+import static br.com.fiapfood.utils.DataGenerator.validLoginRecordRequest;
+import static br.com.fiapfood.utils.DataGenerator.validUsuarioRecordResponse;
 import static br.com.fiapfood.utils.JsonToString.asJsonString;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasKey;
@@ -212,6 +214,29 @@ public class UsuarioControllerTest {
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.*").value(hasItem("O campo nome precisa ter entre 3 e 150 caracteres.")));
             verify(usuarioService, times(0)).cadastrar(any(UsuarioRecordRequest.class));
+        }
+
+        @Test
+        void deveLancarExcecaoSePerfilNaoCadstrado() throws Exception {
+            // Arrange
+            UsuarioRecordRequest usuarioRecordRequest = new UsuarioRecordRequest(
+                    "Thiago Motta",
+                    "thiago@fiapfood.com",
+                    1,
+                    validEnderecoRecordRequest(),
+                    validLoginRecordRequest()
+            );
+
+            doThrow(new PerfilNaoEncontradoException("Perfil não encontrado na base de dados.")).when(usuarioService).cadastrar(any(UsuarioRecordRequest.class));
+
+            // Act & Assert
+            mockMvc.perform(post("/usuarios")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(usuarioRecordRequest)))
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.*").value(hasItem("Perfil não encontrado na base de dados.")));
+            verify(usuarioService, times(1)).cadastrar(any(UsuarioRecordRequest.class));
         }
     }
 
@@ -695,43 +720,4 @@ public class UsuarioControllerTest {
         }
     }
 
-    private LoginRecordRequest validLoginRecordRequest() {
-        return new LoginRecordRequest(
-                "us0001",
-                "123"
-        );
-    }
-
-    private EnderecoRecordRequest validEnderecoRecordRequest() {
-        return new EnderecoRecordRequest(
-                "São Gonçalo",
-                "24455450",
-                "Nova Cidade",
-                "Rua Aquidabã",
-                "Rio de Janeiro",
-                79,
-                "Casa 8",
-                false
-        );
-    }
-
-    private PerfilRecordResponse validPerfilRecordResponse() {
-        return new PerfilRecordResponse(
-                1,
-                "Cliente"
-        );
-    }
-
-    private UsuarioRecordResponse validUsuarioRecordResponse() {
-        UUID id = UUID.randomUUID();
-        return new UsuarioRecordResponse(
-                id,
-                "Thiago Motta",
-                "thiago@fiapfood.com",
-                "us0001",
-                true,
-                validEnderecoRecordRequest(),
-                validPerfilRecordResponse()
-        );
-    }
 }
