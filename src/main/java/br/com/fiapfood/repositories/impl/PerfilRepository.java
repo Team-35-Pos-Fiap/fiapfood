@@ -3,6 +3,8 @@ package br.com.fiapfood.repositories.impl;
 import java.util.List;
 import java.util.Optional;
 
+import br.com.fiapfood.entities.db.UsuarioEntity;
+import br.com.fiapfood.repositories.exceptions.UsuarioNaoEncontradoException;
 import org.springframework.stereotype.Repository;
 
 import br.com.fiapfood.entities.db.PerfilEntity;

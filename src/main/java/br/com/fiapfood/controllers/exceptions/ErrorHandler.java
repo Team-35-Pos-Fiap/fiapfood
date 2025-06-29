@@ -3,6 +3,7 @@ package br.com.fiapfood.controllers.exceptions;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.com.fiapfood.repositories.exceptions.PerfilNaoEncontradoException;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -91,6 +92,13 @@ public class ErrorHandler {
 	public ResponseEntity<MensagemResponse> trataLoginNaoEncontradoException(LoginNaoEncontradoException e) {
 		log.error(e.getMessage(), e);
 		
+		return getResponse(HttpStatus.NOT_FOUND, e.getMessage());
+	}
+
+	@ExceptionHandler(PerfilNaoEncontradoException.class)
+	public ResponseEntity<MensagemResponse> trataPerfilNaoEncontradoException(PerfilNaoEncontradoException e) {
+		log.error(e.getMessage(), e);
+
 		return getResponse(HttpStatus.NOT_FOUND, e.getMessage());
 	}
 	

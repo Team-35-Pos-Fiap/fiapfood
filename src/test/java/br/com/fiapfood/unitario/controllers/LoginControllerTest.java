@@ -136,6 +136,8 @@ public class LoginControllerTest {
                     .andExpect(jsonPath("$.*").value(org.hamcrest.Matchers.hasItem(expectedError)));
         }
 
+
+
 //        @Test
 //        void deveLancarExcecaoSeMatriculaEmBrancoNosDadosDeLogin() throws Exception {
 //            // Arrange
