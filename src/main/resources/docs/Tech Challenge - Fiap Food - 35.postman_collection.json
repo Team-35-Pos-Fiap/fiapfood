@@ -3,8 +3,8 @@
 		"_postman_id": "9e3d0982-3f83-4d80-aeec-73c78a77199b",
 		"name": "Tech Challenge - Fiap Food - 35",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "45515741",
-		"_collection_link": "https://www.postman.com/dark-moon-236306/fiap-team-35/collection/sod5rrj/tech-challenge-fiap-food-35?action=share&source=collection_link&creator=45515741"
+		"_exporter_id": "1827882",
+		"_collection_link": "https://www.postman.com/dark-moon-236306/workspace/fiap-team-35/collection/1827882-9e3d0982-3f83-4d80-aeec-73c78a77199b?action=share&source=collection_link&creator=1827882"
 	},
 	"item": [
 		{
@@ -136,7 +136,7 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
-											"pm.collectionVariables.set(\"id\", \"54546505-5c56-4ca7-bd73-7139acec1f1a\");"
+											"pm.collectionVariables.set(\"id\", \"45237739-56ca-4df5-b43c-235d6f79a4d8\");"
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -526,6 +526,366 @@
 									"path": [
 										"fiapfood",
 										"perfis"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Cardápio",
+					"item": [
+						{
+							"name": "Cardápio - Cadastrar",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Prato Exemplo\",\r\n  \"descricao\": \"Descrição do prato\",\r\n  \"preco\": 29.90,\r\n  \"disponivelApenasRestaurante\": true,\r\n  \"fotoPrato\": \"imagem_prato.jpg\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/fiapfood/cardapios",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"fiapfood",
+										"cardapios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cardápio - Atualizar",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"id\", \"db131014-516a-4e7e-8a57-f40384b0e9e2\");"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Prato Exemplo atualizado\",\r\n  \"descricao\": \"Descrição do prato\",\r\n  \"preco\": 29.90,\r\n  \"disponivelApenasRestaurante\": true,\r\n  \"fotoPrato\": \"/resources/imagem_prato.jpg\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/fiapfood/cardapios/{{id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"fiapfood",
+										"cardapios",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cardápio - Buscar todos",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"pagina\", 1);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/fiapfood/cardapios?pagina={{pagina}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"fiapfood",
+										"cardapios"
+									],
+									"query": [
+										{
+											"key": "pagina",
+											"value": "{{pagina}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cardápio - Buscar por id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"id\", \"db131014-516a-4e7e-8a57-f40384b0e9e2\");"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/fiapfood/cardapios/{{id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"fiapfood",
+										"cardapios",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cardápio - deletar",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"id\", \"60436215-bc58-4582-9f03-ef4f89fc3444\");"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/fiapfood/cardapios/{{id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"fiapfood",
+										"cardapios",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Restaurante",
+					"item": [
+						{
+							"name": "Restaurante - Cadastrar",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\": \"Restaurante novo\",\r\n    \"endereco\": {\r\n        \"cidade\": \"São Paulo\",\r\n        \"cep\": \"05422002\",\r\n        \"bairro\": \"Pinheiros\",\r\n        \"endereco\": \"Rua dos Pinheiros\",\r\n        \"estado\": \"SP\",\r\n        \"numero\": 1340,\r\n        \"complemento\": \"Conjunto 25\",\r\n        \"semNumero\": false\r\n    },\r\n    \"tipoCozinha\": \"exótica\",\r\n    \"horarioFuncionamento\": \"2024-06-01T18:00:00\",\r\n    \"donoRestaurante\": {\r\n        \"nome\" : \"Thiago Motta\",\r\n        \"email\" : \"thiago.motta@fiapfood.com\",\r\n        \"dadosEndereco\" : {\r\n            \"cidade\" : \"Nome da cidade\",\r\n            \"cep\" : \"24455077\",\r\n            \"bairro\" : \"Nome do bairro\",\r\n            \"endereco\" : \"Descrição do endereço\",\r\n            \"estado\" : \"Rio de Janeiro\",\r\n            \"numero\": 7,\r\n            \"complemento\" : \"Complemento do endereço\",\r\n            \"semNumero\" : false\r\n        },\r\n        \"perfil\": 1,\r\n        \"dadosLogin\" : {\r\n            \"matricula\" : \"us012\",\r\n            \"senha\" : \"123\"\r\n        }\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/fiapfood/restaurantes",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"fiapfood",
+										"restaurantes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Restaurante - Atualizar",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"id\", \"b749c325-c7f8-40d1-9cbb-08b7dba80303\");"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Prato Exemplo atualizado\",\r\n  \"descricao\": \"Descrição do prato\",\r\n  \"preco\": 29.90,\r\n  \"disponivelApenasRestaurante\": true,\r\n  \"fotoPrato\": \"/resources/imagem_prato.jpg\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/fiapfood/restaurantes/{{id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"fiapfood",
+										"restaurantes",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Restaurante - Buscar todos",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"pagina\", 1);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/fiapfood/restaurantes?pagina={{pagina}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"fiapfood",
+										"restaurantes"
+									],
+									"query": [
+										{
+											"key": "pagina",
+											"value": "{{pagina}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Restaurante - Buscar por id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"id\", \"80395aec-709f-4f44-9a20-0d59d5d1a45b\");"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/fiapfood/restaurantes/{{id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"fiapfood",
+										"restaurantes",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Restaurante - deletar",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"id\", \"80395aec-709f-4f44-9a20-0d59d5d1a45b\");"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/fiapfood/restaurantes/{{id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"fiapfood",
+										"restaurantes",
+										"{{id}}"
 									]
 								}
 							},
