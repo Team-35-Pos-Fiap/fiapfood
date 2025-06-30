@@ -133,3 +133,33 @@ insert into usuario (id, nome, email, ativo, data_criacao, data_atualizacao, id_
 values (RANDOM_UUID(), 'Luciana Ferreira', 'luciana.ferreira@fiapfood.com', 0, current_timestamp, current_timestamp, 2,
         (SELECT id FROM endereco WHERE cidade = 'Florianópolis'),
         (SELECT id FROM login WHERE matricula = 'us0012'));
+
+----- CARDAPIO ----
+INSERT INTO cardapio VALUES
+(RANDOM_UUID(), 'Feijoada', 'Feijoada completa com acompanhamentos', 39.90, TRUE, '/var/lib/docker/volumes/images/_datafeijoada.jpg'),
+(RANDOM_UUID(), 'Lasanha', 'Lasanha de carne com queijo', 29.50, TRUE, '/var/lib/docker/volumes/images/_datalasanha.jpg'),
+(RANDOM_UUID(), 'Salada Caesar', 'Salada Caesar tradicional', 19.90, FALSE, '/var/lib/docker/volumes/images/_datacaesar.jpg'),
+(RANDOM_UUID(), 'Pizza Margherita', 'Pizza com tomate, mussarela e manjericão', 42.00, TRUE, '/var/lib/docker/volumes/images/_datamargherita.jpg'),
+(RANDOM_UUID(), 'Hambúrguer Artesanal', 'Hambúrguer com batata frita', 27.90, TRUE, '/var/lib/docker/volumes/images/_datahamburguer.jpg'),
+(RANDOM_UUID(), 'Risoto de Camarão', 'Risoto cremoso de camarão', 49.90, FALSE, 'risoto.jpg'),
+(RANDOM_UUID(), 'Strogonoff de Frango', 'Strogonoff com arroz e batata palha', 25.00, TRUE, '/var/lib/docker/volumes/images/_datastrogonoff.jpg'),
+(RANDOM_UUID(), 'Sushi Combo', 'Combo de sushi variado', 59.90, FALSE, '/var/lib/docker/volumes/images/_datasushi.jpg'),
+(RANDOM_UUID(), 'Tapioca', 'Tapioca recheada com queijo e coco', 12.00, TRUE, '/var/lib/docker/volumes/images/_datatapioca.jpg'),
+(RANDOM_UUID(), 'Bolo de Chocolate', 'Bolo de chocolate com cobertura', 15.00, FALSE, '/var/lib/docker/volumes/images/_databolo.jpg');
+
+----- RESTAURANTE ----
+
+INSERT INTO restaurante (id, nome, id_endereco, tipo_cozinha, horario_funcionamento, id_dono_restaurante) VALUES
+    (RANDOM_UUID(), 'Restaurante Sabor Brasil', (SELECT id FROM endereco WHERE cidade = 'Manaus'), 'Brasileira', '2024-06-01 11:00:00', (SELECT u.id FROM usuario u , login l WHERE u.id_login = l.id and l.matricula = 'us0003'));
+
+INSERT INTO restaurante (id, nome, id_endereco, tipo_cozinha, horario_funcionamento, id_dono_restaurante) VALUES
+    (RANDOM_UUID(), 'La Bella Pasta', (SELECT id FROM endereco WHERE cidade = 'Belo Horizonte'), 'Italiana', '2024-06-01 12:00:00', (SELECT u.id FROM usuario u , login l WHERE u.id_login = l.id and l.matricula = 'us0004'));
+
+INSERT INTO restaurante (id, nome, id_endereco, tipo_cozinha, horario_funcionamento, id_dono_restaurante) VALUES
+    (RANDOM_UUID(), 'Sushi House', (SELECT id FROM endereco WHERE cidade = 'São Paulo'), 'Japonesa', '2024-06-01 18:00:00', (SELECT u.id FROM usuario u , login l WHERE u.id_login = l.id and l.matricula = 'us0005'));
+
+INSERT INTO restaurante (id, nome, id_endereco, tipo_cozinha, horario_funcionamento, id_dono_restaurante) VALUES
+    (RANDOM_UUID(), 'Churrascaria Gaúcha', (SELECT id FROM endereco WHERE cidade = 'Curitiba'), 'Churrasco', '2024-06-01 10:00:00', (SELECT u.id FROM usuario u , login l WHERE u.id_login = l.id and l.matricula = 'us0006'));
+
+INSERT INTO restaurante (id, nome, id_endereco, tipo_cozinha, horario_funcionamento, id_dono_restaurante) VALUES
+    (RANDOM_UUID(), 'Veggie Life', (SELECT id FROM endereco WHERE cidade = 'Brasília'), 'Vegetariana', '2024-06-01 09:00:00', (SELECT u.id FROM usuario u , login l WHERE u.id_login = l.id and l.matricula = 'us0001'));

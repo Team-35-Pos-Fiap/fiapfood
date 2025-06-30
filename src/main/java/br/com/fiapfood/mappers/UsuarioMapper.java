@@ -2,6 +2,7 @@ package br.com.fiapfood.mappers;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import br.com.fiapfood.entities.record.request.EnderecoRecordRequest;
@@ -27,6 +28,18 @@ public abstract class UsuarioMapper {
 	// record -> domain -> entity
 	
 	// 1 - record -> domain
+	public static UsuarioDomain toUsuario(UUID id) {
+		return new UsuarioDomain(id,
+								 null,
+								 null,
+								 LocalDateTime.now(),
+								 null,
+								 true,
+								 null,
+								 null,
+								 null);
+	}
+
 	public static UsuarioDomain toUsuario(UsuarioRecordRequest usuario) {
 		return new UsuarioDomain(null,
 							     usuario.nome(), 
@@ -93,13 +106,4 @@ public abstract class UsuarioMapper {
 		return new UsuarioRecordPaginacaoResponse(usuarios, dadosPaginacao);
 	}
 
-	public static UsuarioRecordRequest toUsuarioRecordRequest(UsuarioDomain usuario) {
-		return new UsuarioRecordRequest(
-				usuario.getNome(),
-				usuario.getEmail(),
-				usuario.getPerfil().getId(),
-				EnderecoMapper.toDadosEnderecoRecord(usuario.getDadosEndereco()),
-				LoginMapper.toLoginRecordRequest(usuario.getDadosLogin())
-		);
-	}
 }

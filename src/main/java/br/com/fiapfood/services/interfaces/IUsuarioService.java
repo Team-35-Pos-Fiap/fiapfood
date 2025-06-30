@@ -6,6 +6,7 @@ import br.com.fiapfood.entities.record.request.UsuarioRecordRequest;
 import br.com.fiapfood.entities.record.response.UsuarioRecordPaginacaoResponse;
 import br.com.fiapfood.entities.record.response.UsuarioRecordResponse;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface IUsuarioService {

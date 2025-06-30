@@ -1,8 +1,14 @@
 package br.com.fiapfood.mappers;
 
 import br.com.fiapfood.entities.db.CardapioEntity;
+import br.com.fiapfood.entities.db.UsuarioEntity;
 import br.com.fiapfood.entities.domain.CardapioDomain;
 import br.com.fiapfood.entities.record.request.CardapioRecordRequest;
+import br.com.fiapfood.entities.record.response.*;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class CardapioMapper {
 
@@ -14,7 +20,7 @@ public abstract class CardapioMapper {
 				dadosCardapioRecord.nome(),
 				dadosCardapioRecord.descricao(),
 				dadosCardapioRecord.preco(),
-				dadosCardapioRecord.DisponivelApenasRestaurante(),
+				dadosCardapioRecord.disponivelApenasRestaurante(),
 				dadosCardapioRecord.fotoPrato());
 	}
 	
@@ -41,11 +47,25 @@ public abstract class CardapioMapper {
 	}
 	
 	// 4 - domain -> record
-	public static CardapioRecordRequest toDadosCardapioRecord(CardapioDomain dadosCardapio) {
-		return new CardapioRecordRequest(dadosCardapio.getNome(),
+	public static CardapioRecordResponse toDadosCardapioRecord(CardapioDomain dadosCardapio) {
+		return new CardapioRecordResponse(dadosCardapio.getId(),
+				dadosCardapio.getNome(),
 				dadosCardapio.getDescricao(),
 				dadosCardapio.getPreco(),
 				dadosCardapio.getDisponivelApenasRestaurante(),
 				dadosCardapio.getFotoPrato());
+	}
+
+	public static CardapioRecordPaginacaoResponse toDadosCardapioRecord(Page<CardapioEntity> dados) {
+		List<CardapioRecordResponse> cardapios = dados.toList()
+				.stream()
+				.map(u -> CardapioMapper.toDadosCardapio(u))
+				.map(u -> CardapioMapper.toDadosCardapioRecord(u))
+				.collect(Collectors.toList());
+
+		PaginacaoRecordResponse dadosPaginacao = new PaginacaoRecordResponse(dados.getNumber() + 1,
+				dados.getTotalPages(), Long.valueOf(dados.getTotalElements()).intValue());
+
+		return new CardapioRecordPaginacaoResponse(cardapios, dadosPaginacao);
 	}
 }

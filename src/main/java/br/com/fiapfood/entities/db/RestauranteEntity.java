@@ -19,23 +19,31 @@ public class RestauranteEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column
+    @Column(nullable = false)
     private String nome;
-
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_endereco")
     private EnderecoEntity endereco;
 
-    @Column
+    @Column(nullable = false)
     private String tipoCozinha;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime horarioFuncionamento;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_dono_restaurante")
     private UsuarioEntity donoRestaurante;
+
+    public void atualizarDados(String nome, EnderecoEntity endereco, String tipoCozinha,
+                               LocalDateTime horarioFuncionamento, UsuarioEntity donoRestaurante) {
+        this.nome = nome;
+        this.endereco = endereco;
+        this.tipoCozinha = tipoCozinha;
+        this.horarioFuncionamento = horarioFuncionamento;
+        this.donoRestaurante = donoRestaurante;
+    }
 
 
 }

@@ -18,20 +18,29 @@ public class CardapioEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column
+    @Column(nullable = false)
     private String nome;
 
-    @Column
+    @Column(nullable = false)
     private String descricao;
 
-    @Column
+    @Column(nullable = false)
     private Double preco;
 
-    @Column
+    @Column(nullable = false)
     private Boolean disponivelApenasRestaurante;
 
-    @Column
+    @Column(nullable = false)
     private String fotoPrato;
+
+    public void atualizarDados(String nome, String descricao, Double preco,
+                               Boolean disponivelApenasRestaurante, String fotoPrato) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.preco = preco;
+        this.disponivelApenasRestaurante = disponivelApenasRestaurante;
+        this.fotoPrato = fotoPrato;
+    }
 
 
 }

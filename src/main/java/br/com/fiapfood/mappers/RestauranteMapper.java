@@ -1,8 +1,21 @@
 package br.com.fiapfood.mappers;
 
+import br.com.fiapfood.entities.db.EnderecoEntity;
 import br.com.fiapfood.entities.db.RestauranteEntity;
+import br.com.fiapfood.entities.db.RestauranteEntity;
+import br.com.fiapfood.entities.db.UsuarioEntity;
+import br.com.fiapfood.entities.domain.EnderecoDomain;
 import br.com.fiapfood.entities.domain.RestauranteDomain;
+import br.com.fiapfood.entities.domain.UsuarioDomain;
 import br.com.fiapfood.entities.record.request.RestauranteRecordRequest;
+import br.com.fiapfood.entities.record.response.RestauranteRecordPaginacaoResponse;
+import br.com.fiapfood.entities.record.response.RestauranteRecordResponse;
+import br.com.fiapfood.entities.record.response.PaginacaoRecordResponse;
+import br.com.fiapfood.entities.record.response.RestauranteRecordResponse;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class RestauranteMapper {
 
@@ -16,6 +29,15 @@ public abstract class RestauranteMapper {
 				dadosRestaurante.tipoCozinha(),
 				dadosRestaurante.horarioFuncionamento(),
 				UsuarioMapper.toUsuario(dadosRestaurante.donoRestaurante()));
+	}
+
+	public static RestauranteDomain toDadosRestaurante(RestauranteRecordRequest dadosRestaurante, UsuarioDomain donoRestaurante) {
+		return new RestauranteDomain(null,
+				dadosRestaurante.nome(),
+				EnderecoMapper.toDadosEndereco(dadosRestaurante.endereco()),
+				dadosRestaurante.tipoCozinha(),
+				dadosRestaurante.horarioFuncionamento(),
+				donoRestaurante);
 	}
 	
 	// 2 - domain -> entity
@@ -41,11 +63,25 @@ public abstract class RestauranteMapper {
 	}
 	
 	// 4 - domain -> record
-	public static RestauranteRecordRequest toDadosRestauranteRecord(RestauranteDomain dadosRestaurante) {
-		return new RestauranteRecordRequest(dadosRestaurante.getNome(),
+	public static RestauranteRecordResponse toDadosRestauranteRecord(RestauranteDomain dadosRestaurante) {
+		return new RestauranteRecordResponse(dadosRestaurante.getId(),
+				dadosRestaurante.getNome(),
 				EnderecoMapper.toDadosEnderecoRecord(dadosRestaurante.getEndereco()),
 				dadosRestaurante.getTipoCozinha(),
 				dadosRestaurante.getHorarioFuncionamento(),
-				UsuarioMapper.toUsuarioRecordRequest(dadosRestaurante.getDonoRestaurante()));
+				UsuarioMapper.toUsuarioRecord(dadosRestaurante.getDonoRestaurante()));
+	}
+
+	public static RestauranteRecordPaginacaoResponse toDadosRestauranteRecord(Page<RestauranteEntity> dados) {
+		List<RestauranteRecordResponse> restaurantes = dados.toList()
+				.stream()
+				.map(u -> RestauranteMapper.toDadosRestaurante(u))
+				.map(u -> RestauranteMapper.toDadosRestauranteRecord(u))
+				.collect(Collectors.toList());
+
+		PaginacaoRecordResponse dadosPaginacao = new PaginacaoRecordResponse(dados.getNumber() + 1,
+				dados.getTotalPages(), Long.valueOf(dados.getTotalElements()).intValue());
+
+		return new RestauranteRecordPaginacaoResponse(restaurantes, dadosPaginacao);
 	}
 }

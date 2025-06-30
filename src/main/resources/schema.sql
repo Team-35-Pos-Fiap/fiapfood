@@ -40,3 +40,23 @@ create table usuario (
 	foreign key(id_login) references login(id)
 );
 
+CREATE TABLE cardapio (
+    id UUID PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    descricao VARCHAR(255) NOT NULL,
+    preco DOUBLE PRECISION NOT NULL,
+    disponivel_apenas_restaurante BOOLEAN NOT NULL,
+    foto_prato VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE restaurante (
+    id UUID PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    id_endereco UUID NOT NULL,
+    tipo_cozinha VARCHAR(255) NOT NULL,
+    horario_funcionamento TIMESTAMP NOT NULL,
+    id_dono_restaurante UUID NOT NULL,
+    CONSTRAINT fk_endereco FOREIGN KEY (id_endereco) REFERENCES endereco(id),
+    CONSTRAINT fk_dono_restaurante FOREIGN KEY (id_dono_restaurante) REFERENCES usuario(id)
+);
+
