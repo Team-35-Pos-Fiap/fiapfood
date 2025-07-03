@@ -1,5 +1,6 @@
 package br.com.fiapfood.utils;
 
+import br.com.fiapfood.entities.db.EnderecoEntity;
 import br.com.fiapfood.entities.record.request.EnderecoRecordRequest;
 import br.com.fiapfood.entities.record.request.LoginRecordRequest;
 import br.com.fiapfood.entities.record.response.PerfilRecordResponse;
@@ -45,6 +46,20 @@ public class DataGenerator {
                 true,
                 validEnderecoRecordRequest(),
                 validPerfilRecordResponse()
+        );
+    }
+
+    public static EnderecoEntity validEnderecoEntity() {
+        return new EnderecoEntity(
+                UUID.fromString("f71d82cf-cede-42c8-97f8-182fda1b35bb"),
+                "Cidade",
+                "12345678",
+                "Bairro",
+                "Endereço",
+                "Estado",
+                1,
+                "Complemento",
+                false
         );
     }
 }
