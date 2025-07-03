@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "usuario")
 public class UsuarioEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
 	private String nome;
 	@Column(unique = true)
@@ -44,7 +44,7 @@ public class UsuarioEntity {
 	private EnderecoEntity dadosEndereco;
 	
 	@ManyToOne
-	@JoinColumn(name = "id_perfil")
+	@JoinColumn(name = "id_perfil", columnDefinition = "int")
 	private PerfilEntity perfil;
 	
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

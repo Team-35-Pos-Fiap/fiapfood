@@ -14,7 +14,7 @@ import java.util.UUID;
 @Table(name = "login")
 public class LoginEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
 	@Column(unique = true)
 	private String matricula;

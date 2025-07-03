@@ -47,9 +47,13 @@ public class LoginRepository implements ILoginRepository {
 
 	private LoginEntity getLoginEntity(Optional<LoginEntity> dadosLogin) {
 		if (dadosLogin.isPresent()) {
-			return dadosLogin.get();
+			return getEntity(dadosLogin);
 		} else {
 			throw new LoginNaoEncontradoException(MensagensUtil.recuperarMensagem(MensagensUtil.ERRO_LOGIN_NAO_ENCONTRADO));
 		}
+	}
+
+	private static LoginEntity getEntity(Optional<LoginEntity> dadosLogin) {
+		return dadosLogin.get();
 	}
 }

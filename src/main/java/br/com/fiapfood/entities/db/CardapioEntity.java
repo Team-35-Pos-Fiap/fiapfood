@@ -15,7 +15,7 @@ import java.util.UUID;
 public class CardapioEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(nullable = false)
@@ -27,7 +27,7 @@ public class CardapioEntity {
     @Column(nullable = false)
     private Double preco;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private Boolean disponivelApenasRestaurante;
 
     @Column(nullable = false)
