@@ -12,13 +12,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Optional;
-import java.util.UUID;
-
 import static br.com.fiapfood.utils.DataGenerator.validEnderecoEntity;
 import static br.com.fiapfood.utils.DataGenerator.validEnderecoRecordRequest;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 

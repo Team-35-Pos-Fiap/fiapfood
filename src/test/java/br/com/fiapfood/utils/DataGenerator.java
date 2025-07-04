@@ -1,6 +1,7 @@
 package br.com.fiapfood.utils;
 
 import br.com.fiapfood.entities.db.EnderecoEntity;
+import br.com.fiapfood.entities.db.LoginEntity;
 import br.com.fiapfood.entities.record.request.EnderecoRecordRequest;
 import br.com.fiapfood.entities.record.request.LoginRecordRequest;
 import br.com.fiapfood.entities.record.response.PerfilRecordResponse;
@@ -60,6 +61,15 @@ public class DataGenerator {
                 1,
                 "Complemento",
                 false
+        );
+    }
+
+    public static LoginEntity validLoginEntity() {
+
+        return new LoginEntity(
+                UUID.fromString("4b9094a8-7b45-491e-8e5b-042ac5c65ae9"),
+                "us0001",
+                "123"
         );
     }
 }
