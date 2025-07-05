@@ -45,10 +45,10 @@ public class LoginServiceIT {
             LoginNaoEncontradoException exceptionMatricula = assertThrows(LoginNaoEncontradoException.class, () -> loginService.validar(loginRecordRequestWithWrongMatricula));
 
             LoginRecordRequest loginRecordRequestWithWrongSenha = new LoginRecordRequest("us0001", "1234");
-            LoginNaoEncontradoException exceptionSenha = assertThrows(LoginNaoEncontradoException.class, () -> loginService.validar(loginRecordRequestWithWrongMatricula));
+            LoginNaoEncontradoException exceptionSenha = assertThrows(LoginNaoEncontradoException.class, () -> loginService.validar(loginRecordRequestWithWrongSenha));
 
-            // OBS: Removi a checagem do texto porque estava tendo problemas com encoding
-
+            assertEquals(exceptionMatricula.getMessage(), "Não foi encontrado um usuário com a matrícula e senha informados.");
+            assertEquals(exceptionSenha.getMessage(), "Não foi encontrado um usuário com a matrícula e senha informados.");
         }
 
         @Test
@@ -56,8 +56,8 @@ public class LoginServiceIT {
             LoginRecordRequest loginRecordRequest = new LoginRecordRequest("us0003", "123");
 
             LoginSemAcessoException exception = assertThrows(LoginSemAcessoException.class, () -> loginService.validar(loginRecordRequest));
-
-            // OBS: Removi a checagem do texto porque estava tendo problemas com encoding
+            
+            assertEquals(exception.getMessage(), "O usuário não possui permissão de acesso.");
         }
     }
 
@@ -82,7 +82,7 @@ public class LoginServiceIT {
 
             LoginNaoEncontradoException exception = assertThrows(LoginNaoEncontradoException.class, () -> loginService.trocarSenha(matriculaInvalida, novaSenha));
 
-            // OBS: Removi a checagem do texto porque estava tendo problemas com encoding
+            assertEquals(exception.getMessage(), "Não foi encontrado um usuário com a matrícula e senha informados.");
         }
 
         @Test
@@ -92,7 +92,7 @@ public class LoginServiceIT {
 
             UsuarioNaoEncontradoException exception = assertThrows(UsuarioNaoEncontradoException.class, () -> loginService.trocarSenha(matriculaDeUsuarioInativo, novaSenha));
 
-            // OBS: Removi a checagem do texto porque estava tendo problemas com encoding
+            assertEquals(exception.getMessage(), "Usuário não encontrado na base de dados.");
         }
     }
 

@@ -4,3 +4,5 @@ spring:
     url: jdbc:h2:mem:fiapfoodtest;DB_CLOSE_DELAY=-1;AUTO_RECONNECT=TRUE;MODE=MySQL;
     username: admin
     password: fiapfood
+  messages:
+    encoding: UTF-8
