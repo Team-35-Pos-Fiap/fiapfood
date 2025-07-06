@@ -3,11 +3,14 @@ package br.com.fiapfood.utils;
 import br.com.fiapfood.entities.db.EnderecoEntity;
 import br.com.fiapfood.entities.db.LoginEntity;
 import br.com.fiapfood.entities.db.PerfilEntity;
+import br.com.fiapfood.entities.db.UsuarioEntity;
 import br.com.fiapfood.entities.record.request.EnderecoRecordRequest;
 import br.com.fiapfood.entities.record.request.LoginRecordRequest;
+import br.com.fiapfood.entities.record.request.UsuarioRecordRequest;
 import br.com.fiapfood.entities.record.response.PerfilRecordResponse;
 import br.com.fiapfood.entities.record.response.UsuarioRecordResponse;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class DataGenerator {
@@ -78,6 +81,30 @@ public class DataGenerator {
         return new PerfilEntity(
                 1,
                 "Dono"
+        );
+    }
+
+    public static UsuarioEntity validUsuarioEntity() {
+        return new UsuarioEntity(
+                UUID.fromString("cf05db14-7993-4564-bff9-c258b5c7387c"),
+                "John Doe",
+                "johndoe@email.com",
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                true,
+                validEnderecoEntity(),
+                validPerfilEntity(),
+                validLoginEntity()
+        );
+    }
+
+    public static UsuarioRecordRequest validUsuarioRecordRequest() {
+        return new UsuarioRecordRequest(
+               "John Doe",
+               "johndoe@email.com",
+               1,
+               validEnderecoRecordRequest(),
+               validLoginRecordRequest()
         );
     }
 }
