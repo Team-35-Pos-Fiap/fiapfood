@@ -12,7 +12,6 @@ create table endereco (
     endereco varchar(150) not null,
     numero int null,
     complemento varchar(150) null,
-    sem_numero tinyint(1) not null default 1,
     cep varchar(100) not null,
     primary key(id)
 );
