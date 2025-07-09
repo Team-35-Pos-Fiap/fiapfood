@@ -7,6 +7,6 @@ public record CardapioDto(
         String nome,
         String descricao,
         Double preco,
-        Boolean DisponivelApenasRestaurante,
+        Boolean disponivelApenasRestaurante,
         String fotoPrato
 ) { }

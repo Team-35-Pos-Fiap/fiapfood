@@ -17,4 +17,12 @@ public class Cardapio {
     private Double preco;
     private Boolean disponivelApenasRestaurante;
     private String fotoPrato;
+
+    public void atualizarDados(String nome, String descricao, Double preco, Boolean disponivelApenasRestaurante, String fotoPrato) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.preco = preco;
+        this.disponivelApenasRestaurante = disponivelApenasRestaurante;
+        this.fotoPrato = fotoPrato;
+    }
 }

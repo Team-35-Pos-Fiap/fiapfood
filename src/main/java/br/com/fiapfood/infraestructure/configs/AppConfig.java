@@ -1,5 +1,12 @@
 package br.com.fiapfood.infraestructure.configs;
 
+import br.com.fiapfood.core.controllers.impl.CardapioCoreController;
+import br.com.fiapfood.core.controllers.interfaces.ICardapioCoreController;
+import br.com.fiapfood.core.gateways.impl.*;
+import br.com.fiapfood.core.gateways.interfaces.*;
+import br.com.fiapfood.core.usecases.cardapio.impl.*;
+import br.com.fiapfood.core.usecases.cardapio.interfaces.*;
+import br.com.fiapfood.infraestructure.repositories.interfaces.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,14 +16,6 @@ import br.com.fiapfood.core.controllers.impl.UsuarioCoreController;
 import br.com.fiapfood.core.controllers.interfaces.ILoginCoreController;
 import br.com.fiapfood.core.controllers.interfaces.IPerfilCoreController;
 import br.com.fiapfood.core.controllers.interfaces.IUsuarioCoreController;
-import br.com.fiapfood.core.gateways.impl.EnderecoGateway;
-import br.com.fiapfood.core.gateways.impl.LoginGateway;
-import br.com.fiapfood.core.gateways.impl.PerfilGateway;
-import br.com.fiapfood.core.gateways.impl.UsuarioGateway;
-import br.com.fiapfood.core.gateways.interfaces.IEnderecoGateway;
-import br.com.fiapfood.core.gateways.interfaces.ILoginGateway;
-import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
-import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
 import br.com.fiapfood.core.usecases.login.impl.AtualizarMatriculaUseCase;
 import br.com.fiapfood.core.usecases.login.impl.AtualizarSenhaUseCase;
 import br.com.fiapfood.core.usecases.login.impl.ValidarLoginUseCase;
@@ -45,10 +44,6 @@ import br.com.fiapfood.core.usecases.usuario.interfaces.IBuscarUsuarioPorIdUseCa
 import br.com.fiapfood.core.usecases.usuario.interfaces.ICadastrarUsuarioUseCase;
 import br.com.fiapfood.core.usecases.usuario.interfaces.IInativarUsuarioUseCase;
 import br.com.fiapfood.core.usecases.usuario.interfaces.IReativarUsuarioUseCase;
-import br.com.fiapfood.infraestructure.repositories.interfaces.IEnderecoRepository;
-import br.com.fiapfood.infraestructure.repositories.interfaces.ILoginRepository;
-import br.com.fiapfood.infraestructure.repositories.interfaces.IPerfilRepository;
-import br.com.fiapfood.infraestructure.repositories.interfaces.IUsuarioRepository;
 
 @Configuration
 public class AppConfig {
@@ -83,6 +78,19 @@ public class AppConfig {
 										 reativarUsuarioUseCase,
 										 atualizarPerfilUsuarioUseCase,
 										 atualizarEnderecoUsuarioUseCase);
+	}
+
+	@Bean
+	public ICardapioCoreController iCardapioCoreController(IAtualizarCardapioUseCase atualizarCardapioUseCase,
+														   IBuscarCardapioPorIdUseCase buscarCardapioPorIdUseCase,
+															IBuscarTodosCardapioUseCase buscarTodosCardapioUseCase,
+															ICadastrarCardapioUseCase cadastrarCardapioUseCase,
+															IDeletarCardapioUseCase deletarCardapioUseCase) {
+		return new CardapioCoreController(atualizarCardapioUseCase,
+										 buscarCardapioPorIdUseCase,
+										 buscarTodosCardapioUseCase,
+										 cadastrarCardapioUseCase,
+										 deletarCardapioUseCase);
 	}
 	
 	// Usecases
@@ -156,6 +164,31 @@ public class AppConfig {
 	public IReativarUsuarioUseCase iReativarUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway, ILoginGateway loginGateway, IEnderecoGateway enderecoGateway) {
 		return new ReativarUsuarioUseCase(usuarioGateway, perfilGateway, loginGateway, enderecoGateway);
 	}
+
+	@Bean
+	public IAtualizarCardapioUseCase iAtualizarCardapioUseCase(ICardapioGateway cardapioGateway) {
+		return new AtualizarCardapioUseCase(cardapioGateway);
+	}
+
+	@Bean
+	public IBuscarCardapioPorIdUseCase iBuscarCardapioPorIdUseCase (ICardapioGateway cardapioGateway) {
+		return new BuscarCardapioPorIdUseCase(cardapioGateway);
+	}
+
+	@Bean
+	public IBuscarTodosCardapioUseCase iBuscarTodosCardapioUseCase (ICardapioGateway cardapioGateway) {
+		return new BuscarTodosCardapioUseCase(cardapioGateway);
+	}
+
+	@Bean
+	public ICadastrarCardapioUseCase iCadastrarCardapioUseCase (ICardapioGateway cardapioGateway) {
+		return new CadastrarCardapioUseCase(cardapioGateway);
+	}
+
+	@Bean
+	public IDeletarCardapioUseCase iDeletarCardapioUseCase (ICardapioGateway cardapioGateway) {
+		return new DeletarCardapioUseCase(cardapioGateway);
+	}
 	
 	// Gateways
 	
@@ -177,5 +210,10 @@ public class AppConfig {
 	@Bean
 	public IEnderecoGateway iEnderecoGateway(IEnderecoRepository enderecoRepository) {
 		return new EnderecoGateway(enderecoRepository);
+	}
+
+	@Bean
+	public ICardapioGateway iCardapioGateway(ICardapioRepository cardapioRepository) {
+		return new CardapioGateway(cardapioRepository);
 	}
 }
