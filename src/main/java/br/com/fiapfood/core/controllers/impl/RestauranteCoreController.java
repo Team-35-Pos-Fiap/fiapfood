@@ -1,34 +1,50 @@
 package br.com.fiapfood.core.controllers.impl;
 
-import br.com.fiapfood.core.controllers.interfaces.ILoginCoreController;
+
 import br.com.fiapfood.core.controllers.interfaces.IRestauranteCoreController;
 import br.com.fiapfood.core.entities.dto.*;
-import br.com.fiapfood.core.usecases.login.interfaces.IAtualizarMatriculaUseCase;
-import br.com.fiapfood.core.usecases.login.interfaces.IAtualizarSenhaUseCase;
-import br.com.fiapfood.core.usecases.login.interfaces.IValidarLoginUseCase;
+import br.com.fiapfood.core.usecases.restaurante.interfaces.*;
 
 import java.util.UUID;
 
 public class RestauranteCoreController implements IRestauranteCoreController {
 
+	private final IAtualizarRestauranteUseCase atualizarRestauranteUseCase;
+	private final IBuscarRestaurantePorIdUseCase buscarRestaurantePorIdUseCase;
+	private final IBuscarTodosRestauranteUseCase buscarTodosRestauranteUseCase;
+	private final ICadastrarRestauranteUseCase cadastrarRestauranteUseCase;
+	private final IDeletarRestauranteUseCase deletarRestauranteUseCase;
+
+	public RestauranteCoreController(IAtualizarRestauranteUseCase atualizarRestauranteUseCase,
+									  IBuscarRestaurantePorIdUseCase buscarRestaurantePorIdUseCase,
+									  IBuscarTodosRestauranteUseCase buscarTodosRestauranteUseCase,
+									  ICadastrarRestauranteUseCase cadastrarRestauranteUseCase,
+									  IDeletarRestauranteUseCase deletarRestauranteUseCase) {
+		this.atualizarRestauranteUseCase = atualizarRestauranteUseCase;
+		this.buscarRestaurantePorIdUseCase = buscarRestaurantePorIdUseCase;
+		this.buscarTodosRestauranteUseCase = buscarTodosRestauranteUseCase;
+		this.cadastrarRestauranteUseCase = cadastrarRestauranteUseCase;
+		this.deletarRestauranteUseCase = deletarRestauranteUseCase;
+	}
+
 	@Override
 	public DadosRestauranteComPaginacaoDto buscarTodos(Integer pagina) {
-		return null;
+		return buscarTodosRestauranteUseCase.buscarTodos(pagina);
 	}
 
 	@Override
 	public RestauranteDto buscarPorId(UUID id) {
-		return null;
+		return buscarRestaurantePorIdUseCase.buscarPorId(id);
 	}
 
 	@Override
 	public void cadastrar(DadosRestauranteDto restaurante) {
-
+		cadastrarRestauranteUseCase.cadastrar(restaurante);
 	}
 
 	@Override
 	public void atualizarRestaurante(UUID id, DadosRestauranteDto request) {
-
+		atualizarRestauranteUseCase.atualizar(id, request);
 	}
 
 	@Override
@@ -38,6 +54,6 @@ public class RestauranteCoreController implements IRestauranteCoreController {
 
 	@Override
 	public void deletarRestaurante(UUID id) {
-
+		deletarRestauranteUseCase.deletar(id);
 	}
 }

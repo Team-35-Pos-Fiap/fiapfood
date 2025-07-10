@@ -6,7 +6,7 @@ import br.com.fiapfood.core.gateways.impl.*;
 import br.com.fiapfood.core.gateways.interfaces.*;
 import br.com.fiapfood.core.usecases.cardapio.impl.*;
 import br.com.fiapfood.core.usecases.cardapio.interfaces.*;
-import br.com.fiapfood.core.usecases.restaurante.impl.AtualizarRestauranteUseCase;
+import br.com.fiapfood.core.usecases.restaurante.impl.*;
 import br.com.fiapfood.core.usecases.restaurante.interfaces.*;
 import br.com.fiapfood.infraestructure.repositories.interfaces.*;
 import org.springframework.context.annotation.Bean;
@@ -202,37 +202,71 @@ public class AppConfig {
 	}
 
 	@Bean
-	public IAtualizarRestauranteUseCase iAtualizarRestauranteUseCase (IRestauranteGateway restauranteGateway) {
-		return new AtualizarRestauranteUseCase(restauranteGateway);
+	public IAtualizarRestauranteUseCase iAtualizarRestauranteUseCase (
+			IRestauranteGateway restauranteGateway,
+			IEnderecoGateway enderecoGateway,
+			IUsuarioGateway usuarioGateway,
+			IPerfilGateway perfilGateway,
+			ILoginGateway loginGateway
+	) {
+		return new AtualizarRestauranteUseCase(restauranteGateway,
+				enderecoGateway,
+				usuarioGateway,
+				perfilGateway,
+				loginGateway);
 	}
 
 	@Bean
-	public IBuscarRestaurantePorIdUseCase iDeletarCardapioUseCase (ICardapioGateway cardapioGateway) {
-		return new DeletarCardapioUseCase(cardapioGateway);
+	public IBuscarRestaurantePorIdUseCase iBuscarRestaurantePorIdUseCase (
+			IRestauranteGateway restauranteGateway,
+			IEnderecoGateway enderecoGateway,
+			IUsuarioGateway usuarioGateway,
+			IPerfilGateway perfilGateway,
+			ILoginGateway loginGateway
+	) {
+		return new BuscarRestaurantePorIdUseCase(restauranteGateway,
+				enderecoGateway,
+				usuarioGateway,
+				perfilGateway,
+				loginGateway);
 	}
 
 	@Bean
-	public IBuscarTodosRestauranteUseCase iDeletarCardapioUseCase (ICardapioGateway cardapioGateway) {
-		return new DeletarCardapioUseCase(cardapioGateway);
+	public IBuscarTodosRestauranteUseCase iBuscarTodosRestauranteUseCase (
+			IRestauranteGateway restauranteGateway,
+			IEnderecoGateway enderecoGateway,
+			IUsuarioGateway usuarioGateway,
+			IPerfilGateway perfilGateway,
+			ILoginGateway loginGateway
+	) {
+		return new BuscarTodosRestaurantesUseCase(restauranteGateway,
+				usuarioGateway,
+				perfilGateway,
+				loginGateway,
+				enderecoGateway
+				);
 	}
 
 	@Bean
-	public ICadastrarRestauranteUseCase iDeletarCardapioUseCase (ICardapioGateway cardapioGateway) {
-		return new DeletarCardapioUseCase(cardapioGateway);
+	public ICadastrarRestauranteUseCase iCadastrarRestauranteUseCase (
+			IRestauranteGateway restauranteGateway,
+			IEnderecoGateway enderecoGateway,
+			IUsuarioGateway usuarioGateway,
+			IPerfilGateway perfilGateway,
+			ILoginGateway loginGateway
+	) {
+		return new CadastrarRestauranteUseCase(restauranteGateway,
+				enderecoGateway,
+				usuarioGateway,
+				perfilGateway,
+				loginGateway);
 	}
 
 	@Bean
-	public IDeletarRestauranteUseCase iDeletarCardapioUseCase (ICardapioGateway cardapioGateway) {
-		return new DeletarCardapioUseCase(cardapioGateway);
+	public IDeletarRestauranteUseCase iDeletarRestauranteUseCase (IRestauranteGateway restauranteGateway) {
+		return new DeletarRestauranteUseCase(restauranteGateway);
 	}
 
-
-
-
-
-
-
-	
 	// Gateways
 	
 	@Bean
@@ -258,5 +292,10 @@ public class AppConfig {
 	@Bean
 	public ICardapioGateway iCardapioGateway(ICardapioRepository cardapioRepository) {
 		return new CardapioGateway(cardapioRepository);
+	}
+
+	@Bean
+	public IRestauranteGateway iRestauranteGateway(IRestauranteRepository restauranteRepository) {
+		return new RestauranteGateway(restauranteRepository);
 	}
 }
