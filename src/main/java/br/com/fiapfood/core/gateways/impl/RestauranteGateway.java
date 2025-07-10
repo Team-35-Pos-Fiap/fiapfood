@@ -1,70 +1,62 @@
 package br.com.fiapfood.core.gateways.impl;
 
-import br.com.fiapfood.core.entities.Usuario;
+import br.com.fiapfood.core.entities.Restaurante;
+import br.com.fiapfood.core.entities.dto.RestauranteDto;
 import br.com.fiapfood.core.entities.dto.UsuarioDto;
-import br.com.fiapfood.core.exceptions.UsuarioNaoEncontradoException;
-import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
-import br.com.fiapfood.core.presenters.EnderecoPresenter;
-import br.com.fiapfood.core.presenters.LoginPresenter;
-import br.com.fiapfood.core.presenters.PerfilPresenter;
-import br.com.fiapfood.core.presenters.UsuarioPresenter;
-import br.com.fiapfood.infraestructure.repositories.interfaces.IUsuarioRepository;
+import br.com.fiapfood.core.exceptions.RestauranteNaoEncontradoException;
+import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
+import br.com.fiapfood.core.presenters.*;
+import br.com.fiapfood.infraestructure.entities.UsuarioEntity;
+import br.com.fiapfood.infraestructure.repositories.interfaces.IRestauranteRepository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class RestauranteGateway implements IUsuarioGateway {
+public class RestauranteGateway implements IRestauranteGateway {
 
-	private final IUsuarioRepository usuarioRepository;
+	private final IRestauranteRepository restauranteRepository;
 
-	public RestauranteGateway(IUsuarioRepository usuarioRepository) {
-		this.usuarioRepository = usuarioRepository;
+	public RestauranteGateway(IRestauranteRepository restauranteRepository) {
+		this.restauranteRepository = restauranteRepository;
 	}
-	
+
 	@Override
-	public Usuario buscarPorIdLogin(final UUID idLogin) {
-		final UsuarioDto usuario = usuarioRepository.buscarPorIdLogin(idLogin);
+	public Restaurante buscarPorId(final UUID id) {
+		final RestauranteDto restaurante = restauranteRepository.buscarRestaurantePorId(id);
 		
-		if(usuario != null) {
-			return UsuarioPresenter.toUsuario(usuario);
+		if(restaurante != null) {
+			return RestaurantePresenter.toRestaurante(restaurante);
 		} else {
-			throw new UsuarioNaoEncontradoException("Não foi encontrado nenhum usuário com o login informado.");
-		}
-	}
-	
-	@Override
-	public Usuario buscarPorId(final UUID id) {
-		final UsuarioDto usuario = usuarioRepository.buscarPorId(id);
-		
-		if(usuario != null) {
-			return UsuarioPresenter.toUsuario(usuario);
-		} else {
-			throw new UsuarioNaoEncontradoException("Não foi encontrado nenhum usuário com o id informado.");
+			throw new RestauranteNaoEncontradoException("Não foi encontrado nenhum usuário com o id informado.");
 		}
 	}
 
 	@Override
-	public Map<Class<?>, Object> buscarUsuariosComPaginacao(final Integer pagina) {
-		final Map<Class<?>, Object> dados = usuarioRepository.buscarUsuariosComPaginacao(pagina);
+	public Map<Class<?>, Object> buscarRestaurantesComPaginacao(final Integer pagina) {
+		final Map<Class<?>, Object> dados = restauranteRepository.buscarRestauranteComPaginacao(pagina);
 		
 		if(dados.get(List.class) != null) {
 			return dados;
 		} else {
-			throw new UsuarioNaoEncontradoException("Não foi encontrado nenhum usuário com o login informado.");
+			throw new RestauranteNaoEncontradoException("Não foi encontrado nenhum usuário com o login informado.");
 		}
 	}
 
 	@Override
-	public void salvar(final UsuarioDto usuario) {
-		usuarioRepository.salvar(UsuarioPresenter.toUsuarioAtualizadoEntity(usuario, 
-														 				    EnderecoPresenter.toEnderecoEntity(usuario.endereco()), 
-																		    PerfilPresenter.toPerfilEntity(usuario.perfil()), 
-																		    LoginPresenter.toLoginEntity(usuario.login())));		
+	public void salvar(final RestauranteDto restaurante) {
+		restauranteRepository.salvarRestaurante(RestaurantePresenter
+				.toRestauranteAtualizadoEntity(restaurante,
+						EnderecoPresenter.toEnderecoEntity(restaurante.endereco()),
+						UsuarioPresenter.toUsuarioEntity(restaurante.donoRestaurante(),
+								EnderecoPresenter.toEnderecoEntity(restaurante.donoRestaurante().endereco()),
+								PerfilPresenter.toPerfilEntity(restaurante.donoRestaurante().perfil()),
+								LoginPresenter.toLoginEntity(restaurante.donoRestaurante().login())
+						)));
 	}
 
 	@Override
-	public boolean emailJaCadastrado(final String email) {
-		return usuarioRepository.emailJaCadastrado(email);
-	}	
+	public void deletar(UUID id) {
+		restauranteRepository.deletarRestaurante(id);
+	}
 }

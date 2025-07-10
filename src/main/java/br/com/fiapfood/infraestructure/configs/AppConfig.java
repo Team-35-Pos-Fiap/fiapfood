@@ -1,21 +1,17 @@
 package br.com.fiapfood.infraestructure.configs;
 
-import br.com.fiapfood.core.controllers.impl.CardapioCoreController;
-import br.com.fiapfood.core.controllers.interfaces.ICardapioCoreController;
+import br.com.fiapfood.core.controllers.impl.*;
+import br.com.fiapfood.core.controllers.interfaces.*;
 import br.com.fiapfood.core.gateways.impl.*;
 import br.com.fiapfood.core.gateways.interfaces.*;
 import br.com.fiapfood.core.usecases.cardapio.impl.*;
 import br.com.fiapfood.core.usecases.cardapio.interfaces.*;
+import br.com.fiapfood.core.usecases.restaurante.impl.AtualizarRestauranteUseCase;
+import br.com.fiapfood.core.usecases.restaurante.interfaces.*;
 import br.com.fiapfood.infraestructure.repositories.interfaces.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.fiapfood.core.controllers.impl.LoginCoreController;
-import br.com.fiapfood.core.controllers.impl.PerfilCoreController;
-import br.com.fiapfood.core.controllers.impl.UsuarioCoreController;
-import br.com.fiapfood.core.controllers.interfaces.ILoginCoreController;
-import br.com.fiapfood.core.controllers.interfaces.IPerfilCoreController;
-import br.com.fiapfood.core.controllers.interfaces.IUsuarioCoreController;
 import br.com.fiapfood.core.usecases.login.impl.AtualizarMatriculaUseCase;
 import br.com.fiapfood.core.usecases.login.impl.AtualizarSenhaUseCase;
 import br.com.fiapfood.core.usecases.login.impl.ValidarLoginUseCase;
@@ -91,6 +87,21 @@ public class AppConfig {
 										 buscarTodosCardapioUseCase,
 										 cadastrarCardapioUseCase,
 										 deletarCardapioUseCase);
+	}
+
+	@Bean
+	public IRestauranteCoreController iRestauranteCoreController(
+			IAtualizarRestauranteUseCase atualizarCardapioUseCase,
+			IBuscarRestaurantePorIdUseCase buscarRestaurantePorIdUseCase,
+			IBuscarTodosRestauranteUseCase buscarTodosRestauranteUseCase,
+			ICadastrarRestauranteUseCase cadastrarRestauranteUseCase,
+			IDeletarRestauranteUseCase deletarRestauranteUseCase
+	) {
+		return new RestauranteCoreController(atualizarCardapioUseCase,
+				buscarRestaurantePorIdUseCase,
+				buscarTodosRestauranteUseCase,
+				cadastrarRestauranteUseCase,
+				deletarRestauranteUseCase);
 	}
 	
 	// Usecases
@@ -189,6 +200,38 @@ public class AppConfig {
 	public IDeletarCardapioUseCase iDeletarCardapioUseCase (ICardapioGateway cardapioGateway) {
 		return new DeletarCardapioUseCase(cardapioGateway);
 	}
+
+	@Bean
+	public IAtualizarRestauranteUseCase iAtualizarRestauranteUseCase (IRestauranteGateway restauranteGateway) {
+		return new AtualizarRestauranteUseCase(restauranteGateway);
+	}
+
+	@Bean
+	public IBuscarRestaurantePorIdUseCase iDeletarCardapioUseCase (ICardapioGateway cardapioGateway) {
+		return new DeletarCardapioUseCase(cardapioGateway);
+	}
+
+	@Bean
+	public IBuscarTodosRestauranteUseCase iDeletarCardapioUseCase (ICardapioGateway cardapioGateway) {
+		return new DeletarCardapioUseCase(cardapioGateway);
+	}
+
+	@Bean
+	public ICadastrarRestauranteUseCase iDeletarCardapioUseCase (ICardapioGateway cardapioGateway) {
+		return new DeletarCardapioUseCase(cardapioGateway);
+	}
+
+	@Bean
+	public IDeletarRestauranteUseCase iDeletarCardapioUseCase (ICardapioGateway cardapioGateway) {
+		return new DeletarCardapioUseCase(cardapioGateway);
+	}
+
+
+
+
+
+
+
 	
 	// Gateways
 	

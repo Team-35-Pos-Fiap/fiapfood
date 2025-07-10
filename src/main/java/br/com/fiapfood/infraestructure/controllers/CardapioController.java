@@ -2,6 +2,7 @@ package br.com.fiapfood.infraestructure.controllers;
 
 import br.com.fiapfood.core.controllers.interfaces.ICardapioCoreController;
 import br.com.fiapfood.core.entities.dto.CardapioDto;
+import br.com.fiapfood.core.entities.dto.DadosCardapioComPaginacaoDto;
 import br.com.fiapfood.core.entities.dto.DadosCardapioDto;
 import br.com.fiapfood.infraestructure.controllers.response.MensagemResponse;
 import br.com.fiapfood.infraestructure.controllers.response.SucessoResponse;
@@ -27,7 +28,7 @@ public class CardapioController {
     }
 
     @GetMapping
-    public ResponseEntity<CardapioDto> buscarCardapios(@RequestParam(defaultValue = "1") final Integer pagina) {
+    public ResponseEntity<DadosCardapioComPaginacaoDto> buscarCardapios(@RequestParam(defaultValue = "1") final Integer pagina) {
         log.info("buscarCardapios() - pagina {}", pagina);
 
         return ResponseEntity.ok().body(cardapioCoreController.buscarTodos(pagina));

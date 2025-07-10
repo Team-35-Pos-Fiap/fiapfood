@@ -1,13 +1,15 @@
 package br.com.fiapfood.infraestructure.repositories.interfaces;
 
+import br.com.fiapfood.core.entities.dto.RestauranteDto;
 import br.com.fiapfood.infraestructure.entities.RestauranteEntity;
 import org.springframework.data.domain.Page;
 
+import java.util.Map;
 import java.util.UUID;
 
 public interface IRestauranteRepository {
-    RestauranteEntity buscarRestaurantePorId(UUID id);
-    Page<RestauranteEntity> buscarTodosRestaurantes(Integer pagina);
+    RestauranteDto buscarRestaurantePorId(UUID id);
+    Map<Class<?>, Object> buscarRestauranteComPaginacao(Integer pagina);
     void salvarRestaurante(RestauranteEntity restaurante);
     void deletarRestaurante(UUID id);
 }

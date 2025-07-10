@@ -4,13 +4,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record DadosRestauranteDto(
         @NotBlank (message = "O campo nome precisa ser informado.")
         String nome,
 
         @NotNull(message = "O campo endereco precisa ser informado.")
-        DadosEnderecoDto endereco,
+        UUID endereco,
 
         @NotBlank(message = "O campo tipoCozinha precisa ser informado.")
         String tipoCozinha,
@@ -19,5 +20,5 @@ public record DadosRestauranteDto(
         LocalDateTime horarioFuncionamento,
 
         @NotNull(message = "O campo donoRestaurante precisa ser informado.")
-        CadastrarUsuarioDto donoRestaurante
+        UUID donoRestaurante
 ) {}

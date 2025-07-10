@@ -1,57 +1,89 @@
 package br.com.fiapfood.core.presenters;
 
-import br.com.fiapfood.core.entities.Endereco;
-import br.com.fiapfood.core.entities.Login;
-import br.com.fiapfood.core.entities.Perfil;
-import br.com.fiapfood.core.entities.Usuario;
+import br.com.fiapfood.core.entities.*;
 import br.com.fiapfood.core.entities.dto.*;
-import br.com.fiapfood.infraestructure.entities.EnderecoEntity;
-import br.com.fiapfood.infraestructure.entities.LoginEntity;
-import br.com.fiapfood.infraestructure.entities.PerfilEntity;
-import br.com.fiapfood.infraestructure.entities.UsuarioEntity;
+import br.com.fiapfood.infraestructure.entities.*;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 
 public class RestaurantePresenter {
 
-	public static UsuarioDto toUsuarioDto(UsuarioEntity usuario, PerfilDto perfil, LoginDto login, EnderecoDto endereco) {
-		return new UsuarioDto(usuario.getId(), usuario.getNome(), perfil, login, usuario.getIsAtivo(), usuario.getEmail(), usuario.getDataCriacao(), usuario.getDataAtualizacao(), endereco);
+	public static RestauranteDto toRestauranteDto(RestauranteEntity dadosRestaurante, EnderecoDto endereco, UsuarioDto usuario) {
+		return new RestauranteDto(dadosRestaurante.getId(),
+				dadosRestaurante.getNome(),
+				endereco,
+				dadosRestaurante.getTipoCozinha(),
+				dadosRestaurante.getHorarioFuncionamento(),
+				usuario);
 	}
 
-	public static Usuario toUsuario(UsuarioDto usuario) {
-		return Usuario.criar(usuario.id(), usuario.nome(), usuario.perfil().id(), usuario.login().id(), usuario.isAtivo(), usuario.email(), usuario.dataCriacao(), usuario.dataAtualizacao(), usuario.endereco().id());
+	public static RestauranteDto toRestauranteDto(DadosRestauranteDto dadosRestaurante, Endereco enderecoUsuario, UsuarioDto usuario) {
+		return new RestauranteDto(null,
+				dadosRestaurante.nome(),
+				EnderecoPresenter.toEnderecoDto(enderecoUsuario),
+				dadosRestaurante.tipoCozinha(),
+				dadosRestaurante.horarioFuncionamento(),
+				usuario);
 	}
 
-	public static UsuarioDto toUsuarioDto(Usuario usuario, Perfil perfil, Login login, Endereco endereco) {
-		return new UsuarioDto(usuario.getId(), usuario.getNome(), PerfilPresenter.toPerfilDto(perfil), LoginPresenter.toLogin(login),
-							  usuario.getIsAtivo(), usuario.getEmail(), usuario.getDataCriacao(), usuario.getDataAtualizacao(), EnderecoPresenter.toEnderecoEntity(endereco));
+	public static Restaurante toRestaurante(RestauranteDto dadosRestaurante) {
+		return new Restaurante(dadosRestaurante.id(),
+				dadosRestaurante.nome(),
+				dadosRestaurante.endereco().id(),
+				dadosRestaurante.tipoCozinha(),
+				dadosRestaurante.horarioFuncionamento(),
+				dadosRestaurante.donoRestaurante().id());
 	}
 
-	public static DadosUsuariosComPaginacaoDto toUsuarioPaginacaoDto(List<UsuarioDto> usuarios, PaginacaoDto paginacao) {
-		return new DadosUsuariosComPaginacaoDto(usuarios, paginacao);
+
+
+	public static RestauranteDto toRestauranteDto(Restaurante dadosRestaurante, Endereco endereco,
+												  Usuario usuario, Perfil perfil, Login login, Endereco enderecoUsuario) {
+		return new RestauranteDto(dadosRestaurante.getId(),
+				dadosRestaurante.getNome(),
+				EnderecoPresenter.toEnderecoDto(endereco),
+				dadosRestaurante.getTipoCozinha(),
+				dadosRestaurante.getHorarioFuncionamento(),
+				UsuarioPresenter.toUsuarioDto(usuario,
+						perfil,
+						login,
+						enderecoUsuario));
 	}
 
-	public static List<UsuarioDto> toListUsuarioDto(List<UsuarioEntity> usuarios) {
-		return usuarios.stream().map(u -> RestaurantePresenter.toUsuarioDto(u,
-																		PerfilPresenter.toPerfilDto(u.getPerfil()), 
-																		LoginPresenter.toLoginDto(u.getDadosLogin()), 
-																		EnderecoPresenter.toEnderecoDto(u.getDadosEndereco()))).toList();
+	public static DadosRestauranteComPaginacaoDto toRestaurantePaginacaoDto(List<RestauranteDto> restaurantes, PaginacaoDto paginacao) {
+		return new DadosRestauranteComPaginacaoDto(restaurantes, paginacao);
+	}
+
+	public static List<RestauranteDto> toListRestauranteDto(List<RestauranteEntity> restaurantes) {
+		return restaurantes.stream().map(u -> RestaurantePresenter.toRestauranteDto(u,
+																		EnderecoPresenter.toEnderecoDto(u.getEndereco()),
+																		UsuarioPresenter.toUsuarioDto(u.getDonoRestaurante(),
+																				PerfilPresenter.toPerfilDto(u.getDonoRestaurante().getPerfil()),
+																				LoginPresenter.toLoginDto(u.getDonoRestaurante().getDadosLogin()),
+																				EnderecoPresenter.toEnderecoDto(u.getDonoRestaurante().getDadosEndereco())
+																		))).toList();
 	}
 	
-	public static List<Usuario> toListUsuario(List<UsuarioDto> usuarios) {
-		return usuarios.stream().map(u -> RestaurantePresenter.toUsuario(u)).toList();
+	public static List<Restaurante> toListRestaurante(List<RestauranteDto> restaurantes) {
+		return restaurantes.stream().map(RestaurantePresenter::toRestaurante).toList();
 	}
 
-	public static UsuarioEntity toUsuarioEntity(UsuarioDto usuario, EnderecoEntity endereco, PerfilEntity perfil, LoginEntity login) {
-		return new UsuarioEntity(null, usuario.nome(), usuario.email(), LocalDateTime.now(), null, true, endereco, perfil, login);
+	public static RestauranteEntity toRestauranteEntity(RestauranteDto dadosRestaurante, EnderecoEntity endereco, UsuarioEntity usuario) {
+		return new RestauranteEntity(null,
+				dadosRestaurante.nome(),
+				endereco,
+				dadosRestaurante.tipoCozinha(),
+				dadosRestaurante.horarioFuncionamento(),
+				usuario);
 	}
 
-	public static UsuarioEntity toUsuarioAtualizadoEntity(UsuarioDto usuario, EnderecoEntity endereco, PerfilEntity perfil, LoginEntity login) {
-		return new UsuarioEntity(usuario.id(), usuario.nome(), usuario.email(), usuario.dataCriacao(), usuario.dataAtualizacao(), usuario.isAtivo(), endereco, perfil, login);
-	}
-	
-	public static Usuario toUsuario(CadastrarUsuarioDto usuario) {
-		return Usuario.criar(null, usuario.nome(), usuario.perfil(), null, true, usuario.email(), LocalDateTime.now(), null, null);
+	public static RestauranteEntity toRestauranteAtualizadoEntity(RestauranteDto dadosRestaurante, EnderecoEntity endereco, UsuarioEntity usuario) {
+		return new RestauranteEntity(dadosRestaurante.id(),
+				dadosRestaurante.nome(),
+				endereco,
+				dadosRestaurante.tipoCozinha(),
+				dadosRestaurante.horarioFuncionamento(),
+				usuario);
 	}
 }

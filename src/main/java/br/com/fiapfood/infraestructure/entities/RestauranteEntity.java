@@ -2,6 +2,7 @@ package br.com.fiapfood.infraestructure.entities;
 
 import br.com.fiapfood.core.entities.Endereco;
 import br.com.fiapfood.core.entities.Usuario;
+import br.com.fiapfood.core.entities.dto.EnderecoDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +27,7 @@ public class RestauranteEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_endereco")
-    private Endereco endereco;
+    private EnderecoEntity endereco;
 
     @Column(nullable = false)
     private String tipoCozinha;
@@ -36,10 +37,10 @@ public class RestauranteEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_dono_restaurante")
-    private Usuario donoRestaurante;
+    private UsuarioEntity donoRestaurante;
 
-    public void atualizarDados(String nome, Endereco endereco, String tipoCozinha,
-                               LocalDateTime horarioFuncionamento, Usuario donoRestaurante) {
+    public void atualizarDados(String nome, EnderecoEntity endereco, String tipoCozinha,
+                               LocalDateTime horarioFuncionamento, UsuarioEntity donoRestaurante) {
         this.nome = nome;
         this.endereco = endereco;
         this.tipoCozinha = tipoCozinha;
