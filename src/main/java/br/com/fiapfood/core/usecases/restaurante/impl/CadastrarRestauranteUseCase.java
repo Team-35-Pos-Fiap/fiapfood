@@ -36,20 +36,12 @@ public class CadastrarRestauranteUseCase implements ICadastrarRestauranteUseCase
         }
 
         Perfil perfil = perfilGateway.buscarPorId(usuario.getIdPerfil());
-        PerfilDto perfilDto = PerfilPresenter.toPerfilDto(perfil);
-        PerfilEntity perfilEntity = PerfilPresenter.toPerfilEntity(perfilDto);
 
         Login login = loginGateway.buscarPorId(usuario.getIdLogin());
-        LoginDto loginDto = LoginPresenter.toLogin(login);
-        LoginEntity loginEntity = LoginPresenter.toLoginEntity(loginDto);
 
         Endereco enderecoUsuario = enderecoGateway.buscarPorId(usuario.getIdEndereco());
-        EnderecoDto enderecoUsuarioDto = EnderecoPresenter.toEnderecoDto(enderecoUsuario);
-        EnderecoEntity enderecoUsuarioEntity = EnderecoPresenter.toEnderecoEntity(enderecoUsuarioDto);
 
         UsuarioDto usuarioDto = UsuarioPresenter.toUsuarioDto(usuario, perfil, login, enderecoUsuario);
-        UsuarioEntity usuarioEntity = UsuarioPresenter.toUsuarioEntity(usuarioDto, enderecoUsuarioEntity,
-                perfilEntity, loginEntity);
 
         RestauranteDto dadosRestaurante = RestaurantePresenter.toRestauranteDto(restaurante, enderecoUsuario,
                 usuarioDto);
