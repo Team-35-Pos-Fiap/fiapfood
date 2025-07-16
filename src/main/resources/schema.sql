@@ -12,7 +12,7 @@ create table endereco (
     endereco varchar(150) not null,
     numero int null,
     complemento varchar(150) null,
-    sem_numero tinyint(1) not null default 1,
+    sem_numero tinyint not null default 1,
     cep varchar(100) not null,
     primary key(id)
 );
@@ -28,7 +28,7 @@ create table usuario (
     id varchar(36) not null,
 	nome varchar(150) not null,
 	email varchar(70) not null,
-	ativo tinyint(1) not null default 1,
+	ativo tinyint not null default 1,
 	data_criacao datetime not null,
 	data_atualizacao datetime null,
 	id_perfil int not null,
