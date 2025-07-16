@@ -57,7 +57,7 @@ public class LoginController {
 		
 		loginCoreController.atualizarMatricula(matricula, dados.matricula());
 
-		MensagemResponse sucessoResponse = new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_TROCA_SENHA_USUARIO));
+		MensagemResponse sucessoResponse = new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_TROCA_MATRICULA_USUARIO));
 	
 		return ResponseEntity.ok(sucessoResponse);
 	}

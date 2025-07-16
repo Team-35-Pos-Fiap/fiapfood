@@ -1,7 +1,5 @@
 package br.com.fiapfood.core.usecases.login.impl;
 
-import java.util.UUID;
-
 import br.com.fiapfood.core.entities.Login;
 import br.com.fiapfood.core.entities.Usuario;
 import br.com.fiapfood.core.exceptions.MatriculaDuplicadaException;
@@ -10,6 +8,8 @@ import br.com.fiapfood.core.gateways.interfaces.ILoginGateway;
 import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
 import br.com.fiapfood.core.presenters.LoginPresenter;
 import br.com.fiapfood.core.usecases.login.interfaces.IAtualizarMatriculaUseCase;
+
+import java.util.UUID;
 
 public class AtualizarMatriculaUseCase implements IAtualizarMatriculaUseCase {
 
@@ -41,7 +41,7 @@ public class AtualizarMatriculaUseCase implements IAtualizarMatriculaUseCase {
 	
 	private void validarUsuario(final Usuario usuario) {
 		if (!usuario.getIsAtivo()) {
-			throw new UsuarioInativoException("Não é possível alterar a senha de um usuário inativo.");
+			throw new UsuarioInativoException("Não é possível alterar a matricula de um usuário inativo.");
 		} 
 	}
 	
