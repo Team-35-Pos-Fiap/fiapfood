@@ -6,12 +6,6 @@ import br.com.fiapfood.core.gateways.impl.*;
 import br.com.fiapfood.core.gateways.interfaces.*;
 import br.com.fiapfood.core.usecases.cardapio.impl.*;
 import br.com.fiapfood.core.usecases.cardapio.interfaces.*;
-import br.com.fiapfood.core.usecases.restaurante.impl.*;
-import br.com.fiapfood.core.usecases.restaurante.interfaces.*;
-import br.com.fiapfood.infraestructure.repositories.interfaces.*;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import br.com.fiapfood.core.usecases.login.impl.AtualizarMatriculaUseCase;
 import br.com.fiapfood.core.usecases.login.impl.AtualizarSenhaUseCase;
 import br.com.fiapfood.core.usecases.login.impl.ValidarLoginUseCase;
@@ -22,24 +16,13 @@ import br.com.fiapfood.core.usecases.perfil.impl.BuscarPerfilPorIdUseCase;
 import br.com.fiapfood.core.usecases.perfil.impl.BuscarTodosPerfisUseCase;
 import br.com.fiapfood.core.usecases.perfil.interfaces.IBuscarPerfilPorIdUseCase;
 import br.com.fiapfood.core.usecases.perfil.interfaces.IBuscarTodosPerfisUseCase;
-import br.com.fiapfood.core.usecases.usuario.impl.AtualizarEmailUsuarioUseCase;
-import br.com.fiapfood.core.usecases.usuario.impl.AtualizarEnderecoUsuarioUseCase;
-import br.com.fiapfood.core.usecases.usuario.impl.AtualizarNomeUsuarioUseCase;
-import br.com.fiapfood.core.usecases.usuario.impl.AtualizarPerfilUsuarioUseCase;
-import br.com.fiapfood.core.usecases.usuario.impl.BuscarTodosUsuariosUseCase;
-import br.com.fiapfood.core.usecases.usuario.impl.BuscarUsuarioPorIdUseCase;
-import br.com.fiapfood.core.usecases.usuario.impl.CadastrarUsuarioUseCase;
-import br.com.fiapfood.core.usecases.usuario.impl.InativarUsuarioUseCase;
-import br.com.fiapfood.core.usecases.usuario.impl.ReativarUsuarioUseCase;
-import br.com.fiapfood.core.usecases.usuario.interfaces.IAtualizarEmailUsuarioUseCase;
-import br.com.fiapfood.core.usecases.usuario.interfaces.IAtualizarEnderecoUsuarioUseCase;
-import br.com.fiapfood.core.usecases.usuario.interfaces.IAtualizarNomeUsuarioUseCase;
-import br.com.fiapfood.core.usecases.usuario.interfaces.IAtualizarPerfilUsuarioUseCase;
-import br.com.fiapfood.core.usecases.usuario.interfaces.IBuscarTodosUsuariosUseCase;
-import br.com.fiapfood.core.usecases.usuario.interfaces.IBuscarUsuarioPorIdUseCase;
-import br.com.fiapfood.core.usecases.usuario.interfaces.ICadastrarUsuarioUseCase;
-import br.com.fiapfood.core.usecases.usuario.interfaces.IInativarUsuarioUseCase;
-import br.com.fiapfood.core.usecases.usuario.interfaces.IReativarUsuarioUseCase;
+import br.com.fiapfood.core.usecases.restaurante.impl.*;
+import br.com.fiapfood.core.usecases.restaurante.interfaces.*;
+import br.com.fiapfood.core.usecases.usuario.impl.*;
+import br.com.fiapfood.core.usecases.usuario.interfaces.*;
+import br.com.fiapfood.infraestructure.repositories.interfaces.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AppConfig {
@@ -115,7 +98,8 @@ public class AppConfig {
 	public IAtualizarMatriculaUseCase iAtualizarMatriculaUseCase(ILoginGateway loginGateway, IUsuarioGateway usuarioGateway) {
 		return new AtualizarMatriculaUseCase(loginGateway, usuarioGateway);
 	}
-	
+
+	// TIVE QUE CRIAR USE CASES, MAS AINDA PRECISA IMPLEMENTACAO
 	@Bean
 	public IAtualizarSenhaUseCase iAtualizarSenhaUseCase(ILoginGateway loginGateway, IUsuarioGateway usuarioGateway) {
 		return new AtualizarSenhaUseCase(loginGateway, usuarioGateway);
@@ -160,7 +144,8 @@ public class AppConfig {
 	public IAtualizarEmailUsuarioUseCase iAtualizarEmailUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway, ILoginGateway loginGateway, IEnderecoGateway enderecoGateway) {
 		return new AtualizarEmailUsuarioUseCase(usuarioGateway, perfilGateway, loginGateway, enderecoGateway);
 	}
-	
+
+	// TIVE QUE CRIAR USE CASES, MAS AINDA PRECISA IMPLEMENTACAO
 	@Bean
 	public IAtualizarEnderecoUsuarioUseCase iAtualizarEnderecoUsuarioUseCase(IUsuarioGateway usuarioGateway, IEnderecoGateway enderecoGateway) {
 		return new AtualizarEnderecoUsuarioUseCase(usuarioGateway, enderecoGateway);

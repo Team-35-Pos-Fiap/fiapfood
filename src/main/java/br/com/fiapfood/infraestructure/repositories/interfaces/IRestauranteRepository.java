@@ -2,7 +2,6 @@ package br.com.fiapfood.infraestructure.repositories.interfaces;
 
 import br.com.fiapfood.core.entities.dto.RestauranteDto;
 import br.com.fiapfood.infraestructure.entities.RestauranteEntity;
-import org.springframework.data.domain.Page;
 
 import java.util.Map;
 import java.util.UUID;
