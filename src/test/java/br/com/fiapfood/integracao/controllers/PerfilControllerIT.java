@@ -31,7 +31,7 @@ public class PerfilControllerIT {
     class BuscarTodosRequest {
 
         @Test
-        void deveRetornarListaComPerfisCadastrados() throws Exception {
+        void deveRetornarListaComPerfisCadastrados() {
             // Arrange
 
             // Act & Assert

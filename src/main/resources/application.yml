@@ -19,7 +19,7 @@ spring:
     console:
       enabled: true
   messages:
-    encoding: ISO-8859-1
+    encoding: UTF-8
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER

@@ -15,8 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = {"/db_clean.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -65,9 +64,8 @@ public class LoginControllerIT {
                     .post("/login")
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("$", hasKey("mensagem"));
-
-            // OBS: Removi a checagem do texto porque estava tendo problemas com encoding
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Não foi encontrado um usuário com a matrícula e senha informados."));
         }
 
         @ParameterizedTest
@@ -105,60 +103,9 @@ public class LoginControllerIT {
                     .post("/login")
                     .then()
                     .statusCode(HttpStatus.UNAUTHORIZED.value())
-                    .body("$", hasKey("mensagem"));
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("O usuário não possui permissão de acesso."));
         }
-
-//        @Test
-//        void deveRetornarStatusBadRequestSeMatriculaEmBrancoNosDadosDeLogin(){
-//            LoginRecordRequest loginRecordRequest = new LoginRecordRequest("", "123");
-//            given()
-//                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                    .body(loginRecordRequest)
-//                    .when()
-//                    .post("/login")
-//                    .then()
-//                    .statusCode(HttpStatus.BAD_REQUEST.value())
-//                    .body("$", hasKey("matricula"));
-//        }
-
-//        @Test
-//        public void deveRetornarStatusBadRequestSeMatriculaMenorDoQue3LetrasNosDadosDeLogin(){
-//            LoginRecordRequest loginRecordRequest = new LoginRecordRequest("us", "123");
-//            given()
-//                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                    .body(loginRecordRequest)
-//                    .when()
-//                    .post("/login")
-//                    .then()
-//                    .statusCode(HttpStatus.BAD_REQUEST.value())
-//                    .body("$", hasKey("matricula"));
-//        }
-
-//        @Test
-//        public void deveRetornarStatusBadRequestSeMatriculaMaiorDoQue6LetrasNosDadosDeLogin(){
-//            LoginRecordRequest loginRecordRequest = new LoginRecordRequest("us00001", "123");
-//            given()
-//                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                    .body(loginRecordRequest)
-//                    .when()
-//                    .post("/login")
-//                    .then()
-//                    .statusCode(HttpStatus.BAD_REQUEST.value())
-//                    .body("$", hasKey("matricula"));
-//        }
-
-//        @Test
-//        public void deveRetornarStatusBadRequestSeSenhaEmBrancoNosDadosDeLogin(){
-//            LoginRecordRequest loginRecordRequest = new LoginRecordRequest("us0001", "");
-//            given()
-//                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                    .body(loginRecordRequest)
-//                    .when()
-//                    .post("/login")
-//                    .then()
-//                    .statusCode(HttpStatus.BAD_REQUEST.value())
-//                    .body("$", hasKey("senha"));
-//        }
     }
 
     @Nested
@@ -177,7 +124,8 @@ public class LoginControllerIT {
                     .patch("/login/{matricula}/senha", matricula)
                     .then()
                     .statusCode(HttpStatus.OK.value())
-                    .body("$", hasKey("mensagem"));
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Senha alterada com sucesso."));
         }
 
         @Test
@@ -194,7 +142,8 @@ public class LoginControllerIT {
                     .patch("/login/{matricula}/senha", matricula)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("$", hasKey("mensagem"));
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Não foi encontrado um usuário com a matrícula e senha informados."));
         }
 
         @Test
@@ -211,7 +160,8 @@ public class LoginControllerIT {
                     .patch("/login/{matricula}/senha", matricula)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("$", hasKey("mensagem"));
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Usuário não encontrado na base de dados."));
         }
 
         @Test
@@ -228,7 +178,8 @@ public class LoginControllerIT {
                     .patch("/login/{matricula}/senha", matricula)
                     .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .body("$", hasKey("senha"));
+                    .body("$", hasKey("senha"))
+                    .body("senha", equalTo("O campo senha precisa estar preenchido."));
 
         }
     }

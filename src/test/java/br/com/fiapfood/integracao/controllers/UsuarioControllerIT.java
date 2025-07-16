@@ -78,9 +78,8 @@ public class UsuarioControllerIT {
                     .post("/usuarios")
                     .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .body("$", hasKey("mensagem"));
-
-            // OBS: Removi a checagem do texto porque estava tendo problemas com encoding
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Já existe um usuário com o email informado."));
         }
 
 
@@ -210,7 +209,8 @@ public class UsuarioControllerIT {
                     .post("/usuarios")
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("$", hasKey("mensagem"));
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Perfil não encontrado na base de dados."));
         }
     }
 
@@ -228,9 +228,8 @@ public class UsuarioControllerIT {
                     .delete("/usuarios/{id}/status", id)
                     .then()
                     .statusCode(HttpStatus.OK.value())
-                    .body("$", hasKey("mensagem"));
-
-            // OBS: Removi a checagem do texto porque estava tendo problemas com encoding
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Usuário inativado com sucesso."));
         }
 
         @Test
@@ -245,7 +244,8 @@ public class UsuarioControllerIT {
                     .delete("/usuarios/{id}/status", id)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("$", hasKey("mensagem"));
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Usuário não encontrado na base de dados."));
 
             // OBS: Removi a checagem do texto porque estava tendo problemas com encoding
         }
@@ -265,9 +265,8 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/status", id)
                     .then()
                     .statusCode(HttpStatus.OK.value())
-                    .body("$", hasKey("mensagem"));
-
-            // OBS: Removi a checagem do texto porque estava tendo problemas com encoding
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Usuário reativado com sucesso."));
         }
 
         @Test
@@ -282,9 +281,8 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/status", id)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("$", hasKey("mensagem"));
-
-            // OBS: Removi a checagem do texto porque estava tendo problemas com encoding
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Usuário não encontrado na base de dados."));
         }
     }
 
@@ -323,9 +321,8 @@ public class UsuarioControllerIT {
                     .get("/usuarios/{id}", id)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("$", hasKey("mensagem"));
-
-            // OBS: Removi a checagem do texto porque estava tendo problemas com encoding
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Usuário não encontrado na base de dados."));
         }
     }
 
@@ -359,7 +356,8 @@ public class UsuarioControllerIT {
                     .get("/usuarios?pagina={pagina}", pagina)
                     .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .body("$", hasKey("mensagem"));
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("O número da página deve ser maior ou igual a 1."));
         }
 
         @Test
@@ -374,7 +372,8 @@ public class UsuarioControllerIT {
                     .get("/usuarios?pagina={pagina}", pagina)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("$", hasKey("mensagem"));
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Não foram encontrados usuários na base de dados."));
         }
     }
 
@@ -410,7 +409,8 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/perfil", id)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("$", hasKey("mensagem"));
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Usuário não encontrado na base de dados."));
         }
 
         @Test
@@ -427,11 +427,12 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/perfil", id)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("$", hasKey("mensagem"));
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Perfil não encontrado na base de dados."));
         }
 
         @Test
-        void deveReornarStatusBadRequestQuandoCamposInvalidosNoDto() {
+        void deveRetornarStatusBadRequestQuandoCamposInvalidosNoDto() {
             // Arrange
             UUID id = UUID.fromString("cf05db14-7993-4564-bff9-c258b5c7387c");
             PerfilRecordRequest perfilRecordRequest = new PerfilRecordRequest(null);
@@ -444,7 +445,8 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/perfil", id)
                     .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .body("$", hasKey("idPerfil"));
+                    .body("$", hasKey("idPerfil"))
+                    .body("idPerfil", equalTo("É necessário informar o perfil de acesso para o usuário."));
         }
     }
 
@@ -481,7 +483,8 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/endereco", id)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("$", hasKey("mensagem"));
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Usuário não encontrado na base de dados."));
 
         }
 
@@ -552,7 +555,8 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/nome", id)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("$", hasKey("mensagem"));
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Usuário não encontrado na base de dados."));
         }
 
         @ParameterizedTest
@@ -591,7 +595,8 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/nome", id)
                     .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .body("$", hasKey("nome"));
+                    .body("$", hasKey("nome"))
+                    .body("nome", equalTo("O campo nome precisa ter entre 3 e 150 caracteres."));
         }
     }
 
@@ -627,7 +632,8 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/email", id)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("$", hasKey("mensagem"));
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Usuário não encontrado na base de dados."));;
         }
 
         @Test
@@ -644,7 +650,8 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/email", id)
                     .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .body("$", hasKey("mensagem"));
+                    .body("$", hasKey("mensagem"))
+                    .body("mensagem", equalTo("Já existe um usuário com o email informado."));
         }
 
         @Test
@@ -661,7 +668,8 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/email", id)
                     .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .body("$", hasKey("email"));
+                    .body("$", hasKey("email"))
+                    .body("email", equalTo("O e-mail precisa ser válido"));
         }
     }
 }
