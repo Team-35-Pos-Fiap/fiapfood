@@ -26,7 +26,7 @@ public class CardapioGateway implements ICardapioGateway {
 		if(cardapio != null) {
 			return CardapioPresenter.toCardapio(cardapio);
 		} else {
-			throw new CardapioNaoEncontradoException("Não foi encontrado nenhum usuário com o id informado.");
+			throw new CardapioNaoEncontradoException("Não foi encontrado nenhum cardapio com o id informado.");
 		}
 	}
 
@@ -37,7 +37,7 @@ public class CardapioGateway implements ICardapioGateway {
 		if(dados.get(List.class) != null) {
 			return dados;
 		} else {
-			throw new CardapioNaoEncontradoException("Não foi encontrado nenhum usuário com o login informado.");
+			throw new CardapioNaoEncontradoException("Não foi encontrado nenhum cardapio com o login informado.");
 		}
 	}
 

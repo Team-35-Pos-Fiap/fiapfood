@@ -55,8 +55,7 @@ public class CardapioController {
         log.info("atualizar():cardapios {}", id);
         cardapioCoreController.atualizar(id, request);
 
-        MensagemResponse sucessoResponse = new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_ATUALIZACAO_CARDAPIO));
-        return ResponseEntity.ok(sucessoResponse);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("/{id}")
@@ -65,8 +64,7 @@ public class CardapioController {
 
         cardapioCoreController.deletarCardapio(id);
 
-        MensagemResponse sucessoResponse = new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_DELECAO_CARDAPIO));
-        return ResponseEntity.ok(sucessoResponse);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
