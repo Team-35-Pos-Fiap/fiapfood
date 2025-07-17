@@ -57,8 +57,7 @@ public class RestauranteController {
         log.info("cadastrar():restaurantes {}", id);
         restauranteCoreController.atualizarRestaurante(id, request);
 
-        MensagemResponse sucessoResponse = new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_ATUALIZACAO_CARDAPIO));
-        return ResponseEntity.ok(sucessoResponse);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PatchMapping("/{id}/endereco")
@@ -73,8 +72,7 @@ public class RestauranteController {
 
         restauranteCoreController.deletarRestaurante(id);
 
-        MensagemResponse sucessoResponse = new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_DELECAO_RESTAURANTE));
-        return ResponseEntity.ok(sucessoResponse);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
