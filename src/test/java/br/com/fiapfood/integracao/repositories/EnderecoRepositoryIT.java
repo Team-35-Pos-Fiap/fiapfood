@@ -13,7 +13,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.Optional;
 import java.util.UUID;
 
-import static br.com.fiapfood.utils.DataGenerator.validEnderecoEntity;
+import static br.com.fiapfood.utils.DataGenerator.validInexistenteEnderecoEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -30,7 +30,7 @@ public class EnderecoRepositoryIT {
 
     @BeforeEach
     void setUp() {
-        enderecoEntity = validEnderecoEntity();
+        enderecoEntity = validInexistenteEnderecoEntity();
     }
 
     @Test

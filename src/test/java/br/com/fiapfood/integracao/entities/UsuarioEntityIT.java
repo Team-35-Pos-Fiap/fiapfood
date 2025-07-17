@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.jdbc.Sql;
-import static br.com.fiapfood.utils.DataGenerator.validEnderecoEntity;
+import static br.com.fiapfood.utils.DataGenerator.validInexistenteEnderecoEntity;
 import static br.com.fiapfood.utils.DataGenerator.validPerfilEntity;
-import static br.com.fiapfood.utils.DataGenerator.validLoginEntity;
+import static br.com.fiapfood.utils.DataGenerator.validInexistenteLoginEntity;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -36,9 +36,9 @@ public class UsuarioEntityIT {
         usuario.setEmail("usuario.test@email.com");
         usuario.setDataCriacao(LocalDateTime.now());
         usuario.setIsAtivo(true);
-        usuario.setDadosEndereco(validEnderecoEntity());
+        usuario.setDadosEndereco(validInexistenteEnderecoEntity());
         usuario.setPerfil(validPerfilEntity());
-        usuario.setDadosLogin(validLoginEntity());
+        usuario.setDadosLogin(validInexistenteLoginEntity());
     }
 
     @Test
@@ -49,9 +49,9 @@ public class UsuarioEntityIT {
         usuario.setEmail("joao.silva@gmail.com");
         usuario.setDataCriacao(LocalDateTime.now());
         usuario.setIsAtivo(true);
-        usuario.setDadosEndereco(validEnderecoEntity());
+        usuario.setDadosEndereco(validInexistenteEnderecoEntity());
         usuario.setPerfil(validPerfilEntity());
-        usuario.setDadosLogin(validLoginEntity());
+        usuario.setDadosLogin(validInexistenteLoginEntity());
 
         // Act
         UsuarioEntity usuarioSalvo = entityManager.persistAndFlush(usuario);
@@ -88,7 +88,7 @@ public class UsuarioEntityIT {
         assertThat(usuarioRecuperado.getPerfil())
                 .isNotNull()
                 .extracting(PerfilEntity::getNome)
-                .isEqualTo("Cliente");
+                .isEqualTo("Dono");
 
         assertThat(usuarioRecuperado.getDadosEndereco())
                 .isNotNull()

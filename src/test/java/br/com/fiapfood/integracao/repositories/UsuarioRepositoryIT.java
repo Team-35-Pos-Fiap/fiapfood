@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.UUID;
 
-import static br.com.fiapfood.utils.DataGenerator.validUsuarioEntity;
+import static br.com.fiapfood.utils.DataGenerator.validInexistenteUsuarioEntity;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -33,7 +33,7 @@ public class UsuarioRepositoryIT {
 
     @BeforeEach
     void setUp() {
-        usuarioEntity = validUsuarioEntity();
+        usuarioEntity = validInexistenteUsuarioEntity();
     }
 
     @Test

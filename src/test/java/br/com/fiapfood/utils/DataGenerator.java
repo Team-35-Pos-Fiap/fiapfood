@@ -107,4 +107,40 @@ public class DataGenerator {
                validLoginRecordRequest()
         );
     }
+
+    public static EnderecoEntity validInexistenteEnderecoEntity() {
+        return new EnderecoEntity(
+                null,
+                "São Gonçalo",
+                "24455450",
+                "Nova Cidade",
+                "Rua Aquidabã",
+                "Rio de Janeiro",
+                79,
+                "Casa 8",
+                false
+        );
+    }
+
+    public static LoginEntity validInexistenteLoginEntity() {
+        return new LoginEntity(
+                null,
+                "us0010",
+                "123"
+        );
+    }
+
+    public static UsuarioEntity validInexistenteUsuarioEntity() {
+        return new UsuarioEntity(
+                null,
+                "Nome Teste",
+                "nome@email.com",
+                LocalDateTime.now(),
+                null,
+                true,
+                validInexistenteEnderecoEntity(),
+                validPerfilEntity(),
+                validInexistenteLoginEntity()
+        );
+    }
 }

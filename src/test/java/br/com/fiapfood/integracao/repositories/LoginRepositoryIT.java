@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static br.com.fiapfood.utils.DataGenerator.validLoginEntity;
+import static br.com.fiapfood.utils.DataGenerator.validInexistenteLoginEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -32,7 +32,7 @@ public class LoginRepositoryIT {
 
     @BeforeEach
     void setUp() {
-        loginEntity = validLoginEntity();
+        loginEntity = validInexistenteLoginEntity();
     }
 
     @Test
