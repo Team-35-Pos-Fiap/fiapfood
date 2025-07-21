@@ -3,10 +3,8 @@ package br.com.fiapfood.core.controllers.impl;
 import java.util.UUID;
 
 import br.com.fiapfood.core.controllers.interfaces.IUsuarioCoreController;
-import br.com.fiapfood.core.entities.dto.CadastrarUsuarioDto;
-import br.com.fiapfood.core.entities.dto.DadosEnderecoDto;
-import br.com.fiapfood.core.entities.dto.DadosUsuariosComPaginacaoDto;
-import br.com.fiapfood.core.entities.dto.UsuarioDto;
+import br.com.fiapfood.core.presenters.EnderecoPresenter;
+import br.com.fiapfood.core.presenters.UsuarioPresenter;
 import br.com.fiapfood.core.usecases.usuario.interfaces.IAtualizarEmailUsuarioUseCase;
 import br.com.fiapfood.core.usecases.usuario.interfaces.IAtualizarEnderecoUsuarioUseCase;
 import br.com.fiapfood.core.usecases.usuario.interfaces.IAtualizarNomeUsuarioUseCase;
@@ -16,6 +14,10 @@ import br.com.fiapfood.core.usecases.usuario.interfaces.IBuscarUsuarioPorIdUseCa
 import br.com.fiapfood.core.usecases.usuario.interfaces.ICadastrarUsuarioUseCase;
 import br.com.fiapfood.core.usecases.usuario.interfaces.IInativarUsuarioUseCase;
 import br.com.fiapfood.core.usecases.usuario.interfaces.IReativarUsuarioUseCase;
+import br.com.fiapfood.infraestructure.controllers.request.endereco.DadosEnderecoDto;
+import br.com.fiapfood.infraestructure.controllers.request.usuario.CadastrarUsuarioDto;
+import br.com.fiapfood.infraestructure.controllers.request.usuario.UsuarioDto;
+import br.com.fiapfood.infraestructure.controllers.request.usuario.UsuarioPaginacaoDto;
 
 public class UsuarioCoreController implements IUsuarioCoreController {
 
@@ -51,17 +53,17 @@ public class UsuarioCoreController implements IUsuarioCoreController {
 	
 	@Override
 	public UsuarioDto buscarUsuarioPorId(final UUID id) {
-		return buscarUsuarioPorIdUseCase.buscar(id);
+		return UsuarioPresenter.toUsuarioDto(buscarUsuarioPorIdUseCase.buscar(id));
 	}
 	
 	@Override
-	public DadosUsuariosComPaginacaoDto buscarTodos(final Integer pagina) {
-		return buscarTodosUsuariosUseCase.buscar(pagina);
+	public UsuarioPaginacaoDto buscarTodos(final Integer pagina) {
+		return UsuarioPresenter.toUsuarioPaginacaoDto(buscarTodosUsuariosUseCase.buscar(pagina));
 	}
 
 	@Override
 	public void cadastrar(final CadastrarUsuarioDto usuario) {
-		cadastrarUsuarioUseCase.cadastrar(usuario);		
+		cadastrarUsuarioUseCase.cadastrar(UsuarioPresenter.toCadastrarUsuarioDto(usuario));		
 	}
 	
 	@Override
@@ -91,6 +93,6 @@ public class UsuarioCoreController implements IUsuarioCoreController {
 
 	@Override
 	public void atualizarDadosEndereco(final UUID id, final DadosEnderecoDto dadosEndereco) {
-		atualizarEnderecoUsuarioUseCase.atualizar(id, dadosEndereco);		
+		atualizarEnderecoUsuarioUseCase.atualizar(id, EnderecoPresenter.toEnderecoCoreDto(dadosEndereco));		
 	}
 }

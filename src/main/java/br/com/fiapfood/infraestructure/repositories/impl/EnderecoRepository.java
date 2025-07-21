@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
-import br.com.fiapfood.core.entities.dto.EnderecoDto;
+import br.com.fiapfood.core.entities.dto.endereco.EnderecoCoreDto;
 import br.com.fiapfood.core.presenters.EnderecoPresenter;
 import br.com.fiapfood.infraestructure.entities.EnderecoEntity;
 import br.com.fiapfood.infraestructure.repositories.interfaces.IEnderecoRepository;
@@ -21,7 +21,7 @@ public class EnderecoRepository implements IEnderecoRepository {
 	}
 
 	@Override
-	public EnderecoDto buscarPorId(final UUID id) {
+	public EnderecoCoreDto buscarPorId(final UUID id) {
 		final Optional<EnderecoEntity> dados = enderecoRepository.findById(id);
 		
 		if(dados != null) {
@@ -29,7 +29,6 @@ public class EnderecoRepository implements IEnderecoRepository {
 		} else {
 			return null;
 		}
-		
 	}
 
 	@Override

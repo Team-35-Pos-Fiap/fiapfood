@@ -1,45 +1,76 @@
 package br.com.fiapfood.core.usecases.restaurante.impl;
 
-import br.com.fiapfood.core.entities.*;
-import br.com.fiapfood.core.entities.dto.RestauranteDto;
-import br.com.fiapfood.core.entities.dto.UsuarioDto;
-import br.com.fiapfood.core.gateways.interfaces.*;
-import br.com.fiapfood.core.presenters.RestaurantePresenter;
-import br.com.fiapfood.core.presenters.UsuarioPresenter;
-import br.com.fiapfood.core.usecases.restaurante.interfaces.IBuscarRestaurantePorIdUseCase;
-import br.com.fiapfood.infraestructure.entities.RestauranteEntity;
-
 import java.util.UUID;
 
-public class BuscarRestaurantePorIdUseCase implements IBuscarRestaurantePorIdUseCase {
+import br.com.fiapfood.core.entities.Endereco;
+import br.com.fiapfood.core.entities.Login;
+import br.com.fiapfood.core.entities.Restaurante;
+import br.com.fiapfood.core.entities.TipoCulinaria;
+import br.com.fiapfood.core.entities.Usuario;
+import br.com.fiapfood.core.entities.dto.restaurante.DadosRestauranteCoreDto;
+import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioResumidoCoreDto;
+import br.com.fiapfood.core.gateways.interfaces.IEnderecoGateway;
+import br.com.fiapfood.core.gateways.interfaces.ILoginGateway;
+import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
+import br.com.fiapfood.core.gateways.interfaces.ITipoCulinariaGateway;
+import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
+import br.com.fiapfood.core.presenters.RestaurantePresenter;
+import br.com.fiapfood.core.presenters.UsuarioPresenter;
+import br.com.fiapfood.core.usecases.restaurante.interfaces.IBuscarRestaurantePorId;
 
-    private final IRestauranteGateway restauranteGateway;
-    private final IEnderecoGateway enderecoGateway;
-    private final IUsuarioGateway usuarioGateway;
-    private final IPerfilGateway perfilGateway;
-    private final ILoginGateway loginGateway;
+public class BuscarRestaurantePorIdUseCase implements IBuscarRestaurantePorId {
+	private final IRestauranteGateway restauranteGateway;
+	private final IUsuarioGateway usuarioGateway;
+	private final IEnderecoGateway enderecoGateway;
+	private final ILoginGateway loginGateway;
+	private final ITipoCulinariaGateway tipoCulinariaGateway;
+		
+	public BuscarRestaurantePorIdUseCase(IRestauranteGateway restauranteGateway, IUsuarioGateway usuarioGateway, 
+								   		 IEnderecoGateway enderecoGateway, ILoginGateway loginGateway, 
+								   		 ITipoCulinariaGateway tipoCulinariaGateway) {
+		this.restauranteGateway = restauranteGateway;
+		this.usuarioGateway = usuarioGateway;
+		this.enderecoGateway = enderecoGateway;
+		this.loginGateway = loginGateway;
+		this.tipoCulinariaGateway = tipoCulinariaGateway;
+	}
+	
+	@Override
+	public DadosRestauranteCoreDto buscar(UUID id) {
+		return toDadosRestauranteOutputDto(buscarPorId(id));
+	}
+	
+	private DadosRestauranteCoreDto toDadosRestauranteOutputDto(Restaurante restaurante) {
+		return RestaurantePresenter.toRestauranteDto(restaurante, 
+													 buscarEndereco(restaurante.getIdEndereco()), 
+													 buscarUsuario(restaurante.getIdDonoRestaurante()),
+													 buscarTipoCulinaria(restaurante.getIdTipoCulinaria()),
+													 restaurante.getAtendimentos());
+	}
+	
+	private Restaurante buscarPorId(UUID id) {
+		return restauranteGateway.buscarPorId(id);
+	}
+	
+	private TipoCulinaria buscarTipoCulinaria(Integer idTipoCulinaria) {
+		return tipoCulinariaGateway.buscarPorId(idTipoCulinaria);
+	}
 
-    public BuscarRestaurantePorIdUseCase(IRestauranteGateway restauranteGateway, IEnderecoGateway enderecoGateway,
-                                         IUsuarioGateway usuarioGateway,
-                                         IPerfilGateway perfilGateway,
-                                         ILoginGateway loginGateway) {
-        this.restauranteGateway = restauranteGateway;
-        this.enderecoGateway = enderecoGateway;
-        this.usuarioGateway = usuarioGateway;
-        this.perfilGateway = perfilGateway;
-        this.loginGateway = loginGateway;
-    }
-
-    @Override
-    public RestauranteDto buscarPorId(UUID id) {
-        Restaurante restaurante = restauranteGateway.buscarPorId(id);
-        Endereco endereco = enderecoGateway.buscarPorId(restaurante.getIdEndereco());
-        Usuario usuario = usuarioGateway.buscarPorId(restaurante.getIdDonoRestaurante());
-        Perfil perfil = perfilGateway.buscarPorId(usuario.getIdPerfil());
-        Login login = loginGateway.buscarPorId(usuario.getIdLogin());
-        Endereco enderecoUsuario = enderecoGateway.buscarPorId(usuario.getIdEndereco());
-
-        return  RestaurantePresenter.toRestauranteDto(restaurante, endereco, usuario,
-                perfil, login, enderecoUsuario);
-    }
+	private DadosUsuarioResumidoCoreDto buscarUsuario(UUID id) {
+		Usuario usuario = buscarUsuarioPorId(id);
+		
+		return UsuarioPresenter.toUsuarioOutputDto(usuario, buscarLogin(usuario.getIdLogin()));
+	}
+	
+	private Login buscarLogin(final UUID idLogin) {
+		return loginGateway.buscarPorId(idLogin);
+	}
+	
+	private Endereco buscarEndereco(final UUID idEndereco) {
+		return enderecoGateway.buscarPorId(idEndereco);
+	}
+	
+	private Usuario buscarUsuarioPorId(final UUID idUsuario) {
+		return usuarioGateway.buscarPorId(idUsuario);
+	}
 }

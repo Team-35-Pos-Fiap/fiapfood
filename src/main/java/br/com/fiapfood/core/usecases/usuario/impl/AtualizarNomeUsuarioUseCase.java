@@ -7,6 +7,7 @@ import br.com.fiapfood.core.entities.Login;
 import br.com.fiapfood.core.entities.Perfil;
 import br.com.fiapfood.core.entities.Usuario;
 import br.com.fiapfood.core.exceptions.UsuarioInativoException;
+import br.com.fiapfood.core.exceptions.usuario.AtualizacaoNomeUsuarioNaoPermitidoException;
 import br.com.fiapfood.core.gateways.interfaces.IEnderecoGateway;
 import br.com.fiapfood.core.gateways.interfaces.ILoginGateway;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
@@ -32,10 +33,21 @@ public class AtualizarNomeUsuarioUseCase implements IAtualizarNomeUsuarioUseCase
 		final Usuario usuario = buscarUsuario(id);
 		
 		validarUsuario(usuario);
+		validarNome(usuario, nome);
 		
-		usuario.atualizarNome(nome);
+		atualizarNome(usuario, nome);
 		
 		salvar(usuario);
+	}
+
+	private void validarNome(Usuario usuario, String nome) {
+		if (usuario.getNome().equals(nome)) {
+			throw new AtualizacaoNomeUsuarioNaoPermitidoException("Não é possível alterar o nome do usuário pois ele é igual ao nome do usuário.");
+		} 
+	}
+
+	private void atualizarNome(Usuario usuario, String nome) {
+		usuario.atualizarNome(nome);
 	}
 
 	private void validarUsuario(final Usuario usuario) {

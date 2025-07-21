@@ -1,62 +1,60 @@
 package br.com.fiapfood.core.gateways.impl;
 
-import br.com.fiapfood.core.entities.Restaurante;
-import br.com.fiapfood.core.entities.dto.RestauranteDto;
-import br.com.fiapfood.core.entities.dto.UsuarioDto;
-import br.com.fiapfood.core.exceptions.RestauranteNaoEncontradoException;
-import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
-import br.com.fiapfood.core.presenters.*;
-import br.com.fiapfood.infraestructure.entities.UsuarioEntity;
-import br.com.fiapfood.infraestructure.repositories.interfaces.IRestauranteRepository;
-
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
-public class RestauranteGateway implements IRestauranteGateway {
+import br.com.fiapfood.core.entities.Restaurante;
+import br.com.fiapfood.core.entities.dto.atendimento.AtendimentoCoreDto;
+import br.com.fiapfood.core.entities.dto.endereco.EnderecoCoreDto;
+import br.com.fiapfood.core.entities.dto.restaurante.DadosRestauranteDto;
+import br.com.fiapfood.core.entities.dto.restaurante.RestaurantePaginacaoInputDto;
+import br.com.fiapfood.core.exceptions.RestauranteNaoEncontradoException;
+import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
+import br.com.fiapfood.core.presenters.RestaurantePresenter;
+import br.com.fiapfood.infraestructure.repositories.interfaces.IRestauranteRepository;
+
+public class RestauranteGateway implements IRestauranteGateway{
 
 	private final IRestauranteRepository restauranteRepository;
-
+	
 	public RestauranteGateway(IRestauranteRepository restauranteRepository) {
 		this.restauranteRepository = restauranteRepository;
 	}
-
+	
 	@Override
-	public Restaurante buscarPorId(final UUID id) {
-		final RestauranteDto restaurante = restauranteRepository.buscarRestaurantePorId(id);
+	public Restaurante buscarPorId(UUID id) {
+		DadosRestauranteDto restaurante = restauranteRepository.buscarPorId(id);
 		
-		if(restaurante != null) {
+		if(restaurante != null) {		 
 			return RestaurantePresenter.toRestaurante(restaurante);
 		} else {
-			throw new RestauranteNaoEncontradoException("Não foi encontrado nenhum usuário com o id informado.");
+			throw new RestauranteNaoEncontradoException("Não foi encontrado nenhum restaurante com o id informado.");
 		}
 	}
 
 	@Override
-	public Map<Class<?>, Object> buscarRestaurantesComPaginacao(final Integer pagina) {
-		final Map<Class<?>, Object> dados = restauranteRepository.buscarRestauranteComPaginacao(pagina);
+	public RestaurantePaginacaoInputDto buscarTodos(Integer pagina) {
+		RestaurantePaginacaoInputDto dados = restauranteRepository.buscarRestaurantesComPaginacao(pagina);
 		
-		if(dados.get(List.class) != null) {
+		if(dados != null) {
 			return dados;
 		} else {
-			throw new RestauranteNaoEncontradoException("Não foi encontrado nenhum usuário com o login informado.");
+			throw new RestauranteNaoEncontradoException("Não foram encontrados restaurantes na base de dados para a página informada.");
 		}
 	}
 
 	@Override
-	public void salvar(final RestauranteDto restaurante) {
-		restauranteRepository.salvarRestaurante(RestaurantePresenter
-				.toRestauranteAtualizadoEntity(restaurante,
-						EnderecoPresenter.toEnderecoEntity(restaurante.endereco()),
-						UsuarioPresenter.toUsuarioEntity(restaurante.donoRestaurante(),
-								EnderecoPresenter.toEnderecoEntity(restaurante.donoRestaurante().endereco()),
-								PerfilPresenter.toPerfilEntity(restaurante.donoRestaurante().perfil()),
-								LoginPresenter.toLoginEntity(restaurante.donoRestaurante().login())
-						)));
+	public void atualizar(DadosRestauranteDto restaurante) {
+		restauranteRepository.salvarRestaurante(RestaurantePresenter.toRestauranteEntity(restaurante));		
 	}
 
 	@Override
-	public void deletar(UUID id) {
-		restauranteRepository.deletarRestaurante(id);
+	public void cadastrar(DadosRestauranteDto restaurante, EnderecoCoreDto endereco, List<AtendimentoCoreDto> atendimento) {
+		restauranteRepository.salvarRestaurante(RestaurantePresenter.toRestauranteEntity(restaurante, endereco, atendimento));		
+	}
+
+	@Override
+	public void atualizarAtendimentos(DadosRestauranteDto restaurante) {
+		restauranteRepository.salvarRestaurante(RestaurantePresenter.toRestauranteComAtendimentosEntity(restaurante));		
 	}
 }

@@ -3,7 +3,7 @@ package br.com.fiapfood.core.gateways.impl;
 import java.util.UUID;
 
 import br.com.fiapfood.core.entities.Login;
-import br.com.fiapfood.core.entities.dto.LoginDto;
+import br.com.fiapfood.core.entities.dto.login.LoginCoreDto;
 import br.com.fiapfood.core.exceptions.LoginNaoEncontradoException;
 import br.com.fiapfood.core.gateways.interfaces.ILoginGateway;
 import br.com.fiapfood.core.presenters.LoginPresenter;
@@ -19,7 +19,7 @@ public class LoginGateway implements ILoginGateway {
 	
 	@Override
 	public Login buscarPorMatricula(final String matricula) {
-		final LoginDto loginDto = loginRepository.buscarPorMatricula(matricula);
+		final LoginCoreDto loginDto = loginRepository.buscarPorMatricula(matricula);
 		
 		if(loginDto != null) {
 			return LoginPresenter.toLogin(loginDto);
@@ -30,7 +30,7 @@ public class LoginGateway implements ILoginGateway {
 
 	@Override
 	public Login buscarPorMatriculaSenha(final String matricula, final String senha) {
-		final LoginDto loginDto = loginRepository.buscarPorMatriculaSenha(matricula, senha);
+		final LoginCoreDto loginDto = loginRepository.buscarPorMatriculaSenha(matricula, senha);
 		
 		if(loginDto != null) {
 			return LoginPresenter.toLogin(loginDto);
@@ -40,13 +40,13 @@ public class LoginGateway implements ILoginGateway {
 	}
 
 	@Override
-	public void salvar(final LoginDto login) {
+	public void salvar(final LoginCoreDto login) {
 		loginRepository.salvar(LoginPresenter.toLoginEntity(login));
 	}
 
 	@Override
 	public Login buscarPorId(final UUID id) {
-		final LoginDto loginDto = loginRepository.buscarPorId(id);
+		final LoginCoreDto loginDto = loginRepository.buscarPorId(id);
 		
 		if(loginDto != null) {
 			return LoginPresenter.toLogin(loginDto);

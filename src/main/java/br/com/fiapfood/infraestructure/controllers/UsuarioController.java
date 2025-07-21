@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiapfood.core.controllers.interfaces.IUsuarioCoreController;
-import br.com.fiapfood.core.entities.dto.CadastrarUsuarioDto;
-import br.com.fiapfood.core.entities.dto.DadosEnderecoDto;
-import br.com.fiapfood.core.entities.dto.DadosPerfilDto;
-import br.com.fiapfood.core.entities.dto.DadosUsuariosComPaginacaoDto;
-import br.com.fiapfood.core.entities.dto.DadosEmailDto;
-import br.com.fiapfood.core.entities.dto.DadosNomeDto;
-import br.com.fiapfood.core.entities.dto.UsuarioDto;
+import br.com.fiapfood.infraestructure.controllers.request.endereco.DadosEnderecoDto;
+import br.com.fiapfood.infraestructure.controllers.request.usuario.CadastrarUsuarioDto;
+import br.com.fiapfood.infraestructure.controllers.request.usuario.DadosEmailDto;
+import br.com.fiapfood.infraestructure.controllers.request.usuario.DadosNomeDto;
+import br.com.fiapfood.infraestructure.controllers.request.usuario.DadosPerfilDto;
+import br.com.fiapfood.infraestructure.controllers.request.usuario.UsuarioDto;
+import br.com.fiapfood.infraestructure.controllers.request.usuario.UsuarioPaginacaoDto;
 import br.com.fiapfood.infraestructure.controllers.response.MensagemResponse;
 import br.com.fiapfood.infraestructure.controllers.response.SucessoResponse;
 import br.com.fiapfood.infraestructure.utils.MensagensUtil;
@@ -79,7 +79,7 @@ public class UsuarioController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<DadosUsuariosComPaginacaoDto> buscarUsuarios(@RequestParam(defaultValue = "1") @Valid @Positive(message = "O parâmetro página precisa ser maior do que 0.") final Integer pagina) {
+	public ResponseEntity<UsuarioPaginacaoDto> buscarUsuarios(@RequestParam(defaultValue = "1") @Valid @Positive(message = "O parâmetro página precisa ser maior do que 0.") final Integer pagina) {
 		log.info("buscarUsuarios() - pagina {}", pagina);
 
 		return ResponseEntity.ok().body(usuarioCoreController.buscarTodos(pagina));

@@ -6,8 +6,7 @@ import br.com.fiapfood.core.entities.Endereco;
 import br.com.fiapfood.core.entities.Login;
 import br.com.fiapfood.core.entities.Perfil;
 import br.com.fiapfood.core.entities.Usuario;
-import br.com.fiapfood.core.exceptions.EmailDuplicadoException;
-import br.com.fiapfood.core.exceptions.UsuarioInativoException;
+import br.com.fiapfood.core.exceptions.usuario.AtualizacaoEmailUsuarioNaoPermitidoException;
 import br.com.fiapfood.core.gateways.interfaces.IEnderecoGateway;
 import br.com.fiapfood.core.gateways.interfaces.ILoginGateway;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
@@ -33,25 +32,37 @@ public class AtualizarEmailUsuarioUseCase implements IAtualizarEmailUsuarioUseCa
 		final Usuario usuario = buscarUsuario(id);
 		
 		validarUsuario(usuario);
-		validarEmail(email);
+		validarEmailExistente(email);
+		validarEmail(usuario, email);
 		
-		usuario.atualizarEmail(email);
+		atualizarEmail(usuario, email);
 		
 		salvar(usuario);
 	}
 
+	private void atualizarEmail(Usuario usuario, String email) {
+		usuario.atualizarEmail(email);
+	}
+
 	private void validarUsuario(final Usuario usuario) {
 		if (!usuario.getIsAtivo()) {
-			throw new UsuarioInativoException("Não é possível alterar o email de um usuário inativo.");
+			throw new AtualizacaoEmailUsuarioNaoPermitidoException("Não é possível alterar o email de um usuário inativo.");
 		} 
 	}
 
-	private void validarEmail(final String email) {
+	private void validarEmailExistente(final String email) {
 		if(usuarioGateway.emailJaCadastrado(email)){
-			throw new EmailDuplicadoException("Já existe um usuário com o email informado.");
+			throw new AtualizacaoEmailUsuarioNaoPermitidoException("Já existe um usuário com o email informado.");
 		}
 	}
 
+	private void validarEmail(final Usuario usuario, final String email) {
+		if(usuario.getEmail().equals(email)){
+			throw new AtualizacaoEmailUsuarioNaoPermitidoException("Não é possível alterar o email do usuário, pois ele já é igual ao email atual.");
+		}
+	}
+
+	
 	private void salvar(final Usuario usuario) {
 		usuarioGateway.salvar(UsuarioPresenter.toUsuarioDto(usuario, 
 															buscarPerfil(usuario.getIdPerfil()), 

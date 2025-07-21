@@ -34,9 +34,13 @@ public class AtualizarPerfilUsuarioUseCase implements IAtualizarPerfilUsuarioUse
 		validarUsuario(usuario);
 		validarPerfil(usuario, idPerfil);
 		
-		usuario.atualizarPerfil(idPerfil);
+		atualizarPerfil(usuario, idPerfil);
 		
 		salvar(usuario);
+	}
+
+	private void atualizarPerfil(Usuario usuario, Integer idPerfil) {
+		usuario.atualizarPerfil(idPerfil);		
 	}
 
 	private void validarUsuario(final Usuario usuario) {

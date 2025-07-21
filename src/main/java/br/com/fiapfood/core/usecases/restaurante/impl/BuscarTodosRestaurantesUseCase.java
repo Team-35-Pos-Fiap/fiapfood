@@ -1,64 +1,85 @@
 package br.com.fiapfood.core.usecases.restaurante.impl;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import br.com.fiapfood.core.entities.Endereco;
 import br.com.fiapfood.core.entities.Login;
-import br.com.fiapfood.core.entities.Perfil;
 import br.com.fiapfood.core.entities.Restaurante;
-import br.com.fiapfood.core.entities.dto.DadosRestauranteComPaginacaoDto;
-import br.com.fiapfood.core.entities.dto.PaginacaoDto;
-import br.com.fiapfood.core.entities.dto.RestauranteDto;
-import br.com.fiapfood.core.gateways.interfaces.*;
-import br.com.fiapfood.core.presenters.*;
-import br.com.fiapfood.core.usecases.restaurante.interfaces.IBuscarTodosRestauranteUseCase;
-import br.com.fiapfood.infraestructure.entities.RestauranteEntity;
+import br.com.fiapfood.core.entities.TipoCulinaria;
+import br.com.fiapfood.core.entities.Usuario;
+import br.com.fiapfood.core.entities.dto.paginacao.PaginacaoCoreDto;
+import br.com.fiapfood.core.entities.dto.restaurante.DadosRestauranteDto;
+import br.com.fiapfood.core.entities.dto.restaurante.DadosRestauranteCoreDto;
+import br.com.fiapfood.core.entities.dto.restaurante.RestaurantePaginacaoInputDto;
+import br.com.fiapfood.core.entities.dto.restaurante.RestaurantePaginacaoCoreDto;
+import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioResumidoCoreDto;
+import br.com.fiapfood.core.gateways.interfaces.IEnderecoGateway;
+import br.com.fiapfood.core.gateways.interfaces.ILoginGateway;
+import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
+import br.com.fiapfood.core.gateways.interfaces.ITipoCulinariaGateway;
+import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
+import br.com.fiapfood.core.presenters.RestaurantePresenter;
+import br.com.fiapfood.core.presenters.UsuarioPresenter;
+import br.com.fiapfood.core.usecases.restaurante.interfaces.IBuscarTodosRestaurantesUseCase;
 
-public class BuscarTodosRestaurantesUseCase implements IBuscarTodosRestauranteUseCase{
-    private final IRestauranteGateway restauranteGateway;
-    private final IUsuarioGateway usuarioGateway;
-    private final IPerfilGateway perfilGateway;
-    private final ILoginGateway loginGateway;
-    private final IEnderecoGateway enderecoGateway;
+public class BuscarTodosRestaurantesUseCase implements IBuscarTodosRestaurantesUseCase {
 
-    public BuscarTodosRestaurantesUseCase(IRestauranteGateway restauranteGateway,
-                                          IUsuarioGateway usuarioGateway,
-                                          IPerfilGateway perfilGateway, ILoginGateway loginGateway, IEnderecoGateway enderecoGateway) {
-        this.restauranteGateway = restauranteGateway;
-        this.usuarioGateway = usuarioGateway;
-        this.perfilGateway = perfilGateway;
-        this.loginGateway = loginGateway;
-        this.enderecoGateway = enderecoGateway;
-    }
+	private final IRestauranteGateway restauranteGateway;
+	private final IUsuarioGateway usuarioGateway;
+	private final IEnderecoGateway enderecoGateway;
+	private final ILoginGateway loginGateway;
+	private final ITipoCulinariaGateway tipoCulinariaGateway;
+		
+	public BuscarTodosRestaurantesUseCase (IRestauranteGateway restauranteGateway, IUsuarioGateway usuarioGateway, 
+								   		   IEnderecoGateway enderecoGateway, ILoginGateway loginGateway, 
+								   		   ITipoCulinariaGateway tipoCulinariaGateway) {
+		this.restauranteGateway = restauranteGateway;
+		this.usuarioGateway = usuarioGateway;
+		this.enderecoGateway = enderecoGateway;
+		this.loginGateway = loginGateway;
+		this.tipoCulinariaGateway = tipoCulinariaGateway;
+	}
+	
+	@Override
+	public RestaurantePaginacaoCoreDto buscar(final Integer pagina) {
+		RestaurantePaginacaoInputDto dados = restauranteGateway.buscarTodos(pagina);
+		
+		return toRestaurantePaginacaoOutputDto(toListRestauranteDto(toListRestaurante(dados.restaurantes())), 
+											   dados.paginacao());
+	}
 
-    @Override
-    public DadosRestauranteComPaginacaoDto buscarTodos(final Integer pagina) {
-
-        final Map<Class<?>, Object> dados = buscarRestaurantesComPaginacao(pagina);
-
-        return RestaurantePresenter.toRestaurantePaginacaoDto(getListDto(dados), (PaginacaoDto)dados.get(PaginacaoDto.class));
-    }
-
-    private Map<Class<?>, Object> buscarRestaurantesComPaginacao(final Integer pagina) {
-        return  restauranteGateway.buscarRestaurantesComPaginacao(pagina);
-    }
-
-    @SuppressWarnings("unchecked")
-    private List<RestauranteDto> getListDto(final Map<Class<?>, Object> dados) {
-        return (List<RestauranteDto>) dados.get(List.class);
-    }
-
-    private Perfil buscarPerfil(final Integer idPerfil) {
-        return perfilGateway.buscarPorId(idPerfil);
-    }
-
-    private Login buscarLogin(final UUID idLogin) {
-        return loginGateway.buscarPorId(idLogin);
-    }
-
-    private Endereco buscarEndereco(final UUID idEndereco) {
-        return enderecoGateway.buscarPorId(idEndereco);
-    }
+	private DadosUsuarioResumidoCoreDto buscarUsuario(UUID id) {
+		Usuario usuario = usuarioGateway.buscarPorId(id);
+		
+		return UsuarioPresenter.toUsuarioOutputDto(usuario, buscarLogin(usuario.getIdLogin()));
+	}
+	
+	private Login buscarLogin(final UUID idLogin) {
+		return loginGateway.buscarPorId(idLogin);
+	}
+	
+	private Endereco buscarEndereco(final UUID idEndereco) {
+		return enderecoGateway.buscarPorId(idEndereco);
+	}
+	
+	private List<Restaurante> toListRestaurante(final List<DadosRestauranteDto> restaurantes) {
+		return RestaurantePresenter.toListRestaurante(restaurantes);
+	}
+	
+	private List<DadosRestauranteCoreDto> toListRestauranteDto(final List<Restaurante> restaurantes) {
+		return restaurantes.stream().map(r -> RestaurantePresenter.toRestauranteDto(r, 
+																					buscarEndereco(r.getIdEndereco()),
+																					buscarUsuario(r.getIdDonoRestaurante()),
+																					buscarTipoCulinaria(r.getIdTipoCulinaria()),
+																					r.getAtendimentos())).toList();
+	}
+	
+	private RestaurantePaginacaoCoreDto toRestaurantePaginacaoOutputDto(final List<DadosRestauranteCoreDto> restaurantes, final PaginacaoCoreDto paginacao) {
+		return RestaurantePresenter.toRestaurantePaginacaoOutputDto(restaurantes, paginacao);
+	}
+	
+	private TipoCulinaria buscarTipoCulinaria(Integer idTipoCulinaria) {
+		return tipoCulinariaGateway.buscarPorId(idTipoCulinaria);
+	}
 }

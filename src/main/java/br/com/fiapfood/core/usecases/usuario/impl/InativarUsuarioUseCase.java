@@ -33,9 +33,13 @@ public class InativarUsuarioUseCase implements IInativarUsuarioUseCase {
 		
 		validarUsuario(usuario);
 		
-		usuario.inativar();
+		inativar(usuario);
 		
 		salvar(usuario);
+	}
+
+	private void inativar(Usuario usuario) {
+		usuario.inativar();		
 	}
 
 	private void validarUsuario(final Usuario usuario) {

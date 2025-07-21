@@ -6,7 +6,7 @@ import br.com.fiapfood.core.entities.Endereco;
 import br.com.fiapfood.core.entities.Login;
 import br.com.fiapfood.core.entities.Perfil;
 import br.com.fiapfood.core.entities.Usuario;
-import br.com.fiapfood.core.entities.dto.UsuarioDto;
+import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioCoreDto;
 import br.com.fiapfood.core.gateways.interfaces.IEnderecoGateway;
 import br.com.fiapfood.core.gateways.interfaces.ILoginGateway;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
@@ -29,13 +29,15 @@ public class BuscarUsuarioPorIdUseCase implements IBuscarUsuarioPorIdUseCase {
 	}
 	
 	@Override
-	public UsuarioDto buscar(final UUID id) {
-		final Usuario usuario = buscarUsuario(id);
-
-		return UsuarioPresenter.toUsuarioDto(usuario, 
+	public DadosUsuarioCoreDto buscar(final UUID id) {
+		return toDadosUsuarioOutputDto(buscarUsuario(id));
+	}
+	
+	private DadosUsuarioCoreDto toDadosUsuarioOutputDto(Usuario usuario) {
+		return UsuarioPresenter.toUsuarioDto(usuario,
 											 buscarPerfil(usuario.getIdPerfil()), 
 											 buscarLogin(usuario.getIdLogin()), 
-											 buscarEndereco(usuario.getIdEndereco()));
+											 buscarEndereco(usuario.getIdEndereco())); 
 	}
 	
 	private Usuario buscarUsuario(final UUID id) {

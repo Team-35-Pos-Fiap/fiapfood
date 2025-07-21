@@ -1,7 +1,6 @@
 package br.com.fiapfood.core.controllers.impl;
 
 import br.com.fiapfood.core.controllers.interfaces.ILoginCoreController;
-import br.com.fiapfood.core.entities.dto.LoginDto;
 import br.com.fiapfood.core.usecases.login.interfaces.IAtualizarMatriculaUseCase;
 import br.com.fiapfood.core.usecases.login.interfaces.IAtualizarSenhaUseCase;
 import br.com.fiapfood.core.usecases.login.interfaces.IValidarLoginUseCase;
@@ -19,8 +18,8 @@ public class LoginCoreController implements ILoginCoreController{
 	}
 	
 	@Override
-	public String validar(final LoginDto dados) {
-		return validarLoginUseCase.validar(dados);
+	public String validar(final String matricula, final String senha) {
+		return validarLoginUseCase.validar(matricula, senha);
 	}
 
 	@Override

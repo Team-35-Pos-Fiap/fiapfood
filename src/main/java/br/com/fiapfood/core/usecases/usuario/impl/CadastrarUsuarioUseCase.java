@@ -4,9 +4,9 @@ import br.com.fiapfood.core.entities.Endereco;
 import br.com.fiapfood.core.entities.Login;
 import br.com.fiapfood.core.entities.Perfil;
 import br.com.fiapfood.core.entities.Usuario;
-import br.com.fiapfood.core.entities.dto.CadastrarUsuarioDto;
-import br.com.fiapfood.core.entities.dto.DadosEnderecoDto;
-import br.com.fiapfood.core.entities.dto.LoginDto;
+import br.com.fiapfood.core.entities.dto.endereco.DadosEnderecoCoreDto;
+import br.com.fiapfood.core.entities.dto.login.LoginCoreDto;
+import br.com.fiapfood.core.entities.dto.usuario.CadastrarUsuarioCoreDto;
 import br.com.fiapfood.core.exceptions.EmailDuplicadoException;
 import br.com.fiapfood.core.exceptions.MatriculaDuplicadaException;
 import br.com.fiapfood.core.gateways.interfaces.ILoginGateway;
@@ -30,11 +30,11 @@ public class CadastrarUsuarioUseCase implements ICadastrarUsuarioUseCase {
 	}
 	
 	@Override
-	public void cadastrar(final CadastrarUsuarioDto usuarioDto) {
-		final Usuario usuario = toUsuario(usuarioDto);
-		
+	public void cadastrar(final CadastrarUsuarioCoreDto usuarioDto) {
 		validarEmail(usuarioDto.email());
 		validarMatricula(usuarioDto.dadosLogin().matricula());
+
+		final Usuario usuario = toUsuario(usuarioDto);
 		
 		salvar(usuario, usuarioDto);
 	}
@@ -43,19 +43,19 @@ public class CadastrarUsuarioUseCase implements ICadastrarUsuarioUseCase {
 		return perfilGateway.buscarPorId(idPerfil);
 	}
 	
-	private Usuario toUsuario(final CadastrarUsuarioDto usuario) {
+	private Usuario toUsuario(final CadastrarUsuarioCoreDto usuario) {
 		return UsuarioPresenter.toUsuario(usuario);
 	}
 	
-	private Login toLogin(final LoginDto login) {
+	private Login toLogin(final LoginCoreDto login) {
 		return LoginPresenter.toLogin(login);
 	}
 	
-	private Endereco toEndereco(final DadosEnderecoDto endereco) {
+	private Endereco toEndereco(final DadosEnderecoCoreDto endereco) {
 		return EnderecoPresenter.toEndereco(endereco);
 	}
 	
-	private void salvar(final Usuario usuario, final CadastrarUsuarioDto usuarioDto) {
+	private void salvar(final Usuario usuario, final CadastrarUsuarioCoreDto usuarioDto) {
 		usuarioGateway.salvar(UsuarioPresenter.toUsuarioDto(usuario, 
 				   			  buscarPerfil(usuario.getIdPerfil()), 
 				   			  toLogin(usuarioDto.dadosLogin()),

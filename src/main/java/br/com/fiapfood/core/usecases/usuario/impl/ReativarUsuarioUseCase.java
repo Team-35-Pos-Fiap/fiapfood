@@ -33,9 +33,13 @@ public class ReativarUsuarioUseCase implements IReativarUsuarioUseCase {
 		
 		validarUsuario(usuario);
 		
-		usuario.reativar();
+		reativar(usuario);
 		
 		salvar(usuario);
+	}
+
+	private void reativar(Usuario usuario) {
+		usuario.reativar();
 	}
 
 	private void validarUsuario(final Usuario usuario) {

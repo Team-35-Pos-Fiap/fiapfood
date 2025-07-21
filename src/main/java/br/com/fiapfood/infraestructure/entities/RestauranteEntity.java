@@ -1,15 +1,24 @@
 package br.com.fiapfood.infraestructure.entities;
 
-import br.com.fiapfood.core.entities.Endereco;
-import br.com.fiapfood.core.entities.Usuario;
-import br.com.fiapfood.core.entities.dto.EnderecoDto;
-import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -25,28 +34,25 @@ public class RestauranteEntity {
     @Column(nullable = false)
     private String nome;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JoinColumn(name = "id_endereco")
     private EnderecoEntity endereco;
 
-    @Column(nullable = false)
-    private String tipoCozinha;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private UsuarioEntity dono;
 
-    @Column(nullable = false)
-    private LocalDateTime horarioFuncionamento;
+    @ManyToOne
+    @JoinColumn(name = "id_tipo_culinaria")
+    private TipoCulinariaEntity tipoCulinaria;
+    
+	@Column(name = "ativo", columnDefinition = "tinyint")
+	private Boolean isAtivo;
+	
+	@OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY)
+	private List<ItemEntity> itens;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_dono_restaurante")
-    private UsuarioEntity donoRestaurante;
-
-    public void atualizarDados(String nome, EnderecoEntity endereco, String tipoCozinha,
-                               LocalDateTime horarioFuncionamento, UsuarioEntity donoRestaurante) {
-        this.nome = nome;
-        this.endereco = endereco;
-        this.tipoCozinha = tipoCozinha;
-        this.horarioFuncionamento = horarioFuncionamento;
-        this.donoRestaurante = donoRestaurante;
-    }
-
-
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "id_restaurante", referencedColumnName = "id", nullable = false)
+	private List<AtendimentoEntity> atendimentos = new ArrayList<>();
 }

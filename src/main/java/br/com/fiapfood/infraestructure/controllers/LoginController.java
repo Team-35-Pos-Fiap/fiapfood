@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiapfood.core.controllers.interfaces.ILoginCoreController;
-import br.com.fiapfood.core.entities.dto.LoginDto;
-import br.com.fiapfood.infraestructure.controllers.request.MatriculaDto;
-import br.com.fiapfood.infraestructure.controllers.request.SenhaDto;
+import br.com.fiapfood.infraestructure.controllers.request.login.LoginDto;
+import br.com.fiapfood.infraestructure.controllers.request.login.MatriculaDto;
+import br.com.fiapfood.infraestructure.controllers.request.login.SenhaDto;
 import br.com.fiapfood.infraestructure.controllers.response.MensagemResponse;
 import br.com.fiapfood.infraestructure.controllers.response.SucessoResponse;
 import br.com.fiapfood.infraestructure.utils.MensagensUtil;
@@ -31,16 +31,16 @@ public class LoginController {
 	}
 
 	@PostMapping
-	public ResponseEntity<MensagemResponse> validar(@RequestBody @Valid @NotNull final  LoginDto dados) {
+	public ResponseEntity<MensagemResponse> validar(@RequestBody @Valid @NotNull final LoginDto dados) {
 		log.info("realizaLogin():dados do login {}", dados);
 
-		MensagemResponse sucessoResponse = new SucessoResponse(loginCoreController.validar(dados));
+		MensagemResponse sucessoResponse = new SucessoResponse(loginCoreController.validar(dados.matricula(), dados.senha()));
 
 		return ResponseEntity.ok().body(sucessoResponse);
 	}
 
 	@PatchMapping("/{matricula}/senha")
-	public ResponseEntity<MensagemResponse> atualizarSenha(@PathVariable @Valid @NotNull final  String matricula, @Valid @RequestBody @NotNull final SenhaDto dados) {
+	public ResponseEntity<MensagemResponse> atualizarSenha(@PathVariable @Valid @NotNull final String matricula, @Valid @RequestBody @NotNull final SenhaDto dados) {
 		log.info("trocar senha():id {} - senha {}", matricula, dados.senha());
 		
 		loginCoreController.atualizarSenha(matricula, dados.senha());
@@ -52,7 +52,7 @@ public class LoginController {
 
 
 	@PatchMapping("/{matricula}/matricula")
-	public ResponseEntity<MensagemResponse> atualizarMatricula(@PathVariable @Valid @NotNull final  String matricula, @Valid @RequestBody @NotNull final MatriculaDto dados) {
+	public ResponseEntity<MensagemResponse> atualizarMatricula(@PathVariable @Valid @NotNull final String matricula, @Valid @RequestBody @NotNull final MatriculaDto dados) {
 		log.info("trocar senha():id {} - senha {}", matricula, dados.matricula());
 		
 		loginCoreController.atualizarMatricula(matricula, dados.matricula());

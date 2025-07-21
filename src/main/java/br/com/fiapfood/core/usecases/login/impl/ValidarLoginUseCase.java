@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import br.com.fiapfood.core.entities.Login;
 import br.com.fiapfood.core.entities.Usuario;
-import br.com.fiapfood.core.entities.dto.LoginDto;
 import br.com.fiapfood.core.exceptions.UsuarioSemAcessoException;
 import br.com.fiapfood.core.gateways.interfaces.ILoginGateway;
 import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
@@ -21,8 +20,8 @@ public class ValidarLoginUseCase implements IValidarLoginUseCase {
 	}
 	
 	@Override
-	public String validar(final LoginDto dados) {
-		final Login login = buscarLoginPorMatriculaSenha(dados.matricula(), dados.senha());
+	public String validar(final String matricula, final String senha) {
+		final Login login = buscarLoginPorMatriculaSenha(matricula, senha);
 		
 		validaAcessoUsuario(login.getId());
 		

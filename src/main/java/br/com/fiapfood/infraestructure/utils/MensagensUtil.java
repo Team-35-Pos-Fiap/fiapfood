@@ -1,10 +1,10 @@
 package br.com.fiapfood.infraestructure.utils;
 
+import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
-
-import java.util.Locale;
 
 @Component
 public class MensagensUtil {
@@ -27,12 +27,8 @@ public class MensagensUtil {
 	public static final String SUCESSO_TROCA_SENHA_USUARIO = "sucesso.troca_senha_usuario";
 	public static final String SUCESSO_TROCA_MATRICULA_USUARIO = "sucesso.troca_matricula_usuario";
 	public static final String SUCESSO_RECUPERACAO_SENHA_USUARIO = "sucesso.recuperacao_senha_usuario";
-
-	public static final String ERRO_CARDAPIOS_NAO_ENCONTRADOS = "exception.cardapios_nao_encontrados";
-	public static final String ERRO_RESTAURANTES_NAO_ENCONTRADOS = "exception.restaurantes_nao_encontrados";
-	public static final String SUCESSO_ATUALIZACAO_CARDAPIO = "sucesso.atualizacao_cardapio";
-	public static final String SUCESSO_DELECAO_CARDAPIO = "sucesso.delecao_cardapio";
-	public static final String SUCESSO_DELECAO_RESTAURANTE = "sucesso.delecao_restaurante";
+	public static final String SUCESSO_INATIVACAO_RESTAURANTE = "sucesso.inativacao_restaurante";
+	public static final String SUCESSO_REATIVACAO_RESTAURANTE = "sucesso.reativacao_restaurante";
 
 
 	@Autowired

@@ -3,7 +3,7 @@ package br.com.fiapfood.core.gateways.impl;
 import java.util.List;
 
 import br.com.fiapfood.core.entities.Perfil;
-import br.com.fiapfood.core.entities.dto.PerfilDto;
+import br.com.fiapfood.core.entities.dto.perfil.PerfilCoreDto;
 import br.com.fiapfood.core.exceptions.PerfilInvalidoException;
 import br.com.fiapfood.core.exceptions.PerfilNaoEncontradoException;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
@@ -20,7 +20,7 @@ public class PerfilGateway implements IPerfilGateway {
 	
 	@Override
 	public List<Perfil> buscarTodos() {
-		final List<PerfilDto> perfis = perfilRepository.buscarTodos();
+		final List<PerfilCoreDto> perfis = perfilRepository.buscarTodos();
 		
 		if(perfis.size() > 0) {
 			return PerfilPresenter.toListPerfil(perfis);
@@ -31,12 +31,22 @@ public class PerfilGateway implements IPerfilGateway {
 	
 	@Override
 	public Perfil buscarPorId(final Integer id) {
-		final PerfilDto perfil = perfilRepository.buscarPorId(id);
+		final PerfilCoreDto perfil = perfilRepository.buscarPorId(id);
 		
 		if(perfil != null) {
 			return PerfilPresenter.toPerfil(perfil);
 		} else {
 			throw new PerfilInvalidoException("Não foi encontrado nenhum perfil com o id informado.");			
 		}
+	}
+
+	@Override
+	public void salvar(final PerfilCoreDto perfil) {
+		perfilRepository.salvar(PerfilPresenter.toPerfilEntity(perfil));
+	}
+
+	@Override
+	public boolean nomeJaCadastrado(final String nome) {
+		return perfilRepository.nomeJaCadastrado(nome);
 	}
 }

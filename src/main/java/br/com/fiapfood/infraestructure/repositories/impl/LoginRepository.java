@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
-import br.com.fiapfood.core.entities.dto.LoginDto;
+import br.com.fiapfood.core.entities.dto.login.LoginCoreDto;
 import br.com.fiapfood.core.presenters.LoginPresenter;
 import br.com.fiapfood.infraestructure.entities.LoginEntity;
 import br.com.fiapfood.infraestructure.repositories.interfaces.ILoginRepository;
@@ -21,7 +21,7 @@ public class LoginRepository implements ILoginRepository {
 	}
 
 	@Override
-	public LoginDto buscarPorMatriculaSenha(final String matricula, final String senha) {
+	public LoginCoreDto buscarPorMatriculaSenha(final String matricula, final String senha) {
 		final Optional<LoginEntity> login = loginRepository.findByMatriculaAndSenha(matricula, senha);
 		
 		if (login.isPresent()) {
@@ -37,7 +37,7 @@ public class LoginRepository implements ILoginRepository {
 	}
 
 	@Override
-	public LoginDto buscarPorMatricula(final String matricula) {
+	public LoginCoreDto buscarPorMatricula(final String matricula) {
 		final Optional<LoginEntity> login = loginRepository.findByMatricula(matricula);
 		
 		if (login.isPresent()) {
@@ -48,7 +48,7 @@ public class LoginRepository implements ILoginRepository {
 	}
 	
 	@Override
-	public LoginDto buscarPorId(final UUID id) {
+	public LoginCoreDto buscarPorId(final UUID id) {
 		final Optional<LoginEntity> login = loginRepository.findById(id);
 		
 		if (login.isPresent()) {

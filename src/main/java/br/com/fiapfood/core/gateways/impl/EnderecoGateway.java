@@ -3,7 +3,7 @@ package br.com.fiapfood.core.gateways.impl;
 import java.util.UUID;
 
 import br.com.fiapfood.core.entities.Endereco;
-import br.com.fiapfood.core.entities.dto.EnderecoDto;
+import br.com.fiapfood.core.entities.dto.endereco.EnderecoCoreDto;
 import br.com.fiapfood.core.exceptions.EnderecoUsuarioInvalidoException;
 import br.com.fiapfood.core.gateways.interfaces.IEnderecoGateway;
 import br.com.fiapfood.core.presenters.EnderecoPresenter;
@@ -18,7 +18,7 @@ public class EnderecoGateway implements IEnderecoGateway {
 	
 	@Override
 	public Endereco buscarPorId(final UUID id) {
-		final EnderecoDto endereco = enderecoRepository.buscarPorId(id);
+		final EnderecoCoreDto endereco = enderecoRepository.buscarPorId(id);
 		
 		if(endereco != null) {
 			return EnderecoPresenter.toEndereco(endereco);		
@@ -28,7 +28,7 @@ public class EnderecoGateway implements IEnderecoGateway {
 	}
 	
 	@Override
-	public void salvar(final EnderecoDto endereco) {
+	public void salvar(final EnderecoCoreDto endereco) {
 		enderecoRepository.salvar(EnderecoPresenter.toEnderecoEntity(endereco));
 	}
 }

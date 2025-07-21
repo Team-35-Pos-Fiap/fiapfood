@@ -39,7 +39,8 @@ public class Usuario {
 	public static Usuario criar(UUID id, String nome, Integer idPerfil, UUID idLogin, Boolean isAtivo, String email, LocalDateTime dataCriacao, LocalDateTime dataAtualizacao, UUID idEndereco) {
 		validarNome(nome);
 		validarPerfil(idPerfil);
-
+		validarEmail(email);
+		
 		return new Usuario(id, nome, idPerfil, isAtivo, email, dataCriacao, dataAtualizacao, idLogin, idEndereco);
 	}
 	
@@ -90,22 +91,6 @@ public class Usuario {
 		this.dataAtualizacao = getDataAtual();
 	}
 	
-	/*
-	
-	public void atualizarEndereco(String endereco, String cidade, String bairro,
-								  String estado, Integer numero, String cep, String complemento) {
-		this.dadosEndereco.atualizarDados(endereco, cidade, bairro, estado, numero, cep, complemento);
-		this.dataAtualizacao = getDataAtual();
-	}
-	
-	
-
-	public void atualizarLogin(String matricula, String senha) {
-		this.dadosLogin.atualizarMatricula(matricula);
-		this.dadosLogin.atualizarSenha(senha);
-		this.dataAtualizacao = getDataAtual();
-	}*/
-
 	private LocalDateTime getDataAtual() {
 		return LocalDateTime.now();
 	}
