@@ -1,17 +1,11 @@
--- Clean up restaurantes
-DELETE FROM restaurante;
+-- Delete dependent records first
+DELETE FROM item;             -- Items depend on restaurante and imagem
+DELETE FROM atendimento;      -- Atendimento depends on restaurante
+DELETE FROM restaurante;      -- Restaurante depends on endereco, tipo_culinaria, usuario
+DELETE FROM usuario;          -- Usuario depends on endereco, login, perfil
+DELETE FROM endereco;         -- Endereco can be shared, so delete after usuario and restaurante
+DELETE FROM login;            -- Login is linked only by usuario
+DELETE FROM imagem;           -- Images used in items
 
--- Clean up cardapio
-DELETE FROM cardapio;
-
--- Clean up usuarios first (they depend on login, endereco, perfil)
-DELETE FROM usuario;
-
--- Now clean up logins
-DELETE FROM login;
-
--- Now clean up addresses
-DELETE FROM endereco;
-
--- Finally clean up perfil
-DELETE FROM perfil;
+DELETE FROM tipo_culinaria;  -- Tipo_culinaria independent, but used by restaurante
+DELETE FROM perfil;           -- Perfil independent, used by usuario
