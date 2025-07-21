@@ -1,8 +1,11 @@
 package br.com.fiapfood.infraestructure.controllers.exceptions;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import br.com.fiapfood.core.exceptions.*;
+import br.com.fiapfood.infraestructure.controllers.response.ErroResponse;
+import br.com.fiapfood.infraestructure.controllers.response.MensagemResponse;
+import br.com.fiapfood.infraestructure.utils.MensagensUtil;
+import jakarta.validation.ValidationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,33 +19,8 @@ import org.springframework.web.client.HttpServerErrorException.InternalServerErr
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import br.com.fiapfood.core.exceptions.AtualizacaoPerfilUsuarioNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.AtualizacaoStatusUsuarioNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.EmailDuplicadoException;
-import br.com.fiapfood.core.exceptions.EmailUsuarioInvalidoException;
-import br.com.fiapfood.core.exceptions.EnderecoUsuarioInvalidoException;
-import br.com.fiapfood.core.exceptions.ExclusaoPerfilNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.LoginInvalidoException;
-import br.com.fiapfood.core.exceptions.LoginNaoEncontradoException;
-import br.com.fiapfood.core.exceptions.MatriculaDuplicadaException;
-import br.com.fiapfood.core.exceptions.MatriculaInvalidaException;
-import br.com.fiapfood.core.exceptions.NomePerfilDuplicadoException;
-import br.com.fiapfood.core.exceptions.NomePerfilInvalidoException;
-import br.com.fiapfood.core.exceptions.NomeUsuarioInvalidoException;
-import br.com.fiapfood.core.exceptions.PerfilInvalidoException;
-import br.com.fiapfood.core.exceptions.PerfilNaoEncontradoException;
-import br.com.fiapfood.core.exceptions.RestauranteNaoEncontradoException;
-import br.com.fiapfood.core.exceptions.SenhaInvalidaException;
-import br.com.fiapfood.core.exceptions.TipoCulinariaInvalidoException;
-import br.com.fiapfood.core.exceptions.TipoCulinariaNaoEncontradoException;
-import br.com.fiapfood.core.exceptions.UsuarioInativoException;
-import br.com.fiapfood.core.exceptions.UsuarioNaoEncontradoException;
-import br.com.fiapfood.core.exceptions.UsuarioSemAcessoException;
-import br.com.fiapfood.infraestructure.controllers.response.ErroResponse;
-import br.com.fiapfood.infraestructure.controllers.response.MensagemResponse;
-import br.com.fiapfood.infraestructure.utils.MensagensUtil;
-import jakarta.validation.ValidationException;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 @Slf4j
@@ -273,7 +251,7 @@ public class ErrorHandler {
 			errors.put(field, error.getDefaultMessage());
 		});
 		
-		return getResponse(HttpStatus.INTERNAL_SERVER_ERROR, errors);
+		return getResponse(HttpStatus.BAD_REQUEST, errors);
 	}
 
 	@ExceptionHandler(Exception.class)

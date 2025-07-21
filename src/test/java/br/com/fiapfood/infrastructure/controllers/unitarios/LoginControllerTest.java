@@ -1,17 +1,19 @@
 package br.com.fiapfood.infrastructure.controllers.unitarios;
 
 import br.com.fiapfood.core.controllers.interfaces.ILoginCoreController;
-import br.com.fiapfood.core.entities.dto.LoginDto;
 import br.com.fiapfood.core.exceptions.LoginNaoEncontradoException;
 import br.com.fiapfood.core.exceptions.MatriculaDuplicadaException;
+import br.com.fiapfood.core.exceptions.UsuarioInativoException;
 import br.com.fiapfood.core.exceptions.UsuarioNaoEncontradoException;
-import br.com.fiapfood.core.exceptions.UsuarioSemAcessoException;
 import br.com.fiapfood.infraestructure.controllers.LoginController;
 import br.com.fiapfood.infraestructure.controllers.exceptions.ErrorHandler;
-import br.com.fiapfood.infraestructure.controllers.request.MatriculaDto;
-import br.com.fiapfood.infraestructure.controllers.request.SenhaDto;
+import br.com.fiapfood.infraestructure.controllers.request.login.LoginDto;
+import br.com.fiapfood.infraestructure.controllers.request.login.MatriculaDto;
+import br.com.fiapfood.infraestructure.controllers.request.login.SenhaDto;
 import br.com.fiapfood.infraestructure.utils.MensagensUtil;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
@@ -19,10 +21,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.UUID;
-
+import static br.com.fiapfood.utils.DtoDataGenerator.loginDtoValido;
 import static br.com.fiapfood.utils.JsonToString.asJsonString;
-import static org.mockito.ArgumentMatchers.any;
+import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -64,10 +65,10 @@ public class LoginControllerTest {
         @Test
         void devePermitirValidarLogin() throws Exception {
             // Arrange
-            LoginDto loginRecordRequest = new LoginDto(UUID.randomUUID(),"us0001", "123");
+            LoginDto loginRecordRequest = loginDtoValido();
 
-            when(loginCoreController.validar(any(LoginDto.class)))
-                    .thenReturn("Acesso liberado");
+            when(loginCoreController.validar(anyString(), anyString()))
+                    .thenReturn("Acesso liberado.");
 
             // Act & Assert
             mockMvc.perform(post("/login")
@@ -75,17 +76,17 @@ public class LoginControllerTest {
                             .content(asJsonString(loginRecordRequest)))
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.mensagem").value("Acesso liberado"));
-            verify(loginCoreController, times(1)).validar(any(LoginDto.class));
+                    .andExpect(jsonPath("$.mensagem").value("Acesso liberado."));
+            verify(loginCoreController, times(1)).validar(anyString(), anyString());
         }
 
         @DisplayName("Validação de login com erro. Login não encontrado através de matrícula e senha.")
         @Test
         void deveLancarExcecaoSeLoginNaoEncontradoAtravesDaMatriculaESenha() throws Exception {
             // Arrange
-            LoginDto loginRecordRequest = new LoginDto(UUID.randomUUID(),"us0001", "123");
+            LoginDto loginRecordRequest = loginDtoValido();
 
-            when(loginCoreController.validar(any(LoginDto.class)))
+            when(loginCoreController.validar(anyString(), anyString()))
                     .thenThrow(new LoginNaoEncontradoException("Não foi encontrado nenhum login com a matrícula e senha informados."));
 
             // Act & Assert
@@ -95,17 +96,37 @@ public class LoginControllerTest {
                     .andDo(print())
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.mensagem").value("Não foi encontrado nenhum login com a matrícula e senha informados."));
-            verify(loginCoreController, times(1)).validar(any(LoginDto.class));
+            verify(loginCoreController, times(1)).validar(anyString(), anyString());
         }
 
-        @DisplayName("Validação de login com erro. Usuário ativo não encontrado através do login id")
+        @DisplayName("Validação de login com erro. Usuário não encontrado através do login id")
         @Test
-        void deveLancarExcecaoSeNaoEncontrarUsuarioAtivoVinculadoComOLogin() throws Exception {
+        void deveLancarExcecaoSeNaoEncontrarUsuarioVinculadoComOLogin() throws Exception {
             // Arrange
-            LoginDto loginRecordRequest = new LoginDto(UUID.randomUUID(),"us0001", "123");
+            LoginDto loginRecordRequest = loginDtoValido();
 
-            when(loginCoreController.validar(any(LoginDto.class)))
-                    .thenThrow(new UsuarioSemAcessoException("Não é possível realizar o login para usuários inativos."));
+            when(loginCoreController.validar(anyString(), anyString()))
+                    .thenThrow(new UsuarioNaoEncontradoException("Não foi encontrado nenhum usuário com o login informado."));
+
+            // Act & Assert
+            mockMvc.perform(post("/login")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(loginRecordRequest)))
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.mensagem").value("Não foi encontrado nenhum usuário com o login informado."));
+            verify(loginCoreController, times(1)).validar(anyString(), anyString());
+        }
+
+        @DisplayName("Validação de login com erro. Erro com dados no DTO")
+        @ParameterizedTest
+        @CsvSource({
+                " , 123, O campo matricula precisa ser informado.",
+                "us0001, , O campo senha precisa ser informado."
+        })
+        void deveLancarExcecaoParaCamposInvalidos(String matricula, String senha, String expectedErrorMessage ) throws Exception {
+            // Arrange
+            LoginDto loginRecordRequest = new LoginDto(null, matricula, senha);
 
             // Act & Assert
             mockMvc.perform(post("/login")
@@ -113,31 +134,9 @@ public class LoginControllerTest {
                             .content(asJsonString(loginRecordRequest)))
                     .andDo(print())
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.mensagem").value("Não é possível realizar o login para usuários inativos."));
-            verify(loginCoreController, times(1)).validar(any(LoginDto.class));
+                    .andExpect(jsonPath("$.*").value(hasItem(expectedErrorMessage)));
+            verify(loginCoreController, times(0)).validar(anyString(), anyString());
         }
-
-        // Teste comentado, pois não estamos validando o DTO
-//        @DisplayName("Validação de login com erro. Erro com dados no DTO")
-//        @ParameterizedTest
-//        @CsvSource({
-//                " , 123, O campo matrícula não foi informado.",
-//                "US, 123, O campo matrícula precisa ter entre 3 e 6 caracteres.",
-//                "US00001, 123, O campo matrícula precisa ter entre 3 e 6 caracteres.",
-//                "us0001, , O campo senha não foi informado."
-//        })
-//        void deveLancarExcecaoParaCamposInvalidos(String matricula, String senha, String expectedError) throws Exception {
-//            // Arrange
-//            LoginDto loginRecordRequest = new LoginDto(UUID.randomUUID(),"us0001", "123");
-//
-//            // Act & Assert
-//            mockMvc.perform(post("/login")
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .content(asJsonString(loginRecordRequest)))
-//                    .andDo(print())
-//                    .andExpect(status().isBadRequest())
-//                    .andExpect(jsonPath("$.*").value(org.hamcrest.Matchers.hasItem(expectedError)));
-//        }
     }
 
     @Nested
@@ -189,14 +188,14 @@ public class LoginControllerTest {
             verify(loginCoreController, times(1)).atualizarSenha(anyString(), anyString());
         }
 
-        @DisplayName("Atualizar senha com erro. Não encontrado usuário ativo vinculado com o login")
+        @DisplayName("Atualizar senha com erro. Não encontrado usuário vinculado com o login")
         @Test
-        void deveLancarExcecaoSeNaoEncontrarUsuarioAtivoVinculadoComOLogin() throws Exception {
+        void deveLancarExcecaoSeNaoEncontrarUsuarioVinculadoComOLogin() throws Exception {
             // Arrange
             String matricula = "us0003";
             SenhaDto novaSenhaDto = new SenhaDto("124");
 
-            doThrow(new UsuarioNaoEncontradoException("Não foram encontrados usuários na base de dados.")).when(loginCoreController).atualizarSenha(anyString(), anyString());
+            doThrow(new UsuarioNaoEncontradoException("Não foi encontrado nenhum usuário com o login informado.")).when(loginCoreController).atualizarSenha(anyString(), anyString());
 
             // Act & Arrange
             mockMvc.perform(patch("/login/{matricula}/senha", matricula)
@@ -204,7 +203,27 @@ public class LoginControllerTest {
                             .content(asJsonString(novaSenhaDto)))
                     .andDo(print())
                     .andExpect(status().isNotFound())
-                    .andExpect(jsonPath("$.mensagem").value("Não foram encontrados usuários na base de dados."));
+                    .andExpect(jsonPath("$.mensagem").value("Não foi encontrado nenhum usuário com o login informado."));
+
+            verify(loginCoreController, times(1)).atualizarSenha(anyString(), anyString());
+        }
+
+        @DisplayName("Atualizar senha com erro. Usuário vinculado com o login inativo")
+        @Test
+        void deveLancarExcecaoSeUsuarioVinculadoComIdEstiverInativo() throws Exception {
+            // Arrange
+            String matricula = "us0003";
+            SenhaDto novaSenhaDto = new SenhaDto("124");
+
+            doThrow(new UsuarioInativoException("Não é possível alterar a senha de um usuário inativo.")).when(loginCoreController).atualizarSenha(anyString(), anyString());
+
+            // Act & Arrange
+            mockMvc.perform(patch("/login/{matricula}/senha", matricula)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(novaSenhaDto)))
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.mensagem").value("Não é possível alterar a senha de um usuário inativo."));
 
             verify(loginCoreController, times(1)).atualizarSenha(anyString(), anyString());
         }
@@ -221,7 +240,7 @@ public class LoginControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(asJsonString(novaSenhaDto)))
                     .andDo(print())
-                    .andExpect(status().is5xxServerError()) // Não tenho certeza o motivo de estar sendo 500 aqui
+                    .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.senha").value("O campo senha precisa estar preenchido."));
 
             verify(loginCoreController, times(0)).atualizarSenha(anyString(), anyString());
@@ -277,14 +296,14 @@ public class LoginControllerTest {
             verify(loginCoreController, times(1)).atualizarMatricula(anyString(), anyString());
         }
 
-        @DisplayName("Atualizar matricula com erro. Não encontrado usuário ativo vinculado com o login")
+        @DisplayName("Atualizar matricula com erro. Não encontrado usuário vinculado com o login")
         @Test
-        void deveLancarExcecaoSeNaoEncontrarUsuarioAtivoVinculadoComOLogin() throws Exception {
+        void deveLancarExcecaoSeNaoEncontrarUsuarioVinculadoComOLogin() throws Exception {
             // Arrange
             String matriculaAtual = "us0008";
             MatriculaDto novaMatriculaDto = new MatriculaDto("us0010");
 
-            doThrow(new UsuarioNaoEncontradoException("Não é possível alterar a matricula de um usuário inativo.")).when(loginCoreController).atualizarMatricula(anyString(), anyString());
+            doThrow(new UsuarioNaoEncontradoException("Não foi encontrado nenhum usuário com o login informado.")).when(loginCoreController).atualizarMatricula(anyString(), anyString());
 
             // Act & Arrange
             mockMvc.perform(patch("/login/{matricula}/matricula", matriculaAtual)
@@ -292,7 +311,27 @@ public class LoginControllerTest {
                             .content(asJsonString(novaMatriculaDto)))
                     .andDo(print())
                     .andExpect(status().isNotFound())
-                    .andExpect(jsonPath("$.mensagem").value("Não é possível alterar a matricula de um usuário inativo."));
+                    .andExpect(jsonPath("$.mensagem").value("Não foi encontrado nenhum usuário com o login informado."));
+
+            verify(loginCoreController, times(1)).atualizarMatricula(anyString(), anyString());
+        }
+
+        @DisplayName("Atualizar matricula com erro. Usuário vinculado com o login está inativo")
+        @Test
+        void deveLancarExcecaoSeUsuarioVinculadoComOLoginInativo() throws Exception {
+            // Arrange
+            String matriculaAtual = "us0008";
+            MatriculaDto novaMatriculaDto = new MatriculaDto("us0010");
+
+            doThrow(new UsuarioInativoException("Não é possível alterar a senha de um usuário inativo.")).when(loginCoreController).atualizarMatricula(anyString(), anyString());
+
+            // Act & Arrange
+            mockMvc.perform(patch("/login/{matricula}/matricula", matriculaAtual)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(novaMatriculaDto)))
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.mensagem").value("Não é possível alterar a senha de um usuário inativo."));
 
             verify(loginCoreController, times(1)).atualizarMatricula(anyString(), anyString());
         }
@@ -329,7 +368,7 @@ public class LoginControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(asJsonString(novaMatriculaDto)))
                     .andDo(print())
-                    .andExpect(status().is5xxServerError()) // Não tenho certeza o motivo de estar sendo 500 aqui
+                    .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.matricula").value("O campo matricula precisa estar preenchido."));
 
             verify(loginCoreController, times(0)).atualizarMatricula(anyString(), anyString());
