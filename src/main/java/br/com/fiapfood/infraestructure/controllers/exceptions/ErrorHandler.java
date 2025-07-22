@@ -1,6 +1,7 @@
 package br.com.fiapfood.infraestructure.controllers.exceptions;
 
 import br.com.fiapfood.core.exceptions.*;
+import br.com.fiapfood.core.exceptions.item.ItemNaoEncontradoException;
 import br.com.fiapfood.infraestructure.controllers.response.ErroResponse;
 import br.com.fiapfood.infraestructure.controllers.response.MensagemResponse;
 import br.com.fiapfood.infraestructure.utils.MensagensUtil;
@@ -219,6 +220,13 @@ public class ErrorHandler {
 	public ResponseEntity<MensagemResponse> trataExclusaoPerfilNaoPermitidaException(ExclusaoPerfilNaoPermitidaException e) {
 		log.error(e.getMessage(), e);
 		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+
+	@ExceptionHandler(ItemNaoEncontradoException.class)
+	public ResponseEntity<MensagemResponse> trataItemNaoEncontradoException(ItemNaoEncontradoException e) {
+		log.error(e.getMessage(), e);
+
 		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
 	}
 	
