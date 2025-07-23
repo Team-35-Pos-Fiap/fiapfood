@@ -3,17 +3,17 @@ package br.com.fiapfood.infrastructure.controllers.unitarios;
 
 import br.com.fiapfood.core.controllers.interfaces.IItemCoreController;
 import br.com.fiapfood.core.entities.dto.item.DadosItemDto;
+import br.com.fiapfood.core.entities.dto.item.ImagemCoreDto;
 import br.com.fiapfood.core.exceptions.item.ItemNaoEncontradoException;
 import br.com.fiapfood.infraestructure.controllers.ItemController;
 import br.com.fiapfood.infraestructure.controllers.exceptions.ErrorHandler;
-import br.com.fiapfood.infraestructure.controllers.request.item.ItemDto;
-import br.com.fiapfood.infraestructure.controllers.request.item.ItemPaginacaoDto;
-import br.com.fiapfood.infraestructure.controllers.request.item.NomeDto;
+import br.com.fiapfood.infraestructure.controllers.request.item.*;
 import br.com.fiapfood.infraestructure.controllers.request.paginacao.PaginacaoDto;
 import br.com.fiapfood.infraestructure.controllers.request.restaurante.DadosRestauranteResumidoDto;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,8 +28,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class ItemControllerTest {
 
@@ -86,7 +85,7 @@ public class ItemControllerTest {
 
         );
 
-        PaginacaoDto paginacao = new PaginacaoDto(1,1,2);
+        PaginacaoDto paginacao = new PaginacaoDto(1, 1, 2);
 
         ItemPaginacaoDto itensPaginacao = new ItemPaginacaoDto(itens, paginacao);
 
@@ -180,11 +179,27 @@ public class ItemControllerTest {
     }
 
     @Test
+    @DisplayName("Deve atualizar a descricao do item com sucesso")
+    void deveAtualizarDescricaoItem() throws Exception {
+        UUID id = UUID.randomUUID();
+        String novaDescricao = "Feijoada Especial para duas pessoas";
+
+        // Mock do core controller
+        doNothing().when(itemCoreController).atualizarDescricao(eq(id), eq(novaDescricao));
+
+        mockMvc.perform(patch("/itens/{id}/descricao", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"descricao\":\"" + novaDescricao + "\"}"))
+                .andExpect(status().isNoContent());
+
+        verify(itemCoreController, times(1)).atualizarDescricao(eq(id), eq(novaDescricao));
+    }
+
+    @Test
     @DisplayName("Deve atualizar o nome do item com sucesso")
     void deveAtualizarNomeItem() throws Exception {
         UUID id = UUID.randomUUID();
         String novoNome = "Feijoada Especial";
-        NomeDto nomeDto = new NomeDto(novoNome);
 
         // Mock do core controller
         doNothing().when(itemCoreController).atualizarNome(eq(id), eq(novoNome));
@@ -197,6 +212,95 @@ public class ItemControllerTest {
         verify(itemCoreController, times(1)).atualizarNome(eq(id), eq(novoNome));
     }
 
+    @Test
+    @DisplayName("Deve atualizar o preco do item com sucesso")
+    void deveAtualizarPrecoItem() throws Exception {
+        UUID id = UUID.randomUUID();
+        BigDecimal novoPreco = BigDecimal.valueOf(33.25);
 
+        // Mock do core controller
+        doNothing().when(itemCoreController).atualizarPreco(eq(id), eq(novoPreco));
+
+        mockMvc.perform(patch("/itens/{id}/preco", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"preco\":\"" + novoPreco + "\"}"))
+                .andExpect(status().isNoContent());
+
+        verify(itemCoreController, times(1)).atualizarPreco(eq(id), eq(novoPreco));
+    }
+
+    @Test
+    @DisplayName("Deve atualizar o disponibilidadeConsumoPresencial do item com sucesso")
+    void deveAtualizarDisponibilidadeConsumoPresencialItem() throws Exception {
+        UUID id = UUID.randomUUID();
+        Boolean disponibilidadeConsumoPresencial = false;
+
+        // Mock do core controller
+        doNothing().when(itemCoreController).atualizarDisponibilidadeConsumoPresencial(
+                eq(id),
+                eq(disponibilidadeConsumoPresencial)
+        );
+
+        mockMvc.perform(patch("/itens/{id}/disponibilidade-consumo-presencial", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"isDisponivel\":\"" + disponibilidadeConsumoPresencial + "\"}"))
+                .andExpect(status().isNoContent());
+
+        verify(itemCoreController, times(1)).atualizarDisponibilidadeConsumoPresencial(
+                eq(id),
+                eq(disponibilidadeConsumoPresencial)
+        );
+    }
+
+    @Test
+    @DisplayName("Deve atualizar o disponibilidade do item com sucesso")
+    void deveAtualizarDisponibilidade() throws Exception {
+        UUID id = UUID.randomUUID();
+        Boolean disponibilidade = false;
+
+        // Mock do core controller
+        doNothing().when(itemCoreController).atualizarDisponibilidade( eq(id), eq(disponibilidade));
+
+        mockMvc.perform(patch("/itens/{id}/disponibilidade", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"isDisponivel\":\"" + disponibilidade + "\"}"))
+                .andExpect(status().isNoContent());
+
+        verify(itemCoreController, times(1)).atualizarDisponibilidade( eq(id), eq(disponibilidade));
+    }
+
+    @Test
+    @DisplayName("Deve atualizar a imagem do item com sucesso")
+    void deveAtualizarImagemDoItem() throws Exception {
+        UUID id = UUID.randomUUID();
+        MockMultipartFile imagem = new MockMultipartFile("imagem", "imagem.jpg", "image/jpeg", "conteudo".getBytes());
+
+        doNothing().when(itemCoreController).atualizarImagem(eq(id), any(MultipartFile.class));
+
+        mockMvc.perform(multipart("/itens/{id}/imagem", id)
+                        .file(imagem)
+                        .with(request -> { request.setMethod("PATCH"); return request; }))
+                .andExpect(status().isNoContent());
+
+        verify(itemCoreController, times(1)).atualizarImagem(eq(id), any(MultipartFile.class));
+    }
+    
+    @Test
+    @DisplayName("Deve baixar a imagem do item com sucesso")
+    void deveBaixarImagemDoItem() throws Exception {
+        UUID id = UUID.randomUUID();
+        String nomeArquivo = "imagem.jpg";
+        byte[] conteudo = "conteudo da imagem".getBytes();
+        ImagemCoreDto imagemCoreDto = new ImagemCoreDto(id, nomeArquivo, conteudo, "image/jpeg");
+
+        when(itemCoreController.baixarImagem(eq(id))).thenReturn(imagemCoreDto);
+
+        mockMvc.perform(get("/itens/{id}/imagem", id))
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nomeArquivo + "\""))
+                .andExpect(content().bytes(conteudo));
+
+        verify(itemCoreController, times(1)).baixarImagem(eq(id));
+    }
 
 }
