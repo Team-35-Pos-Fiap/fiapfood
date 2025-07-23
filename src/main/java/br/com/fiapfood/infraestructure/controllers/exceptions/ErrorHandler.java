@@ -2,6 +2,8 @@ package br.com.fiapfood.infraestructure.controllers.exceptions;
 
 import br.com.fiapfood.core.exceptions.*;
 import br.com.fiapfood.core.exceptions.item.ItemNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.usuario.AtualizacaoEmailUsuarioNaoPermitidoException;
+import br.com.fiapfood.core.exceptions.usuario.AtualizacaoNomeUsuarioNaoPermitidoException;
 import br.com.fiapfood.infraestructure.controllers.response.ErroResponse;
 import br.com.fiapfood.infraestructure.controllers.response.MensagemResponse;
 import br.com.fiapfood.infraestructure.utils.MensagensUtil;
@@ -90,6 +92,13 @@ public class ErrorHandler {
 		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
 	}
 
+	@ExceptionHandler(AtualizacaoEmailUsuarioNaoPermitidoException.class)
+	public ResponseEntity<MensagemResponse> trataAtualizacaoEmailUsuarioNaoPermitidoException(AtualizacaoEmailUsuarioNaoPermitidoException e) {
+		log.error(e.getMessage(), e);
+
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+
 	@ExceptionHandler(AtualizacaoPerfilUsuarioNaoPermitidaException.class)
 	public ResponseEntity<MensagemResponse> trataAtualizacaoPerfilUsuarioNaoPermitidaException(AtualizacaoPerfilUsuarioNaoPermitidaException e) {
 		log.error(e.getMessage(), e);
@@ -150,6 +159,13 @@ public class ErrorHandler {
 	public ResponseEntity<MensagemResponse> trataNomeUsuarioInvalidoException(NomeUsuarioInvalidoException e) {
 		log.error(e.getMessage(), e);
 		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+
+	@ExceptionHandler(AtualizacaoNomeUsuarioNaoPermitidoException.class)
+	public ResponseEntity<MensagemResponse> trataAtualizacaoNomeUsuarioNaoPermitidoException(AtualizacaoNomeUsuarioNaoPermitidoException e) {
+		log.error(e.getMessage(), e);
+
 		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
 	}
 	
