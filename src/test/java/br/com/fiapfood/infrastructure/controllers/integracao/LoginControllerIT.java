@@ -1,6 +1,6 @@
 package br.com.fiapfood.infrastructure.controllers.integracao;
 
-import br.com.fiapfood.core.entities.dto.LoginDto;
+import br.com.fiapfood.infraestructure.controllers.request.login.LoginDto;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
