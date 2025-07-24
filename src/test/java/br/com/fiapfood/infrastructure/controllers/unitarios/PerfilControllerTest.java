@@ -1,10 +1,10 @@
 package br.com.fiapfood.infrastructure.controllers.unitarios;
 
 import br.com.fiapfood.core.controllers.interfaces.IPerfilCoreController;
-import br.com.fiapfood.core.entities.dto.PerfilDto;
 import br.com.fiapfood.core.exceptions.PerfilInvalidoException;
 import br.com.fiapfood.infraestructure.controllers.PerfilController;
 import br.com.fiapfood.infraestructure.controllers.exceptions.ErrorHandler;
+import br.com.fiapfood.infraestructure.controllers.request.perfil.PerfilDto;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
+import static br.com.fiapfood.utils.DtoDataGenerator.perfilDtoValido;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -55,8 +56,8 @@ public class PerfilControllerTest {
         void deveRetornarListaComPerfisCadastrados() throws Exception {
             // Arrange
             List<PerfilDto> perfis = List.of(
-                    new PerfilDto(1, "Admin"),
-                    new PerfilDto(2, "User")
+                    new PerfilDto(1, "Admin", null, null),
+                    new PerfilDto(2, "Cliente", null, null)
             );
 
             when(perfilCoreController.buscarTodos()).thenReturn(perfis);
@@ -70,7 +71,7 @@ public class PerfilControllerTest {
                     .andExpect(jsonPath("$[0].id").value(1))
                     .andExpect(jsonPath("$[0].nome").value("Admin"))
                     .andExpect(jsonPath("$[1].id").value(2))
-                    .andExpect(jsonPath("$[1].nome").value("User"));
+                    .andExpect(jsonPath("$[1].nome").value("Cliente"));
 
             verify(perfilCoreController, times(1)).buscarTodos();
         }
@@ -83,7 +84,7 @@ public class PerfilControllerTest {
         void deveRetornarPerfilPorId() throws Exception {
             // Arrange
             int perfilId = 1;
-            PerfilDto perfil = new PerfilDto(1, "Admin");
+            PerfilDto perfil = perfilDtoValido();
 
             when(perfilCoreController.buscarPorId(anyInt())).thenReturn(perfil);
 
