@@ -4,6 +4,7 @@ import br.com.fiapfood.infraestructure.controllers.request.endereco.DadosEnderec
 import br.com.fiapfood.infraestructure.controllers.request.endereco.EnderecoDto;
 import br.com.fiapfood.infraestructure.controllers.request.login.LoginDto;
 import br.com.fiapfood.infraestructure.controllers.request.perfil.PerfilDto;
+import br.com.fiapfood.infraestructure.controllers.request.tipo_culinaria.TipoCulinariaDto;
 import br.com.fiapfood.infraestructure.controllers.request.usuario.CadastrarUsuarioDto;
 import br.com.fiapfood.infraestructure.controllers.request.usuario.UsuarioDto;
 
@@ -77,6 +78,10 @@ public class DtoDataGenerator {
                 null,
                 enderecoDtoValido()
         );
+    }
+
+    public static TipoCulinariaDto tipoCulinariaDtoValido() {
+        return new TipoCulinariaDto(1, "Brasileira");
     }
 
 
