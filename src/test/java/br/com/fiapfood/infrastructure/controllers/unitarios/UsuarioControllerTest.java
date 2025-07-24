@@ -8,6 +8,8 @@ import br.com.fiapfood.infraestructure.controllers.UsuarioController;
 import br.com.fiapfood.infraestructure.controllers.exceptions.ErrorHandler;
 import br.com.fiapfood.infraestructure.controllers.request.endereco.DadosEnderecoDto;
 import br.com.fiapfood.infraestructure.controllers.request.login.LoginDto;
+import br.com.fiapfood.infraestructure.controllers.request.login.MatriculaDto;
+import br.com.fiapfood.infraestructure.controllers.request.login.SenhaDto;
 import br.com.fiapfood.infraestructure.controllers.request.paginacao.PaginacaoDto;
 import br.com.fiapfood.infraestructure.controllers.request.usuario.*;
 import br.com.fiapfood.infraestructure.utils.MensagensUtil;
@@ -860,6 +862,340 @@ public class UsuarioControllerTest {
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.*").value(hasItem("O campo nome precisa ter entre 3 e 150 caracteres.")));
             verify(usuarioCoreController, times(0)).atualizarNome(any(UUID.class), anyString());
+        }
+    }
+
+    @Nested
+    class AtualizarSenhaRequest {
+        @DisplayName("Trocar senha com sucesso")
+        @Test
+        void devePermitirTrocarSenha() throws Exception {
+            // Arrange
+            UUID usuarioId = UUID.randomUUID();
+            SenhaDto novaSenhaDto = new SenhaDto("124");
+
+            doNothing().when(usuarioCoreController).atualizarSenha(any(UUID.class), anyString());
+
+            // Act & Assert
+            // Tive que mockar o Mensagem Util nesse teste para poder checar a mensagem
+            try (MockedStatic<MensagensUtil> mensagensMock = mockStatic(MensagensUtil.class)) {
+                mensagensMock.when(() -> MensagensUtil.recuperarMensagem(
+                                MensagensUtil.SUCESSO_TROCA_SENHA_USUARIO, new Object[0]))
+                        .thenReturn("Senha alterada com sucesso.");
+
+                mockMvc.perform(patch("/usuarios/{id}/senha", usuarioId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJsonString(novaSenhaDto)))
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.mensagem").value("Senha alterada com sucesso."));
+            }
+
+            verify(usuarioCoreController, times(1)).atualizarSenha(any(UUID.class), anyString());
+        }
+
+        @DisplayName("Atualizar senha com erro. Usuario nao encontrado atraves do id")
+        @Test
+        void deveLancarExcecaoSeUsuarioNaoEncontradoAtravesDoId() throws Exception {
+            // Arrange
+            UUID usuarioId = UUID.randomUUID();
+            SenhaDto novaSenhaDto = new SenhaDto("124");
+
+            doThrow(new UsuarioNaoEncontradoException("Não foi encontrado nenhum usuário com o id informado.")).when(usuarioCoreController).atualizarSenha(any(UUID.class), anyString());
+
+            // Act & Assert
+            mockMvc.perform(patch("/usuarios/{id}/senha", usuarioId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(novaSenhaDto)))
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.mensagem").value("Não foi encontrado nenhum usuário com o id informado."));
+
+            verify(usuarioCoreController, times(1)).atualizarSenha(any(UUID.class), anyString());
+        }
+
+//        @DisplayName("Atualizar senha com erro. Não encontrado usuário vinculado com o login")
+//        @Test
+//        void deveLancarExcecaoSeNaoEncontrarUsuarioVinculadoComOLogin() throws Exception {
+//            // Arrange
+//            String matricula = "us0003";
+//            SenhaDto novaSenhaDto = new SenhaDto("124");
+//
+//            doThrow(new UsuarioNaoEncontradoException("Não foi encontrado nenhum usuário com o login informado.")).when(loginCoreController).atualizarSenha(anyString(), anyString());
+//
+//            // Act & Arrange
+//            mockMvc.perform(patch("/login/{matricula}/senha", matricula)
+//                            .contentType(MediaType.APPLICATION_JSON)
+//                            .content(asJsonString(novaSenhaDto)))
+//                    .andDo(print())
+//                    .andExpect(status().isNotFound())
+//                    .andExpect(jsonPath("$.mensagem").value("Não foi encontrado nenhum usuário com o login informado."));
+//
+//            verify(loginCoreController, times(1)).atualizarSenha(anyString(), anyString());
+//        }
+
+        @DisplayName("Atualizar senha com erro. Usuário encontrado esta inativo")
+        @Test
+        void deveLancarExcecaoSeUsuarioEstiverInativo() throws Exception {
+            // Arrange
+            UUID usuarioId = UUID.randomUUID();
+            SenhaDto novaSenhaDto = new SenhaDto("124");
+
+            doThrow(new UsuarioInativoException("Não é possível alterar a senha de um usuário inativo.")).when(usuarioCoreController).atualizarSenha(any(UUID.class), anyString());
+
+            // Act & Arrange
+            mockMvc.perform(patch("/usuarios/{id}/senha", usuarioId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(novaSenhaDto)))
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.mensagem").value("Não é possível alterar a senha de um usuário inativo."));
+
+            verify(usuarioCoreController, times(1)).atualizarSenha(any(UUID.class), anyString());
+        }
+
+        @DisplayName("Alterar senha com erro. Dados inválidos no DTO")
+        @Test
+        void deveLancarExcecaoParaCamposInvalidos() throws Exception {
+            // Arrange
+            UUID usuarioId = UUID.randomUUID();
+            SenhaDto novaSenhaDto = new SenhaDto("");
+
+            // Act & Arrange
+            mockMvc.perform(patch("/usuarios/{id}/senha", usuarioId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(novaSenhaDto)))
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.senha").value("O campo senha precisa estar preenchido."));
+
+            verify(usuarioCoreController, times(0)).atualizarSenha(any(UUID.class), anyString());
+        }
+    }
+
+    @Nested
+    class AtualizarMatriculaRequest {
+        @DisplayName("Trocar matricula com sucesso")
+        @Test
+        void devePermitirTrocarMatricula() throws Exception {
+            // Arrange
+            UUID usuarioId = UUID.randomUUID();
+            MatriculaDto novaMatriculaDto = new MatriculaDto("us0010");
+
+            doNothing().when(usuarioCoreController).atualizarMatricula(any(UUID.class), anyString());
+
+            // Act & Assert
+            // Tive que mockar o Mensagem Util nesse teste para poder checar a mensagem
+            try (MockedStatic<MensagensUtil> mensagensMock = mockStatic(MensagensUtil.class)) {
+                mensagensMock.when(() -> MensagensUtil.recuperarMensagem(
+                                MensagensUtil.SUCESSO_TROCA_MATRICULA_USUARIO, new Object[0]))
+                        .thenReturn("Matricula alterada com sucesso.");
+
+                mockMvc.perform(patch("/usuarios/{id}/matricula", usuarioId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJsonString(novaMatriculaDto)))
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.mensagem").value("Matricula alterada com sucesso."));
+            }
+            verify(usuarioCoreController, times(1)).atualizarMatricula(any(UUID.class), anyString());
+        }
+
+        @DisplayName("Atualizar matricula com erro. Usuário nao encontrado através do id.")
+        @Test
+        void deveLancarExcecaoSeUsuarioNaoEncontradoAtravesDoId() throws Exception {
+            // Arrange
+            UUID usuarioId = UUID.randomUUID();
+            MatriculaDto novaMatriculaDto = new MatriculaDto("us0010");
+
+            doThrow(new UsuarioNaoEncontradoException("Não foi encontrado nenhum usuário com o id informado.")).when(usuarioCoreController).atualizarMatricula(any(UUID.class), anyString());
+
+            // Act & Assert
+            mockMvc.perform(patch("/usuarios/{id}/matricula", usuarioId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(novaMatriculaDto)))
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.mensagem").value("Não foi encontrado nenhum usuário com o id informado."));
+
+            verify(usuarioCoreController, times(1)).atualizarMatricula(any(UUID.class), anyString());
+        }
+
+//        @DisplayName("Atualizar matricula com erro. Não encontrado usuário vinculado com o login")
+//        @Test
+//        void deveLancarExcecaoSeNaoEncontrarUsuarioVinculadoComOLogin() throws Exception {
+//            // Arrange
+//            String matriculaAtual = "us0008";
+//            MatriculaDto novaMatriculaDto = new MatriculaDto("us0010");
+//
+//            doThrow(new UsuarioNaoEncontradoException("Não foi encontrado nenhum usuário com o login informado.")).when(loginCoreController).atualizarMatricula(anyString(), anyString());
+//
+//            // Act & Arrange
+//            mockMvc.perform(patch("/login/{matricula}/matricula", matriculaAtual)
+//                            .contentType(MediaType.APPLICATION_JSON)
+//                            .content(asJsonString(novaMatriculaDto)))
+//                    .andDo(print())
+//                    .andExpect(status().isNotFound())
+//                    .andExpect(jsonPath("$.mensagem").value("Não foi encontrado nenhum usuário com o login informado."));
+//
+//            verify(loginCoreController, times(1)).atualizarMatricula(anyString(), anyString());
+//        }
+
+        @DisplayName("Atualizar matricula com erro. Usuário encontrado está inativo")
+        @Test
+        void deveLancarExcecaoSeUsuarioEstiverInativo() throws Exception {
+            // Arrange
+            UUID usuarioId = UUID.randomUUID();
+            MatriculaDto novaMatriculaDto = new MatriculaDto("us0010");
+
+            doThrow(new UsuarioInativoException("Não é possível alterar a senha de um usuário inativo.")).when(usuarioCoreController).atualizarMatricula(any(UUID.class), anyString());
+
+            // Act & Arrange
+            mockMvc.perform(patch("/usuarios/{id}/matricula", usuarioId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(novaMatriculaDto)))
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.mensagem").value("Não é possível alterar a senha de um usuário inativo."));
+
+            verify(usuarioCoreController, times(1)).atualizarMatricula(any(UUID.class), anyString());
+        }
+
+        @DisplayName("Atualizar matricula com erro. Nova matricula ja cadastrada.")
+        @Test
+        void deveLancarExcecaoSeNovaMatriculaJaCadastrada() throws Exception {
+            // Arrange
+            UUID usuarioId = UUID.randomUUID();
+            MatriculaDto novaMatriculaDto = new MatriculaDto("us0002");
+
+            doThrow(new MatriculaDuplicadaException("Já existe um usuário com a matrícula informada.")).when(usuarioCoreController).atualizarMatricula(any(UUID.class), anyString());
+
+            // Act & Arrange
+            mockMvc.perform(patch("/usuarios/{id}/matricula", usuarioId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(novaMatriculaDto)))
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.mensagem").value("Já existe um usuário com a matrícula informada."));
+
+            verify(usuarioCoreController, times(1)).atualizarMatricula(any(UUID.class), anyString());
+        }
+
+        @DisplayName("Alterar matricula com erro. Dados inválidos no DTO")
+        @Test
+        void deveLancarExcecaoParaCamposInvalidos() throws Exception {
+            // Arrange
+            UUID usuarioId = UUID.randomUUID();
+            MatriculaDto novaMatriculaDto = new MatriculaDto("");
+
+            // Act & Arrange
+            mockMvc.perform(patch("/usuarios/{id}/matricula", usuarioId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(novaMatriculaDto)))
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.matricula").value("O campo matricula precisa estar preenchido."));
+
+            verify(usuarioCoreController, times(0)).atualizarMatricula(any(UUID.class), anyString());
+        }
+    }
+
+    @Nested
+    class ValidarLoginRequest {
+        @DisplayName("Validação de login com sucesso")
+        @Test
+        void devePermitirValidarLogin() throws Exception {
+            // Arrange
+            LoginDto loginRecordRequest = loginDtoValido();
+
+            when(usuarioCoreController.validarAcesso(anyString(), anyString()))
+                    .thenReturn("Acesso liberado.");
+
+            // Act & Assert
+            mockMvc.perform(post("/usuarios/valida-acesso")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(loginRecordRequest)))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.mensagem").value("Acesso liberado."));
+            verify(usuarioCoreController, times(1)).validarAcesso(anyString(), anyString());
+        }
+
+        @DisplayName("Validação de login com erro. Usuario não encontrado através de matrícula e senha.")
+        @Test
+        void deveLancarExcecaoSeUsuarioNaoEncontradoAtravesDaMatriculaESenha() throws Exception {
+            // Arrange
+            LoginDto loginRecordRequest = loginDtoValido();
+
+            when(usuarioCoreController.validarAcesso(anyString(), anyString()))
+                    .thenThrow(new UsuarioNaoEncontradoException("Não foi encontrado nenhum usuário com a matrícula e senha informados."));
+
+            // Act & Assert
+            mockMvc.perform(post("/usuarios/valida-acesso")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(loginRecordRequest)))
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.mensagem").value("Não foi encontrado nenhum usuário com a matrícula e senha informados."));
+            verify(usuarioCoreController, times(1)).validarAcesso(anyString(), anyString());
+        }
+
+        @DisplayName("Validação de login com erro. Usuario encontrado está inativo")
+        @Test
+        void deveLancarExcecaoSeUsuarioEncontradoEstiverInativo() throws Exception {
+            // Arrange
+            LoginDto loginRecordRequest = loginDtoValido();
+
+            when(usuarioCoreController.validarAcesso(anyString(), anyString()))
+                    .thenThrow(new UsuarioSemAcessoException("Não é possível realizar o login para usuários inativos."));
+
+            // Act & Assert
+            mockMvc.perform(post("/usuarios/valida-acesso")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(loginRecordRequest)))
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.mensagem").value("Não é possível realizar o login para usuários inativos."));
+            verify(usuarioCoreController, times(1)).validarAcesso(anyString(), anyString());
+        }
+
+//            @DisplayName("Validação de login com erro. Usuário não encontrado através do login id")
+//            @Test
+//            void deveLancarExcecaoSeNaoEncontrarUsuarioVinculadoComOLogin() throws Exception {
+//                // Arrange
+//                LoginDto loginRecordRequest = loginDtoValido();
+//
+//                when(loginCoreController.validar(anyString(), anyString()))
+//                        .thenThrow(new UsuarioNaoEncontradoException("Não foi encontrado nenhum usuário com o login informado."));
+//
+//                // Act & Assert
+//                mockMvc.perform(post("/login")
+//                                .contentType(MediaType.APPLICATION_JSON)
+//                                .content(asJsonString(loginRecordRequest)))
+//                        .andDo(print())
+//                        .andExpect(status().isNotFound())
+//                        .andExpect(jsonPath("$.mensagem").value("Não foi encontrado nenhum usuário com o login informado."));
+//                verify(loginCoreController, times(1)).validar(anyString(), anyString());
+//            }
+
+        @DisplayName("Validação de login com erro. Erro com dados no DTO")
+        @ParameterizedTest
+        @CsvSource({
+                " , 123, O campo matricula precisa ser informado.",
+                "us0001, , O campo senha precisa ser informado."
+        })
+        void deveLancarExcecaoParaCamposInvalidos(String matricula, String senha, String expectedErrorMessage ) throws Exception {
+            // Arrange
+            LoginDto loginRecordRequest = new LoginDto(null, matricula, senha);
+
+            // Act & Assert
+            mockMvc.perform(post("/usuarios/valida-acesso")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(loginRecordRequest)))
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.*").value(hasItem(expectedErrorMessage)));
+            verify(usuarioCoreController, times(0)).validarAcesso(anyString(), anyString());
         }
     }
 }

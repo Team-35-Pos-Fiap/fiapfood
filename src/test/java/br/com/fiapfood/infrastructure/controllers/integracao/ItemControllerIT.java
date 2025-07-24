@@ -30,7 +30,7 @@ public class ItemControllerIT {
         RestAssured.port = port;
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
-    
+
     @DisplayName("Buscar cardapio por id com sucesso")
     @Test
     void deveRetornarCardapioPorId() {

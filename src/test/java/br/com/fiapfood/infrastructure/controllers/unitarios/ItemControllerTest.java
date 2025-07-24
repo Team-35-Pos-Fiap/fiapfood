@@ -284,7 +284,7 @@ public class ItemControllerTest {
 
         verify(itemCoreController, times(1)).atualizarImagem(eq(id), any(MultipartFile.class));
     }
-    
+
     @Test
     @DisplayName("Deve baixar a imagem do item com sucesso")
     void deveBaixarImagemDoItem() throws Exception {
