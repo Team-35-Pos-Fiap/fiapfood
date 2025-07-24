@@ -20,11 +20,12 @@ public class Usuario {
 	private LocalDateTime dataCriacao;
 	private LocalDateTime dataAtualizacao;
 	private Boolean isAtivo;
-	private UUID idEndereco;
+	private Endereco dadosEndereco;
 	private Integer idPerfil;
-	private UUID idLogin;
+	private Login login;
 
-	private Usuario(UUID id, String nome, Integer idPerfil, Boolean isAtivo, String email, LocalDateTime dataCriacao, LocalDateTime dataAtualizacao, UUID idLogin, UUID idEndereco) {
+	private Usuario(UUID id, String nome, Integer idPerfil, Boolean isAtivo, 
+					String email, LocalDateTime dataCriacao, LocalDateTime dataAtualizacao, Login login, Endereco dadosEndereco) {
 		this.id = id;
 		this.nome = nome;
 		this.idPerfil = idPerfil;
@@ -32,16 +33,17 @@ public class Usuario {
 		this.isAtivo = isAtivo;
 		this.dataAtualizacao = dataAtualizacao;
 		this.email = email;
-		this.idLogin = idLogin;
-		this.idEndereco = idEndereco;
+		this.login = login;
+		this.dadosEndereco = dadosEndereco;
 	}
 	
-	public static Usuario criar(UUID id, String nome, Integer idPerfil, UUID idLogin, Boolean isAtivo, String email, LocalDateTime dataCriacao, LocalDateTime dataAtualizacao, UUID idEndereco) {
+	public static Usuario criar(UUID id, String nome, Integer idPerfil, Login login, Boolean isAtivo, 
+								String email, LocalDateTime dataCriacao, LocalDateTime dataAtualizacao, Endereco dadosEndereco) {
 		validarNome(nome);
 		validarPerfil(idPerfil);
 		validarEmail(email);
 		
-		return new Usuario(id, nome, idPerfil, isAtivo, email, dataCriacao, dataAtualizacao, idLogin, idEndereco);
+		return new Usuario(id, nome, idPerfil, isAtivo, email, dataCriacao, dataAtualizacao, login, dadosEndereco);
 	}
 	
 	private static void validarNome(String nome) {
@@ -93,5 +95,15 @@ public class Usuario {
 	
 	private LocalDateTime getDataAtual() {
 		return LocalDateTime.now();
+	}
+
+	public void atualizarEndereco(Endereco dadosEndereco) {
+		this.dadosEndereco = dadosEndereco;
+		this.dataAtualizacao = getDataAtual();
+	}
+	
+	public void atualizarLogin(Login login) {
+		this.login = login;
+		this.dataAtualizacao = getDataAtual();
 	}
 }

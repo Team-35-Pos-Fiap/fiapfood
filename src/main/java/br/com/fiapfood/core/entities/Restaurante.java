@@ -17,28 +17,32 @@ import lombok.NoArgsConstructor;
 public class Restaurante {
     private UUID id;
     private String nome;
-    private UUID idEndereco;
+    private Endereco dadosEndereco;
     private UUID idDonoRestaurante;
     private Integer idTipoCulinaria;
     private Boolean isAtivo;
     private List<Atendimento> atendimentos;
+    private List<Item> itens;
     
-    private Restaurante(UUID id, String nome, UUID idEndereco, UUID idDonoRestaurante, Integer idTipoCulinaria, Boolean isAtivo, List<Atendimento> atendimentos) {
+    private Restaurante(UUID id, String nome, Endereco dadosEndereco, UUID idDonoRestaurante, 
+    					Integer idTipoCulinaria, Boolean isAtivo, List<Atendimento> atendimentos, List<Item> itens) {
     	this.id = id;
     	this.nome = nome;
-    	this.idEndereco = idEndereco;
+    	this.dadosEndereco = dadosEndereco;
     	this.idDonoRestaurante = idDonoRestaurante;
     	this.idTipoCulinaria = idTipoCulinaria;
     	this.isAtivo = isAtivo;
     	this.atendimentos = atendimentos;
+    	this.itens = itens;
     }
     
-    public static Restaurante criar(UUID id, String nome, UUID idEndereco, UUID idDonoRestaurante, Integer idTipoCulinaria, Boolean isAtivo, List<Atendimento> atendimentos) {
+    public static Restaurante criar(UUID id, String nome, Endereco dadosEndereco, UUID idDonoRestaurante, 
+    								Integer idTipoCulinaria, Boolean isAtivo, List<Atendimento> atendimentos, List<Item> itens) {
     	validarNome(nome);
     	validarUsuarioDono(idDonoRestaurante);
     	validarTipoCulinaria(idTipoCulinaria);
     	
-    	return new Restaurante(id, nome, idEndereco, idDonoRestaurante, idTipoCulinaria, isAtivo, atendimentos);
+    	return new Restaurante(id, nome, dadosEndereco, idDonoRestaurante, idTipoCulinaria, isAtivo, atendimentos, itens);
     }
     
     private static void validarTipoCulinaria(Integer idTipoCulinaria) {
@@ -81,5 +85,13 @@ public class Restaurante {
 
 	public void limparAtendimentos() {
 		this.atendimentos = new ArrayList<>();
+	}
+	
+	public void limparItens() {
+		this.itens = new ArrayList<>();
+	}
+
+	public void atualizarEndereco(Endereco dadosEndereco) {
+		this.dadosEndereco = dadosEndereco;
 	}
 }

@@ -7,14 +7,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 
-import br.com.fiapfood.core.entities.Endereco;
-import br.com.fiapfood.core.entities.Login;
 import br.com.fiapfood.core.entities.Perfil;
 import br.com.fiapfood.core.entities.Usuario;
-import br.com.fiapfood.core.entities.dto.endereco.EnderecoCoreDto;
-import br.com.fiapfood.core.entities.dto.login.LoginCoreDto;
 import br.com.fiapfood.core.entities.dto.paginacao.PaginacaoCoreDto;
-import br.com.fiapfood.core.entities.dto.perfil.PerfilCoreDto;
 import br.com.fiapfood.core.entities.dto.usuario.CadastrarUsuarioCoreDto;
 import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioCoreDto;
 import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioInputDto;
@@ -25,28 +20,21 @@ import br.com.fiapfood.infraestructure.controllers.request.usuario.CadastrarUsua
 import br.com.fiapfood.infraestructure.controllers.request.usuario.DadosUsuarioDto;
 import br.com.fiapfood.infraestructure.controllers.request.usuario.UsuarioDto;
 import br.com.fiapfood.infraestructure.controllers.request.usuario.UsuarioPaginacaoDto;
-import br.com.fiapfood.infraestructure.entities.EnderecoEntity;
-import br.com.fiapfood.infraestructure.entities.LoginEntity;
 import br.com.fiapfood.infraestructure.entities.PerfilEntity;
 import br.com.fiapfood.infraestructure.entities.UsuarioEntity;
 
 public class UsuarioPresenter {
 
-	public static DadosUsuarioCoreDto toUsuarioDto(UsuarioEntity usuario, PerfilCoreDto perfil, LoginCoreDto login, EnderecoCoreDto endereco) {
-		return new DadosUsuarioCoreDto(usuario.getId(), usuario.getNome(), perfil, login, usuario.getIsAtivo(), usuario.getEmail(), usuario.getDataCriacao(), usuario.getDataAtualizacao(), endereco);
-	}
-
 	public static Usuario toUsuario(DadosUsuarioInputDto usuario) {
-		return Usuario.criar(usuario.id(), usuario.nome(), usuario.idPerfil(), usuario.idLogin(), usuario.isAtivo(), usuario.email(), usuario.dataCriacao(), usuario.dataAtualizacao(), usuario.idEndereco());
+		return Usuario.criar(usuario.id(), usuario.nome(), usuario.idPerfil(), LoginPresenter.toLogin(usuario.login()),
+							 usuario.isAtivo(), usuario.email(), usuario.dataCriacao(), 
+							 usuario.dataAtualizacao(), EnderecoPresenter.toEndereco(usuario.dadosEndereco()));
 	}
 	
-	public static DadosUsuarioCoreDto toUsuarioDto(Usuario usuario, Perfil perfil, Login login, Endereco endereco) {
-		return new DadosUsuarioCoreDto(usuario.getId(), usuario.getNome(), PerfilPresenter.toPerfilDto(perfil), LoginPresenter.toLogin(login), 
-							  usuario.getIsAtivo(), usuario.getEmail(), usuario.getDataCriacao(), usuario.getDataAtualizacao(), EnderecoPresenter.toEnderecoEntity(endereco));
-	}
-	
-	public static UsuarioPaginacaoCoreDto toUsuarioPaginacaoDto(List<DadosUsuarioCoreDto> usuarios, PaginacaoCoreDto paginacao) {
-		return new UsuarioPaginacaoCoreDto(usuarios, paginacao);
+	public static DadosUsuarioCoreDto toUsuarioDto(Usuario usuario, Perfil perfil) {
+		return new DadosUsuarioCoreDto(usuario.getId(), usuario.getNome(), PerfilPresenter.toPerfilDto(perfil), LoginPresenter.toLoginDto(usuario.getLogin()), 
+							  		   usuario.getIsAtivo(), usuario.getEmail(), usuario.getDataCriacao(), usuario.getDataAtualizacao(), 
+							  		   EnderecoPresenter.toEnderecoDto(usuario.getDadosEndereco()));
 	}
 
 	public static List<DadosUsuarioInputDto> toListUsuarioDto(List<UsuarioEntity> usuarios) {
@@ -57,25 +45,24 @@ public class UsuarioPresenter {
 		return usuarios.stream().map(u -> UsuarioPresenter.toUsuario(u)).toList();
 	}
 
-	public static UsuarioEntity toUsuarioEntity(DadosUsuarioCoreDto usuario, EnderecoEntity endereco, PerfilEntity perfil, LoginEntity login) {
-		return new UsuarioEntity(usuario.id(), usuario.nome(), usuario.email(), usuario.dataCriacao(), usuario.dataAtualizacao(), usuario.isAtivo(), endereco, perfil, login);
+	public static UsuarioEntity toUsuarioEntity(DadosUsuarioCoreDto usuario, PerfilEntity perfil) {
+		return new UsuarioEntity(usuario.id(), usuario.nome(), usuario.email(), usuario.dataCriacao(), usuario.dataAtualizacao(), usuario.isAtivo(), 
+								 EnderecoPresenter.toEnderecoEntity(usuario.endereco()) , perfil, LoginPresenter.toLoginEntity(usuario.login()));
 	}
 	
 	public static Usuario toUsuario(CadastrarUsuarioCoreDto usuario) {
-		return Usuario.criar(null, usuario.nome(), usuario.perfil(), null, true, usuario.email(), LocalDateTime.now(), null, null);
-	}
-
-	public static DadosUsuarioResumidoCoreDto toUsuarioOutputDto(Usuario usuario, Login login) {
-		return new DadosUsuarioResumidoCoreDto(usuario.getId(), usuario.getNome(), login.getMatricula(), usuario.getEmail());
+		return Usuario.criar(null, usuario.nome(), usuario.perfil(), LoginPresenter.toLogin(usuario.dadosLogin()), true, 
+							 usuario.email(), LocalDateTime.now(), null, EnderecoPresenter.toEndereco(usuario.dadosEndereco()));
 	}
 
 	public static DadosUsuarioResumidoCoreDto toUsuarioOutputDto(Usuario usuario) {
-		return new DadosUsuarioResumidoCoreDto(usuario.getId(), null, null, null);
+		return new DadosUsuarioResumidoCoreDto(usuario.getId(), usuario.getNome(), usuario.getLogin().getMatricula(), usuario.getEmail());
 	}
-	
+
 	public static DadosUsuarioInputDto toUsuarioInputDto(UsuarioEntity usuario) {
-		return new DadosUsuarioInputDto(usuario.getId(), usuario.getNome(), usuario.getPerfil().getId(), usuario.getDadosLogin().getId(), 
-										usuario.getIsAtivo(), usuario.getEmail(), usuario.getDataCriacao(), usuario.getDataAtualizacao(), usuario.getDadosEndereco().getId());
+		return new DadosUsuarioInputDto(usuario.getId(), usuario.getNome(), usuario.getPerfil().getId(), LoginPresenter.toLoginDto(usuario.getDadosLogin()), 
+										usuario.getIsAtivo(), usuario.getEmail(), usuario.getDataCriacao(), usuario.getDataAtualizacao(),
+										EnderecoPresenter.toEnderecoDto(usuario.getDadosEndereco()));
 	}
 
 	public static UsuarioPaginacaoInputDto toUsuarioPaginacaoInputDto(Page<UsuarioEntity> dados) {

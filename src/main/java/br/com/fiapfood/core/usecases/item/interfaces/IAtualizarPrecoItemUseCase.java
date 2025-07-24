@@ -4,5 +4,5 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public interface IAtualizarPrecoItemUseCase {
-	void atualizar(UUID id, BigDecimal preco);
+	void atualizar(UUID idRestaurante, UUID idItem, BigDecimal preco);
 }

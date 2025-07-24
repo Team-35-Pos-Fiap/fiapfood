@@ -5,5 +5,5 @@ import java.util.UUID;
 import br.com.fiapfood.core.entities.dto.item.ImagemCoreDto;
 
 public interface IBaixarImagemItemUseCase {
-	ImagemCoreDto baixar(UUID id);
+	ImagemCoreDto baixar(UUID idItem);
 }

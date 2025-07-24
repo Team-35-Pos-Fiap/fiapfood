@@ -3,19 +3,15 @@ package br.com.fiapfood.core.usecases.restaurante.impl;
 import java.util.List;
 import java.util.UUID;
 
-import br.com.fiapfood.core.entities.Endereco;
-import br.com.fiapfood.core.entities.Login;
 import br.com.fiapfood.core.entities.Restaurante;
 import br.com.fiapfood.core.entities.TipoCulinaria;
 import br.com.fiapfood.core.entities.Usuario;
 import br.com.fiapfood.core.entities.dto.paginacao.PaginacaoCoreDto;
-import br.com.fiapfood.core.entities.dto.restaurante.DadosRestauranteDto;
 import br.com.fiapfood.core.entities.dto.restaurante.DadosRestauranteCoreDto;
-import br.com.fiapfood.core.entities.dto.restaurante.RestaurantePaginacaoInputDto;
+import br.com.fiapfood.core.entities.dto.restaurante.DadosRestauranteDto;
 import br.com.fiapfood.core.entities.dto.restaurante.RestaurantePaginacaoCoreDto;
+import br.com.fiapfood.core.entities.dto.restaurante.RestaurantePaginacaoInputDto;
 import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioResumidoCoreDto;
-import br.com.fiapfood.core.gateways.interfaces.IEnderecoGateway;
-import br.com.fiapfood.core.gateways.interfaces.ILoginGateway;
 import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
 import br.com.fiapfood.core.gateways.interfaces.ITipoCulinariaGateway;
 import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
@@ -27,17 +23,12 @@ public class BuscarTodosRestaurantesUseCase implements IBuscarTodosRestaurantesU
 
 	private final IRestauranteGateway restauranteGateway;
 	private final IUsuarioGateway usuarioGateway;
-	private final IEnderecoGateway enderecoGateway;
-	private final ILoginGateway loginGateway;
 	private final ITipoCulinariaGateway tipoCulinariaGateway;
 		
 	public BuscarTodosRestaurantesUseCase (IRestauranteGateway restauranteGateway, IUsuarioGateway usuarioGateway, 
-								   		   IEnderecoGateway enderecoGateway, ILoginGateway loginGateway, 
 								   		   ITipoCulinariaGateway tipoCulinariaGateway) {
 		this.restauranteGateway = restauranteGateway;
 		this.usuarioGateway = usuarioGateway;
-		this.enderecoGateway = enderecoGateway;
-		this.loginGateway = loginGateway;
 		this.tipoCulinariaGateway = tipoCulinariaGateway;
 	}
 	
@@ -52,15 +43,7 @@ public class BuscarTodosRestaurantesUseCase implements IBuscarTodosRestaurantesU
 	private DadosUsuarioResumidoCoreDto buscarUsuario(UUID id) {
 		Usuario usuario = usuarioGateway.buscarPorId(id);
 		
-		return UsuarioPresenter.toUsuarioOutputDto(usuario, buscarLogin(usuario.getIdLogin()));
-	}
-	
-	private Login buscarLogin(final UUID idLogin) {
-		return loginGateway.buscarPorId(idLogin);
-	}
-	
-	private Endereco buscarEndereco(final UUID idEndereco) {
-		return enderecoGateway.buscarPorId(idEndereco);
+		return UsuarioPresenter.toUsuarioOutputDto(usuario);
 	}
 	
 	private List<Restaurante> toListRestaurante(final List<DadosRestauranteDto> restaurantes) {
@@ -69,7 +52,7 @@ public class BuscarTodosRestaurantesUseCase implements IBuscarTodosRestaurantesU
 	
 	private List<DadosRestauranteCoreDto> toListRestauranteDto(final List<Restaurante> restaurantes) {
 		return restaurantes.stream().map(r -> RestaurantePresenter.toRestauranteDto(r, 
-																					buscarEndereco(r.getIdEndereco()),
+																					r.getDadosEndereco(),
 																					buscarUsuario(r.getIdDonoRestaurante()),
 																					buscarTipoCulinaria(r.getIdTipoCulinaria()),
 																					r.getAtendimentos())).toList();

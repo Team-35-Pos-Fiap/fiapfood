@@ -4,13 +4,11 @@ import java.util.List;
 import java.util.UUID;
 
 import br.com.fiapfood.core.entities.Usuario;
-import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioInputDto;
 import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioCoreDto;
+import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioInputDto;
 import br.com.fiapfood.core.entities.dto.usuario.UsuarioPaginacaoInputDto;
 import br.com.fiapfood.core.exceptions.UsuarioNaoEncontradoException;
 import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
-import br.com.fiapfood.core.presenters.EnderecoPresenter;
-import br.com.fiapfood.core.presenters.LoginPresenter;
 import br.com.fiapfood.core.presenters.PerfilPresenter;
 import br.com.fiapfood.core.presenters.UsuarioPresenter;
 import br.com.fiapfood.infraestructure.repositories.interfaces.IUsuarioRepository;
@@ -22,18 +20,7 @@ public class UsuarioGateway implements IUsuarioGateway {
 	public UsuarioGateway(IUsuarioRepository usuarioRepository) {
 		this.usuarioRepository = usuarioRepository;
 	}
-	
-	@Override
-	public Usuario buscarPorIdLogin(final UUID idLogin) {
-		final DadosUsuarioInputDto usuario = usuarioRepository.buscarPorIdLogin(idLogin);
-		
-		if(usuario != null) {
-			return UsuarioPresenter.toUsuario(usuario);
-		} else {
-			throw new UsuarioNaoEncontradoException("Não foi encontrado nenhum usuário com o login informado.");
-		}
-	}
-	
+
 	@Override
 	public Usuario buscarPorId(final UUID id) {
 		final DadosUsuarioInputDto usuario = usuarioRepository.buscarPorId(id);
@@ -58,10 +45,7 @@ public class UsuarioGateway implements IUsuarioGateway {
 
 	@Override
 	public void salvar(final DadosUsuarioCoreDto usuario) {
-		usuarioRepository.salvar(UsuarioPresenter.toUsuarioEntity(usuario, 
-											 				      EnderecoPresenter.toEnderecoEntity(usuario.endereco()), 
-															      PerfilPresenter.toPerfilEntity(usuario.perfil()), 
-															      LoginPresenter.toLoginEntity(usuario.login())));		
+		usuarioRepository.salvar(UsuarioPresenter.toUsuarioEntity(usuario, PerfilPresenter.toPerfilEntity(usuario.perfil())));		
 	}
 
 	@Override
@@ -78,5 +62,21 @@ public class UsuarioGateway implements IUsuarioGateway {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public Usuario buscarPorMatriculaSenha(String matricula, String senha) {
+		final DadosUsuarioInputDto usuario = usuarioRepository.buscarPorMatriculaSenha(matricula, senha);
+		
+		if(usuario != null) {
+			return UsuarioPresenter.toUsuario(usuario);
+		} else {
+			throw new UsuarioNaoEncontradoException("Não foi encontrado nenhum usuário com a matrícula e senha informados.");
+		}
+	}
+	
+	@Override
+	public boolean matriculaJaCadastrada(final String matricula) {
+		return usuarioRepository.matriculaJaCadastrada(matricula);
 	}
 }

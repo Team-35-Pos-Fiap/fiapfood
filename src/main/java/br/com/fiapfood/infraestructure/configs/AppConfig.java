@@ -3,30 +3,20 @@ package br.com.fiapfood.infraestructure.configs;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.fiapfood.core.controllers.impl.ItemCoreController;
-import br.com.fiapfood.core.controllers.impl.LoginCoreController;
 import br.com.fiapfood.core.controllers.impl.PerfilCoreController;
 import br.com.fiapfood.core.controllers.impl.RestauranteCoreController;
 import br.com.fiapfood.core.controllers.impl.TipoCulinariaCoreController;
 import br.com.fiapfood.core.controllers.impl.UsuarioCoreController;
-import br.com.fiapfood.core.controllers.interfaces.IItemCoreController;
-import br.com.fiapfood.core.controllers.interfaces.ILoginCoreController;
 import br.com.fiapfood.core.controllers.interfaces.IPerfilCoreController;
 import br.com.fiapfood.core.controllers.interfaces.IRestauranteCoreController;
 import br.com.fiapfood.core.controllers.interfaces.ITipoCulinariaCoreController;
 import br.com.fiapfood.core.controllers.interfaces.IUsuarioCoreController;
-import br.com.fiapfood.core.gateways.impl.EnderecoGateway;
-import br.com.fiapfood.core.gateways.impl.ImagemGateway;
 import br.com.fiapfood.core.gateways.impl.ItemGateway;
-import br.com.fiapfood.core.gateways.impl.LoginGateway;
 import br.com.fiapfood.core.gateways.impl.PerfilGateway;
 import br.com.fiapfood.core.gateways.impl.RestauranteGateway;
 import br.com.fiapfood.core.gateways.impl.TipoCulinariaGateway;
 import br.com.fiapfood.core.gateways.impl.UsuarioGateway;
-import br.com.fiapfood.core.gateways.interfaces.IEnderecoGateway;
-import br.com.fiapfood.core.gateways.interfaces.IImagemGateway;
 import br.com.fiapfood.core.gateways.interfaces.IItemGateway;
-import br.com.fiapfood.core.gateways.interfaces.ILoginGateway;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
 import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
 import br.com.fiapfood.core.gateways.interfaces.ITipoCulinariaGateway;
@@ -62,7 +52,7 @@ import br.com.fiapfood.core.usecases.login.impl.AtualizarSenhaUseCase;
 import br.com.fiapfood.core.usecases.login.impl.ValidarLoginUseCase;
 import br.com.fiapfood.core.usecases.login.interfaces.IAtualizarMatriculaUseCase;
 import br.com.fiapfood.core.usecases.login.interfaces.IAtualizarSenhaUseCase;
-import br.com.fiapfood.core.usecases.login.interfaces.IValidarLoginUseCase;
+import br.com.fiapfood.core.usecases.login.interfaces.IValidarAcessoUseCase;
 import br.com.fiapfood.core.usecases.perfil.impl.AtualizarNomePerfilUseCase;
 import br.com.fiapfood.core.usecases.perfil.impl.BuscarPerfilPorIdUseCase;
 import br.com.fiapfood.core.usecases.perfil.impl.BuscarTodosPerfisUseCase;
@@ -119,10 +109,7 @@ import br.com.fiapfood.core.usecases.usuario.interfaces.IBuscarUsuarioPorIdUseCa
 import br.com.fiapfood.core.usecases.usuario.interfaces.ICadastrarUsuarioUseCase;
 import br.com.fiapfood.core.usecases.usuario.interfaces.IInativarUsuarioUseCase;
 import br.com.fiapfood.core.usecases.usuario.interfaces.IReativarUsuarioUseCase;
-import br.com.fiapfood.infraestructure.repositories.interfaces.IEnderecoRepository;
-import br.com.fiapfood.infraestructure.repositories.interfaces.IImagemRepository;
 import br.com.fiapfood.infraestructure.repositories.interfaces.IItemRepository;
-import br.com.fiapfood.infraestructure.repositories.interfaces.ILoginRepository;
 import br.com.fiapfood.infraestructure.repositories.interfaces.IPerfilRepository;
 import br.com.fiapfood.infraestructure.repositories.interfaces.IRestauranteRepository;
 import br.com.fiapfood.infraestructure.repositories.interfaces.ITipoCulinariaRepository;
@@ -131,11 +118,6 @@ import br.com.fiapfood.infraestructure.repositories.interfaces.IUsuarioRepositor
 @Configuration
 public class AppConfig {
 	//Controllers
-	
-	@Bean
-	public ILoginCoreController iLoginCoreController(IValidarLoginUseCase validarLoginUseCase, IAtualizarSenhaUseCase atualizarSenhaUseCase, IAtualizarMatriculaUseCase atualizarMatriculaUseCase) {
-		return new LoginCoreController(validarLoginUseCase, atualizarSenhaUseCase, atualizarMatriculaUseCase);
-	}
 		
 	@Bean
 	public IPerfilCoreController iPerfilCoreController(IBuscarTodosPerfisUseCase buscarTodosUseCase, IBuscarPerfilPorIdUseCase buscarPorIdUseCase, 
@@ -153,7 +135,10 @@ public class AppConfig {
 														 IInativarUsuarioUseCase inativarUsuarioUseCase,
 														 IReativarUsuarioUseCase reativarUsuarioUseCase,
 														 IAtualizarPerfilUsuarioUseCase atualizarPerfilUsuarioUseCase,
-														 IAtualizarEnderecoUsuarioUseCase atualizarEnderecoUsuarioUseCase) {
+														 IAtualizarEnderecoUsuarioUseCase atualizarEnderecoUsuarioUseCase,
+														 IValidarAcessoUseCase validarLoginUseCase, 
+														 IAtualizarSenhaUseCase atualizarSenhaUseCase, 
+														 IAtualizarMatriculaUseCase atualizarMatriculaUseCase) {
 		return new UsuarioCoreController(buscarUsuarioPorIdUseCase, 
 										 buscarTodosUsuariosUseCase, 
 										 cadastrarUsuarioUseCase, 
@@ -162,7 +147,10 @@ public class AppConfig {
 										 inativarUsuarioUseCase,
 										 reativarUsuarioUseCase,
 										 atualizarPerfilUsuarioUseCase,
-										 atualizarEnderecoUsuarioUseCase);
+										 atualizarEnderecoUsuarioUseCase,
+										 validarLoginUseCase,
+										 atualizarSenhaUseCase,
+										 atualizarMatriculaUseCase);
 	}
 	
 	@Bean
@@ -173,11 +161,20 @@ public class AppConfig {
 																 IAtualizarTipoCulinariaRestauranteUseCase atualizarTipoCulinariaRestauranteUseCase,
 																 IAtualizarAtendimentoUseCase atualizarAtendimentoUseCase,
 																 IAdicionarAtendimentoUseCase adicionarAtendimentoUseCase, 
-																 IExcluirAtendimentoUseCase excluirAtendimentoUseCase) {
+																 IExcluirAtendimentoUseCase excluirAtendimentoUseCase, IAtualizarDescricaoItemUseCase atualizarDescricaoItemUseCase,
+																 IAtualizarNomeItemUseCase atualizarNomeItemUseCase, IAtualizarDisponibilidadeConsumoPresencialItemUseCase atualizarDisponibilidadeConsumoPresencialItemUseCase,
+																 IAtualizarDisponibilidadeItemUseCase atualizarDisponibilidadeItemUseCase, IAtualizarImagemItemUseCase atualizarImagemItemUseCase,
+																 IAtualizarPrecoItemUseCase atualizarPrecoItemUseCase, IBaixarImagemItemUseCase baixarImagemItemUseCase,
+																 IBuscarItemPorIdUseCase buscarItemPorIdUseCase, IBuscarTodosItensUseCase buscarTodosItensUseCase,
+																 ICadastrarItemUseCase cadastrarItemUseCase) {
 		return new RestauranteCoreController(buscarRestaurantePorId, buscarTodosRestaurantesUseCase, cadastrarRestauranteUseCase, 
 											 reativarRestauranteUseCase, inativarRestauranteUseCase, atualizarDonoRestauranteUseCase, atualizarEnderecoRestauranteUseCase,
 											 atualizarNomeRestauranteUseCase, atualizarTipoCulinariaRestauranteUseCase,
-											 atualizarAtendimentoUseCase, adicionarAtendimentoUseCase, excluirAtendimentoUseCase);
+											 atualizarAtendimentoUseCase, adicionarAtendimentoUseCase, excluirAtendimentoUseCase, atualizarDescricaoItemUseCase,
+											 atualizarNomeItemUseCase, atualizarDisponibilidadeConsumoPresencialItemUseCase,
+											 atualizarDisponibilidadeItemUseCase, atualizarImagemItemUseCase,
+											 atualizarPrecoItemUseCase, baixarImagemItemUseCase,
+											 buscarItemPorIdUseCase, buscarTodosItensUseCase, cadastrarItemUseCase);
 	}
 	
 	@Bean
@@ -187,34 +184,22 @@ public class AppConfig {
 																	 IAtualizarNomeTipoCulinariaUseCase atualizarNomeTipoCulinariaUseCase) {
 		return new TipoCulinariaCoreController(buscarTodosUseCase, buscarPorIdUseCase, cadastrarTipoCulinariaUseCase, atualizarNomeTipoCulinariaUseCase);
 	}
-	
-	@Bean
-	public IItemCoreController iItemCoreController(IBuscarItemPorIdUseCase buscarItemPorIdUseCase, IBuscarTodosItensUseCase buscarTodosItensUseCase, ICadastrarItemUseCase cadastrarItemUseCase,
-												   IAtualizarDescricaoItemUseCase atualizarDescricaoItemUseCase, IAtualizarDisponibilidadeConsumoPresencialItemUseCase atualizarDisponibilidadeConsumoPresencialItemUseCase,
-												   IAtualizarDisponibilidadeItemUseCase atualizarDisponibilidadeItemUseCase, IAtualizarImagemItemUseCase atualizarFotoItemUseCase,
-												   IAtualizarNomeItemUseCase atualizarNomeItemUseCase, IAtualizarPrecoItemUseCase atualizarPrecoItemUseCase,
-												   IBaixarImagemItemUseCase baixarImagemItemUseCase) {
-		return new ItemCoreController(buscarItemPorIdUseCase, buscarTodosItensUseCase, cadastrarItemUseCase, 
-									  atualizarDescricaoItemUseCase, atualizarDisponibilidadeConsumoPresencialItemUseCase, 
-									  atualizarDisponibilidadeItemUseCase, atualizarFotoItemUseCase, atualizarNomeItemUseCase, 
-									  atualizarPrecoItemUseCase, baixarImagemItemUseCase);
-	}	
-	
+		
 	// Usecases
 	
 	@Bean
-	public IValidarLoginUseCase iValidarLoginUseCase(ILoginGateway loginGateway, IUsuarioGateway usuarioGateway) {
-		return new ValidarLoginUseCase(loginGateway, usuarioGateway);
+	public IValidarAcessoUseCase iValidarLoginUseCase(IUsuarioGateway usuarioGateway) {
+		return new ValidarLoginUseCase(usuarioGateway);
 	}
 	
 	@Bean
-	public IAtualizarMatriculaUseCase iAtualizarMatriculaUseCase(ILoginGateway loginGateway, IUsuarioGateway usuarioGateway) {
-		return new AtualizarMatriculaUseCase(loginGateway, usuarioGateway);
+	public IAtualizarMatriculaUseCase iAtualizarMatriculaUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
+		return new AtualizarMatriculaUseCase(usuarioGateway, perfilGateway);
 	}
 	
 	@Bean
-	public IAtualizarSenhaUseCase iAtualizarSenhaUseCase(ILoginGateway loginGateway, IUsuarioGateway usuarioGateway) {
-		return new AtualizarSenhaUseCase(loginGateway, usuarioGateway);
+	public IAtualizarSenhaUseCase iAtualizarSenhaUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
+		return new AtualizarSenhaUseCase(usuarioGateway, perfilGateway);
 	}
 	
 	@Bean
@@ -228,60 +213,60 @@ public class AppConfig {
 	}
 	
 	@Bean
-	public IBuscarUsuarioPorIdUseCase iBuscarUsuarioPorIdUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway, ILoginGateway loginGateway, IEnderecoGateway enderecoGateway) {
-		return new BuscarUsuarioPorIdUseCase(usuarioGateway, perfilGateway, loginGateway, enderecoGateway);
+	public IBuscarUsuarioPorIdUseCase iBuscarUsuarioPorIdUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
+		return new BuscarUsuarioPorIdUseCase(usuarioGateway, perfilGateway);
 	}
 	
 	@Bean
-	public IBuscarTodosUsuariosUseCase iBuscarTodosUsuariosUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway, ILoginGateway loginGateway, IEnderecoGateway enderecoGateway) {
-		return new BuscarTodosUsuariosUseCase(usuarioGateway, perfilGateway, loginGateway, enderecoGateway);
+	public IBuscarTodosUsuariosUseCase iBuscarTodosUsuariosUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
+		return new BuscarTodosUsuariosUseCase(usuarioGateway, perfilGateway);
 	}
 	
 	@Bean
-	public ICadastrarUsuarioUseCase iCadastrarUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway, ILoginGateway loginGateway) {
-		return new CadastrarUsuarioUseCase(usuarioGateway, perfilGateway, loginGateway);
+	public ICadastrarUsuarioUseCase iCadastrarUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
+		return new CadastrarUsuarioUseCase(usuarioGateway, perfilGateway);
 	}
 	
 	@Bean
-	public IAtualizarPerfilUsuarioUseCase iAtualizarPerfilUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway, ILoginGateway loginGateway, IEnderecoGateway enderecoGateway) {
-		return new AtualizarPerfilUsuarioUseCase(usuarioGateway, perfilGateway, loginGateway, enderecoGateway);
+	public IAtualizarPerfilUsuarioUseCase iAtualizarPerfilUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
+		return new AtualizarPerfilUsuarioUseCase(usuarioGateway, perfilGateway);
 	}
 
 	@Bean
-	public IAtualizarNomeUsuarioUseCase iAtualizarNomeUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway, ILoginGateway loginGateway, IEnderecoGateway enderecoGateway) {
-		return new AtualizarNomeUsuarioUseCase(usuarioGateway, perfilGateway, loginGateway, enderecoGateway);
+	public IAtualizarNomeUsuarioUseCase iAtualizarNomeUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
+		return new AtualizarNomeUsuarioUseCase(usuarioGateway, perfilGateway);
 	}
 	
 	@Bean
-	public IAtualizarEmailUsuarioUseCase iAtualizarEmailUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway, ILoginGateway loginGateway, IEnderecoGateway enderecoGateway) {
-		return new AtualizarEmailUsuarioUseCase(usuarioGateway, perfilGateway, loginGateway, enderecoGateway);
+	public IAtualizarEmailUsuarioUseCase iAtualizarEmailUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
+		return new AtualizarEmailUsuarioUseCase(usuarioGateway, perfilGateway);
 	}
 	
 	@Bean
-	public IAtualizarEnderecoUsuarioUseCase iAtualizarEnderecoUsuarioUseCase(IUsuarioGateway usuarioGateway, IEnderecoGateway enderecoGateway) {
-		return new AtualizarEnderecoUsuarioUseCase(usuarioGateway, enderecoGateway);
+	public IAtualizarEnderecoUsuarioUseCase iAtualizarEnderecoUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
+		return new AtualizarEnderecoUsuarioUseCase(usuarioGateway, perfilGateway);
 	}
 		
 	@Bean
-	public IInativarUsuarioUseCase iInativarUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway, ILoginGateway loginGateway, IEnderecoGateway enderecoGateway) {
-		return new InativarUsuarioUseCase(usuarioGateway, perfilGateway, loginGateway, enderecoGateway);
+	public IInativarUsuarioUseCase iInativarUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
+		return new InativarUsuarioUseCase(usuarioGateway, perfilGateway);
 	}
 	
 	@Bean
-	public IReativarUsuarioUseCase iReativarUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway, ILoginGateway loginGateway, IEnderecoGateway enderecoGateway) {
-		return new ReativarUsuarioUseCase(usuarioGateway, perfilGateway, loginGateway, enderecoGateway);
+	public IReativarUsuarioUseCase iReativarUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
+		return new ReativarUsuarioUseCase(usuarioGateway, perfilGateway);
 	}
 	
 	@Bean
-	public IBuscarRestaurantePorId iBuscarRestaurantePorId(IRestauranteGateway restauranteGateway, IUsuarioGateway usuarioGateway, IEnderecoGateway enderecoGateway, 
-														   ILoginGateway loginGateway, ITipoCulinariaGateway tipoCulinariaGateway) {
-		return new BuscarRestaurantePorIdUseCase(restauranteGateway, usuarioGateway, enderecoGateway, loginGateway, tipoCulinariaGateway);
+	public IBuscarRestaurantePorId iBuscarRestaurantePorId(IRestauranteGateway restauranteGateway, IUsuarioGateway usuarioGateway,
+														   ITipoCulinariaGateway tipoCulinariaGateway) {
+		return new BuscarRestaurantePorIdUseCase(restauranteGateway, usuarioGateway, tipoCulinariaGateway);
 	}
 	
 	@Bean
-	public IBuscarTodosRestaurantesUseCase iBuscarTodosRestaurantesUseCase(IRestauranteGateway restauranteGateway, IUsuarioGateway usuarioGateway, IEnderecoGateway enderecoGateway, 
-																		   ILoginGateway loginGateway, ITipoCulinariaGateway tipoCulinariaGateway) {
-		return new BuscarTodosRestaurantesUseCase(restauranteGateway, usuarioGateway, enderecoGateway, loginGateway, tipoCulinariaGateway);
+	public IBuscarTodosRestaurantesUseCase iBuscarTodosRestaurantesUseCase(IRestauranteGateway restauranteGateway, IUsuarioGateway usuarioGateway, 
+																		   ITipoCulinariaGateway tipoCulinariaGateway) {
+		return new BuscarTodosRestaurantesUseCase(restauranteGateway, usuarioGateway, tipoCulinariaGateway);
 	}
 	
 	@Bean
@@ -305,8 +290,8 @@ public class AppConfig {
 	}	
 	
 	@Bean
-	public IAtualizarEnderecoRestauranteUseCase iAtualizarEnderecoRestauranteUseCase(IRestauranteGateway restauranteGateway, IEnderecoGateway enderecoGateway) {
-		return new AtualizarEnderecoRestauranteUseCase(restauranteGateway, enderecoGateway);
+	public IAtualizarEnderecoRestauranteUseCase iAtualizarEnderecoRestauranteUseCase(IRestauranteGateway restauranteGateway) {
+		return new AtualizarEnderecoRestauranteUseCase(restauranteGateway);
 	}
 	
 	@Bean
@@ -360,53 +345,53 @@ public class AppConfig {
 	}
 	
 	@Bean
-	public IBuscarItemPorIdUseCase iBuscarItemPorIdUseCase(IItemGateway itemGateway, IRestauranteGateway restauranteGateway) {
-		return new BuscarItemPorIdUseCase(itemGateway, restauranteGateway);
+	public IBuscarItemPorIdUseCase iBuscarItemPorIdUseCase(IRestauranteGateway restauranteGateway) {
+		return new BuscarItemPorIdUseCase(restauranteGateway);
 	}
 	
 	@Bean
-	public IBuscarTodosItensUseCase iBuscarTodosItensUseCase(IItemGateway itemGateway, IRestauranteGateway restauranteGateway) {
-		return new BuscarTodosItensUseCase(itemGateway, restauranteGateway);
+	public IBuscarTodosItensUseCase iBuscarTodosItensUseCase(IRestauranteGateway restauranteGateway) {
+		return new BuscarTodosItensUseCase(restauranteGateway);
 	}
 	
 	@Bean
-	public ICadastrarItemUseCase iCadastrarItemUseCase(IItemGateway itemGateway, IRestauranteGateway restauranteGateway) {
-		return new CadastrarItemUseCase(itemGateway, restauranteGateway);
+	public ICadastrarItemUseCase iCadastrarItemUseCase(IRestauranteGateway restauranteGateway) {
+		return new CadastrarItemUseCase(restauranteGateway);
 	}
 	
 	@Bean
-	public IAtualizarDescricaoItemUseCase iAtualizarDescricaoItemUseCase(IItemGateway itemGateway, IRestauranteGateway restauranteGateway,  IImagemGateway imagemGateway) {
-		return new AtualizarDescricaoItemUseCase(itemGateway, restauranteGateway, imagemGateway);
+	public IAtualizarDescricaoItemUseCase iAtualizarDescricaoItemUseCase(IItemGateway itemGateway, IRestauranteGateway restauranteGateway) {
+		return new AtualizarDescricaoItemUseCase(itemGateway, restauranteGateway);
 	}
 	
 	@Bean
-	public IAtualizarDisponibilidadeConsumoPresencialItemUseCase iAtualizarDisponibilidadeConsumoPresencialItemUseCase(IItemGateway itemGateway, IRestauranteGateway restauranteGateway, IImagemGateway imagemGateway) {
-		return new AtualizarDisponibilidadeConsumoPresencialItemUseCase(itemGateway, restauranteGateway, imagemGateway);
+	public IAtualizarDisponibilidadeConsumoPresencialItemUseCase iAtualizarDisponibilidadeConsumoPresencialItemUseCase(IItemGateway itemGateway, IRestauranteGateway restauranteGateway) {
+		return new AtualizarDisponibilidadeConsumoPresencialItemUseCase(itemGateway, restauranteGateway);
 	}
 	
 	@Bean
-	public IAtualizarDisponibilidadeItemUseCase iAtualizarDisponibilidadeItemUseCase(IItemGateway itemGateway, IRestauranteGateway restauranteGateway, IImagemGateway imagemGateway) {
-		return new AtualizarDisponibilidadeItemUseCase(itemGateway, restauranteGateway, imagemGateway);
+	public IAtualizarDisponibilidadeItemUseCase iAtualizarDisponibilidadeItemUseCase(IItemGateway itemGateway, IRestauranteGateway restauranteGateway) {
+		return new AtualizarDisponibilidadeItemUseCase(itemGateway, restauranteGateway);
 	}
 	
 	@Bean
-	public IAtualizarImagemItemUseCase iAtualizarImagemItemUseCase(IItemGateway itemGateway, IImagemGateway imagemGateway) {
-		return new AtualizarImagemItemUseCase(itemGateway, imagemGateway);
+	public IAtualizarImagemItemUseCase iAtualizarImagemItemUseCase(IItemGateway itemGateway, IRestauranteGateway restauranteGateway) {
+		return new AtualizarImagemItemUseCase(itemGateway, restauranteGateway);
 	}
 	
 	@Bean
-	public IAtualizarPrecoItemUseCase iAtualizarPrecoItemUseCase(IItemGateway itemGateway, IRestauranteGateway restauranteGateway, IImagemGateway imagemGateway) {
-		return new AtualizarPrecoItemUseCase(itemGateway, restauranteGateway, imagemGateway);
+	public IAtualizarPrecoItemUseCase iAtualizarPrecoItemUseCase(IItemGateway itemGateway, IRestauranteGateway restauranteGateway) {
+		return new AtualizarPrecoItemUseCase(itemGateway, restauranteGateway);
 	}
 	
 	@Bean
-	public IAtualizarNomeItemUseCase iAtualizarNomeItemUseCase(IItemGateway itemGateway, IRestauranteGateway restauranteGateway, IImagemGateway imagemGateway) {
-		return new AtualizarNomeItemUseCase(itemGateway, restauranteGateway, imagemGateway);
+	public IAtualizarNomeItemUseCase iAtualizarNomeItemUseCase(IItemGateway itemGateway, IRestauranteGateway restauranteGateway) {
+		return new AtualizarNomeItemUseCase(itemGateway, restauranteGateway);
 	}
 	
 	@Bean
-	public IBaixarImagemItemUseCase iBaixarImagemItemUseCase(IItemGateway itemGateway, IImagemGateway imagemGateway) {
-		return new BaixarImagemItemUseCase(itemGateway, imagemGateway);
+	public IBaixarImagemItemUseCase iBaixarImagemItemUseCase(IItemGateway itemGateway) {
+		return new BaixarImagemItemUseCase(itemGateway);
 	}
 	
 	@Bean
@@ -427,11 +412,6 @@ public class AppConfig {
 	// Gateways
 	
 	@Bean
-	public ILoginGateway iLoginGateway(ILoginRepository loginRepository) {
-		return new LoginGateway(loginRepository);
-	}
-	
-	@Bean
 	public IUsuarioGateway iUsuarioGateway(IUsuarioRepository usuarioRepository) {
 		return new UsuarioGateway(usuarioRepository);
 	}
@@ -439,11 +419,6 @@ public class AppConfig {
 	@Bean
 	public IPerfilGateway iPerfilGateway(IPerfilRepository perfilRepository) {
 		return new PerfilGateway(perfilRepository);
-	}
-	
-	@Bean
-	public IEnderecoGateway iEnderecoGateway(IEnderecoRepository enderecoRepository) {
-		return new EnderecoGateway(enderecoRepository);
 	}
 	
 	@Bean
@@ -459,10 +434,5 @@ public class AppConfig {
 	@Bean
 	public IItemGateway iItemGateway(IItemRepository itemRepository) {
 		return new ItemGateway(itemRepository);
-	}
-
-	@Bean
-	public IImagemGateway iImagemGateway(IImagemRepository imagemRepository) {
-		return new ImagemGateway(imagemRepository);
 	}
 }

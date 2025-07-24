@@ -56,7 +56,7 @@ public class ExcluirAtendimentoUseCase implements IExcluirAtendimentoUseCase {
 	}
 
 	private void limparAtendimentos(Restaurante restaurante) {
-		restaurante.limparAtendimentos();
+		restaurante.limparItens();
 	}
 
 	private void removerAtendimentoNaLista(List<Atendimento> atendimentos, Atendimento atendimento) {
@@ -88,6 +88,6 @@ public class ExcluirAtendimentoUseCase implements IExcluirAtendimentoUseCase {
 	}
 	
 	private void atualizar(final Restaurante restaurante) {
-		restauranteGateway.atualizarAtendimentos(RestaurantePresenter.toRestauranteDto(restaurante));
+		restauranteGateway.atualizar(RestaurantePresenter.toRestauranteDto(restaurante));
 	}
 }

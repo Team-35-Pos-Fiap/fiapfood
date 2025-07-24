@@ -1,22 +1,15 @@
 package br.com.fiapfood.core.usecases.restaurante.impl;
 
-import java.util.List;
 import java.util.UUID;
 
-import br.com.fiapfood.core.entities.Atendimento;
-import br.com.fiapfood.core.entities.Endereco;
 import br.com.fiapfood.core.entities.Perfil;
 import br.com.fiapfood.core.entities.Restaurante;
 import br.com.fiapfood.core.entities.Usuario;
-import br.com.fiapfood.core.entities.dto.atendimento.AtendimentoCoreDto;
-import br.com.fiapfood.core.entities.dto.endereco.DadosEnderecoCoreDto;
 import br.com.fiapfood.core.entities.dto.restaurante.CadastrarRestauranteCoreDto;
 import br.com.fiapfood.core.exceptions.CadastrarRestauranteNaoPermitidoException;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
 import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
 import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
-import br.com.fiapfood.core.presenters.AtendimentoPresenter;
-import br.com.fiapfood.core.presenters.EnderecoPresenter;
 import br.com.fiapfood.core.presenters.RestaurantePresenter;
 import br.com.fiapfood.core.usecases.restaurante.interfaces.ICadastrarRestauranteUseCase;
 
@@ -40,14 +33,12 @@ public class CadastrarRestauranteUseCase implements ICadastrarRestauranteUseCase
 		
 		validarUsuarioAtivo(usuario);
 		validarPerfilUsuario(usuario);
-	
-		cadastrar(restaurante, toEndereco(restauranteDto.dadosEndereco()), toListAtendimento(restauranteDto.atendimentos()));
+		
+		cadastrar(restaurante);
 	}
 
-	private void cadastrar(Restaurante restaurante, Endereco endereco, List<Atendimento> atendimentos) {
-		restauranteGateway.cadastrar(RestaurantePresenter.toRestauranteDto(restaurante), 
-				  				  	 EnderecoPresenter.toEnderecoDto(endereco),
-				  				  	 AtendimentoPresenter.toListAtendimentoDto(atendimentos));		
+	private void cadastrar(Restaurante restaurante) {
+		restauranteGateway.cadastrar(RestaurantePresenter.toRestauranteDto(restaurante));		
 	}
 
 	private void validarPerfilUsuario(Usuario usuario) {
@@ -68,19 +59,11 @@ public class CadastrarRestauranteUseCase implements ICadastrarRestauranteUseCase
 		}
 	}
 	
-	private Endereco toEndereco(DadosEnderecoCoreDto dadosEndereco) {
-		return EnderecoPresenter.toEndereco(dadosEndereco);
-	}
-	
 	private Restaurante toRestaurante(CadastrarRestauranteCoreDto restaurante) {
 		return RestaurantePresenter.toRestaurante(restaurante);
 	}
 	
 	private Perfil buscarPerfil(Integer idPerfil) {
 		return perfilGateway.buscarPorId(idPerfil);
-	}
-	
-	private List<Atendimento> toListAtendimento(List<AtendimentoCoreDto> atendimentos) {
-		return AtendimentoPresenter.toListAtendimento(atendimentos);
 	}
 }

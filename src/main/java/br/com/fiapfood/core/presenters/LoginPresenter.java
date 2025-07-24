@@ -19,7 +19,7 @@ public class LoginPresenter {
 		return Login.criar(login.id(), login.matricula(), login.senha());
 	}
 	
-	public static LoginCoreDto toLogin(Login login) {
+	public static LoginCoreDto toLoginDto(Login login) {
 		return new LoginCoreDto(login.getId(), login.getMatricula(), login.getSenha());
 	}
 

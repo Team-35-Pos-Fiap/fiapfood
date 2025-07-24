@@ -8,7 +8,7 @@ import br.com.fiapfood.core.entities.dto.login.LoginCoreDto;
 import br.com.fiapfood.core.entities.dto.perfil.PerfilCoreDto;
 
 public record DadosUsuarioCoreDto(UUID id, String nome, PerfilCoreDto perfil, LoginCoreDto login, 
-						 			Boolean isAtivo, String email, LocalDateTime dataCriacao, 
-						 			LocalDateTime dataAtualizacao, EnderecoCoreDto endereco){
+						 		  Boolean isAtivo, String email, LocalDateTime dataCriacao, 
+						 		  LocalDateTime dataAtualizacao, EnderecoCoreDto endereco){
 	
 }

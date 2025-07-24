@@ -61,7 +61,7 @@ public class AtualizarAtendimentoUseCase implements IAtualizarAtendimentoUseCase
 	}
 
 	private void limparAtendimentos(Restaurante restaurante) {
-		restaurante.limparAtendimentos();
+		restaurante.limparItens();
 	}
 
 	private void atualizarAtendimentoNaLista(List<Atendimento> atendimentos, int indice, Atendimento atendimento) {
@@ -80,7 +80,6 @@ public class AtualizarAtendimentoUseCase implements IAtualizarAtendimentoUseCase
 		if(atendimentos.stream().filter(a -> a.getDia().equals(atendimento.dia()) && !a.getId().equals(atendimento.id())).findAny().isPresent()) {
 			throw new DiaAtendimentoRestauranteInvalidoException("Não é possível atualizar o atendimento, pois já existe um outro atendimento para o mesmo dia.");
 		}
-
 	}
 
 	private Atendimento buscarAtendimento(List<Atendimento> atendimentos, UUID idAtendimento) {
@@ -108,6 +107,6 @@ public class AtualizarAtendimentoUseCase implements IAtualizarAtendimentoUseCase
 	}
 	
 	private void atualizar(final Restaurante restaurante) {
-		restauranteGateway.atualizarAtendimentos(RestaurantePresenter.toRestauranteDto(restaurante));
+		restauranteGateway.atualizar(RestaurantePresenter.toRestauranteDto(restaurante));
 	}
 }

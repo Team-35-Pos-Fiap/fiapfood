@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record LoginDto(UUID id, 
+public record LoginDto(UUID id,
 					   @NotBlank(message = "O campo matricula precisa ser informado.") 
 					   String matricula, 
 					   

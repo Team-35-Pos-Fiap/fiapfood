@@ -82,7 +82,7 @@ public class AdicionarAtendimentoUseCase implements IAdicionarAtendimentoUseCase
 	}
 	
 	private void atualizar(final Restaurante restaurante) {
-		restauranteGateway.atualizarAtendimentos(RestaurantePresenter.toRestauranteDto(restaurante));
+		restauranteGateway.atualizar(RestaurantePresenter.toRestauranteDto(restaurante));
 	}
 	
 	private Atendimento toAtendimento(AtendimentoCoreDto atendimento) {

@@ -3,5 +3,5 @@ package br.com.fiapfood.core.usecases.item.interfaces;
 import java.util.UUID;
 
 public interface IAtualizarDisponibilidadeConsumoPresencialItemUseCase {
-	void atualizar(UUID id, Boolean isDisponivelParaConsumoPresencial);
+	void atualizar(UUID idRestaurante, UUID idItem, Boolean isDisponivelParaConsumoPresencial);
 }

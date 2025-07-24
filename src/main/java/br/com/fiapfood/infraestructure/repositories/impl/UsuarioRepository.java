@@ -35,17 +35,6 @@ public class UsuarioRepository implements IUsuarioRepository {
 	public boolean emailJaCadastrado(final String email) {
 		return usuarioRepository.existsByEmail(email);
 	}
-
-	@Override
-	public DadosUsuarioInputDto buscarPorIdLogin(final UUID loginId) {
-		final Optional<UsuarioEntity> usuario = usuarioRepository.findByIdLogin(loginId);
-
-		if(usuario.isPresent()) {
-			return UsuarioPresenter.toUsuarioInputDto(usuario.get());
-		} else {
-			return null;
-		}
-	}
 	
 	@Override
 	public DadosUsuarioInputDto buscarPorId(final UUID id) {
@@ -77,6 +66,28 @@ public class UsuarioRepository implements IUsuarioRepository {
 			return UsuarioPresenter.toListUsuarioDto(usuarios);
 		} else {
 			return null;
+		}
+	}
+
+	@Override
+	public DadosUsuarioInputDto buscarPorMatriculaSenha(String matricula, String senha) {
+		final Optional<UsuarioEntity> usuario = usuarioRepository.findByMatriculaSenha(matricula, senha);
+
+		if(usuario.isPresent()) {
+			return UsuarioPresenter.toUsuarioInputDto(usuario.get());
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public boolean matriculaJaCadastrada(String matricula) {
+		final Optional<UsuarioEntity> usuario = usuarioRepository.findByMatricula(matricula);
+
+		if(usuario.isPresent()) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

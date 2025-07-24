@@ -17,7 +17,7 @@ public class EnderecoPresenter {
 
 	public static EnderecoCoreDto toEnderecoDto(EnderecoEntity dadosEndereco) {
 		return new EnderecoCoreDto(dadosEndereco.getId(), dadosEndereco.getCidade(), dadosEndereco.getCep(), 
-							   dadosEndereco.getBairro(), dadosEndereco.getEndereco(), dadosEndereco.getEstado(), dadosEndereco.getNumero(), dadosEndereco.getComplemento());
+							       dadosEndereco.getBairro(), dadosEndereco.getEndereco(), dadosEndereco.getEstado(), dadosEndereco.getNumero(), dadosEndereco.getComplemento());
 	}
 
 	public static Endereco toEndereco(EnderecoCoreDto dadosEndereco) {
@@ -29,15 +29,10 @@ public class EnderecoPresenter {
 		return new Endereco(null, dadosEndereco.cidade(), dadosEndereco.cep(), 
 				   			dadosEndereco.bairro(), dadosEndereco.endereco(), dadosEndereco.estado(), dadosEndereco.numero(), dadosEndereco.complemento());
 	}
-	
-	public static EnderecoCoreDto toEnderecoEntity(Endereco dadosEndereco) {
-		return new EnderecoCoreDto(dadosEndereco.getId(), dadosEndereco.getCidade(), dadosEndereco.getCep(), 
-				   			   dadosEndereco.getBairro(), dadosEndereco.getEndereco(), dadosEndereco.getEstado(), dadosEndereco.getNumero(), dadosEndereco.getComplemento());
-	}
 
 	public static EnderecoCoreDto toEnderecoDto(Endereco dadosEndereco) {
 		return new EnderecoCoreDto(dadosEndereco.getId(), dadosEndereco.getCidade(), dadosEndereco.getCep(), 
-							   dadosEndereco.getBairro(), dadosEndereco.getEndereco(), dadosEndereco.getEstado(), dadosEndereco.getNumero(), dadosEndereco.getComplemento());
+							   	   dadosEndereco.getBairro(), dadosEndereco.getEndereco(), dadosEndereco.getEstado(), dadosEndereco.getNumero(), dadosEndereco.getComplemento());
 
 	}
 

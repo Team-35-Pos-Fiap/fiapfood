@@ -5,5 +5,5 @@ import java.util.UUID;
 import br.com.fiapfood.core.entities.dto.item.ItemOutputCoreDto;
 
 public interface IBuscarItemPorIdUseCase {
-	ItemOutputCoreDto buscar(UUID id);
+	ItemOutputCoreDto buscar(UUID idRestaurante, UUID idItem);
 }

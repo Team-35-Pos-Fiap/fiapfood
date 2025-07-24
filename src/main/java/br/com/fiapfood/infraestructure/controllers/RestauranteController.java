@@ -1,8 +1,12 @@
 package br.com.fiapfood.infraestructure.controllers;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +17,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.com.fiapfood.core.controllers.interfaces.IRestauranteCoreController;
 import br.com.fiapfood.infraestructure.controllers.request.atendimento.AtendimentoDto;
 import br.com.fiapfood.infraestructure.controllers.request.endereco.DadosEnderecoDto;
+import br.com.fiapfood.infraestructure.controllers.request.item.DescricaoDto;
+import br.com.fiapfood.infraestructure.controllers.request.item.DisponibilidadeDto;
+import br.com.fiapfood.infraestructure.controllers.request.item.ImagemDto;
+import br.com.fiapfood.infraestructure.controllers.request.item.ItemDto;
+import br.com.fiapfood.infraestructure.controllers.request.item.PrecoDto;
 import br.com.fiapfood.infraestructure.controllers.request.restaurante.CadastrarRestauranteDto;
 import br.com.fiapfood.infraestructure.controllers.request.restaurante.DadosDonoDto;
 import br.com.fiapfood.infraestructure.controllers.request.restaurante.DadosTipoCulinariaDto;
@@ -126,7 +136,7 @@ public class RestauranteController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
     }
     
-    @PatchMapping("/{id}/atendimento")
+    @PatchMapping("/{id-restaurante}/atendimentos/{id-atendimento}")
     public ResponseEntity<MensagemResponse> atualizarAtendimento(@PathVariable @NotNull @Valid final UUID id, @RequestBody @Valid @NotNull final AtendimentoDto atendimento) {
         log.info("atualizarAtendimento(): id {} - dados do atendimento: {}", id, atendimento);
         
@@ -135,16 +145,16 @@ public class RestauranteController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
     }
     
-    @PostMapping("/{id}/atendimento")
-    public ResponseEntity<MensagemResponse> adicionarAtendimento(@PathVariable @NotNull @Valid final UUID id, @RequestBody @Valid @NotNull final AtendimentoDto atendimento) {
-        log.info("adicionarAtendimento(): id {} - dados do atendimento: {}", id, atendimento);
+    @PostMapping("/{id-restaurante}/atendimentos")
+    public ResponseEntity<MensagemResponse> adicionarAtendimento(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante, @RequestBody @Valid @NotNull final AtendimentoDto atendimento) {
+        log.info("adicionarAtendimento(): id {} - dados do atendimento: {}", idRestaurante, atendimento);
         
-        restauranteCoreController.adicionarAtendimento(id, atendimento);
+        restauranteCoreController.adicionarAtendimento(idRestaurante, atendimento);
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
     }
     
-    @DeleteMapping("/{id-restaurante}/atendimento/{id-atendimento}")
+    @DeleteMapping("/{id-restaurante}/atendimentos/{id-atendimento}")
     public ResponseEntity<MensagemResponse> excluirAtendimento(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante, 
     														   @PathVariable(name = "id-atendimento") @NotNull @Valid final UUID idAtendimento) {
         log.info("excluirAtendimento(): id {} - dados do atendimento: {}", idRestaurante, idAtendimento);
@@ -153,4 +163,106 @@ public class RestauranteController {
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
     }
+    
+    @PatchMapping("/{id-restaurante}/itens/{id-item}/descricao")
+	public ResponseEntity<Void> atualizarDescricaoItem(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante, 
+			   										   @PathVariable(name = "id-item") @NotNull @Valid final UUID idItem,
+			   										   @RequestBody @NotNull final DescricaoDto dados) {
+    	log.info("atualizarDescricaoItem(): id restaurante: {} - id item: {} - descricao: {}", idRestaurante, idItem, dados.descricao());
+         
+        restauranteCoreController.atualizarDescricaoItem(idRestaurante, idItem, dados.descricao());
+
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+    
+    @PatchMapping("/{id-restaurante}/itens/{id-item}/nome")
+	public ResponseEntity<Void> atualizarNomeItem(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante, 
+			   								      @PathVariable(name = "id-item") @NotNull @Valid final UUID idItem,
+			   								      @RequestBody @NotNull final NomeDto dados) {
+    	log.info("atualizarDescricaoItem(): id restaurante: {} - id item: {} - descricao: {}", idRestaurante, idItem, dados.nome());
+         
+        restauranteCoreController.atualizarNomeItem(idRestaurante, idItem, dados.nome());
+
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+    
+    @PatchMapping("/{id-restaurante}/itens/{id-item}/disponibilidade-consumo-presencial")
+	public ResponseEntity<Void> atualizarDisponibilidadeConsumoPresencialItem(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante, 
+			      														  	  @PathVariable(name = "id-item") @NotNull @Valid final UUID idItem,
+			      														  	  @RequestBody @NotNull final DisponibilidadeDto dados) {
+    	log.info("atualizarDisponibilidadeConsumoPresencial(): id restaurante: {} - id item: {} - disponibilidadeDto: {}", idRestaurante, idItem, dados.isDisponivel());
+        
+        restauranteCoreController.atualizarDisponibilidadeConsumoPresencialItem(idRestaurante, idItem, dados.isDisponivel());
+
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+    
+    @PatchMapping("/{id-restaurante}/itens/{id-item}/disponibilidade")
+	public ResponseEntity<Void> atualizarDisponibilidadeItem(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante, 
+			      											 @PathVariable(name = "id-item") @NotNull @Valid final UUID idItem,
+			      											 @RequestBody @NotNull final DisponibilidadeDto dados) {
+    	log.info("atualizarDisponibilidadeItem(): id restaurante: {} - id item: {} - disponibilidadeDto: {}", idRestaurante, idItem, dados.isDisponivel());
+        
+        restauranteCoreController.atualizarDisponibilidadeItem(idRestaurante, idItem, dados.isDisponivel());
+
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+    
+    @PatchMapping(value = "/{id-restaurante}/itens/{id-item}/imagem", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })	
+	public ResponseEntity<Void> atualizarImagemItem(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante, 
+			  										@PathVariable(name = "id-item") @NotNull @Valid final UUID idItem,
+			  										@NotNull @RequestParam final MultipartFile imagem) {
+    	log.info("atualizarImagemItem(): id restaurante: {} - id item: {} - imagem: {}", idRestaurante, idItem, imagem);
+        
+        restauranteCoreController.atualizarImagemItem(idRestaurante, idItem, imagem);
+		
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+    
+    @PatchMapping("/{id-restaurante}/itens/{id-item}/preco")
+	public ResponseEntity<Void> atualizarPrecoItem(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante, 
+											   	   @PathVariable(name = "id-item") @NotNull @Valid final UUID idItem,
+											   	   @RequestBody @NotNull final PrecoDto dados) {
+    	log.info("atualizarPrecoItem(): id restaurante: {} - id item: {} - preço: {}", idRestaurante, idItem, dados);
+        
+        restauranteCoreController.atualizarPrecoItem(idRestaurante, idItem, dados.preco());
+
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+       
+    @GetMapping("/{id-restaurante}/itens/{id-item}/imagem/download")
+	public ResponseEntity<?> baixarImagemItem(@PathVariable(name = "id-item") @NotNull @Valid final UUID idItem) {
+    	log.info("baixarImagemItem(): id item: {}", idItem);
+        
+    	ImagemDto imagem = restauranteCoreController.baixarImagemItem(idItem);
+		
+		return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + imagem.nome() + "\"").body(imagem.conteudo());
+	}
+    
+    @GetMapping("/{id-restaurante}/itens/{id-item}")
+	public ResponseEntity<ItemDto> buscarItemPorId(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante, 
+		   	   								       @PathVariable(name = "id-item") @NotNull @Valid final UUID idItem) {
+    	log.info("buscarItemPorid():idRestaurante: {} - idItem: {}", idRestaurante, idItem);
+
+		return ResponseEntity.ok().body(restauranteCoreController.buscarItemPorId(idRestaurante, idItem));
+	}
+    
+    @GetMapping("/{id-restaurante}/itens")
+	public ResponseEntity<List<ItemDto>> buscarTodosItens(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante) {
+    	log.info("buscarTodosItens() - id restaurante: {}", idRestaurante);
+
+		return ResponseEntity.ok().body(restauranteCoreController.buscarTodosItens(idRestaurante));
+	}
+    
+    @PostMapping(value = "/{id-restaurante}/itens", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })	
+	public ResponseEntity<Void> cadastrarItem(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante,
+										  	  @Valid @NotNull @RequestParam final String nome, @RequestParam final String descricao, 
+										      @NotNull @RequestParam final BigDecimal preco, @NotNull @RequestParam final Boolean disponivelParaConsumoPresencial, 
+										      @NotNull @RequestParam final MultipartFile imagem) {
+    	log.info("cadastraritem() - id restaurante: {} - nome: {} - descricao: {} - preço: {} - disponivelParaConsumoPresencial: {}", idRestaurante, nome, descricao, preco, disponivelParaConsumoPresencial);
+    	
+    	restauranteCoreController.cadastrar(idRestaurante, nome, descricao, preco, disponivelParaConsumoPresencial, imagem);
+
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
 }

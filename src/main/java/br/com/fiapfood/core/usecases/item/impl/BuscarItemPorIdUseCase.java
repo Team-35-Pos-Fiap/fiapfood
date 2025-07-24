@@ -1,46 +1,47 @@
 package br.com.fiapfood.core.usecases.item.impl;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import br.com.fiapfood.core.entities.Item;
 import br.com.fiapfood.core.entities.Restaurante;
 import br.com.fiapfood.core.entities.dto.item.ItemOutputCoreDto;
-import br.com.fiapfood.core.gateways.interfaces.IItemGateway;
+import br.com.fiapfood.core.exceptions.item.ItemNaoEncontradoException;
 import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
 import br.com.fiapfood.core.presenters.ItemPresenter;
 import br.com.fiapfood.core.usecases.item.interfaces.IBuscarItemPorIdUseCase;
+import br.com.fiapfood.core.utils.ImagemUtils;
 
 public class BuscarItemPorIdUseCase implements IBuscarItemPorIdUseCase{
 
-	private final IItemGateway itemGateway;
 	private final IRestauranteGateway restauranteGateway;
 	
-	private final String BASE_LINK_FOTO = "http://localhost:8080/fiapfood/itens/";
-	private final String CONTEXTO_LINK_FOTO = "/imagem";
-
-	public BuscarItemPorIdUseCase(IItemGateway itemGateway, IRestauranteGateway restauranteGateway) {
-		this.itemGateway = itemGateway;
+	public BuscarItemPorIdUseCase(IRestauranteGateway restauranteGateway) {
 		this.restauranteGateway = restauranteGateway;
 	}
 	
 	@Override
-	public ItemOutputCoreDto buscar(final UUID id) {
-		return toItemOutputDto(buscarItem(id));
+	public ItemOutputCoreDto buscar(final UUID idRestaurante, final UUID id) {
+		Restaurante restaurante = buscarRestaurante(idRestaurante);
+		
+		Optional<Item> item = buscarItem(restaurante, id);
+		
+		if(item.isPresent()) {
+			return toItemOutputDto(restaurante, item.get());			
+		} else {
+			throw new ItemNaoEncontradoException("Não foi encontrado nenhum item com o id informado para o restaurante.");			
+		}
 	}
 
-	private String prepararLinkFoto(final UUID id) {
-		return BASE_LINK_FOTO + id + CONTEXTO_LINK_FOTO;
-	}
-	
 	private Restaurante buscarRestaurante(UUID idRestaurante) {
 		return restauranteGateway.buscarPorId(idRestaurante);
 	}
 	
-	private ItemOutputCoreDto toItemOutputDto(Item item) {
-		return ItemPresenter.toItemDto(item, prepararLinkFoto(item.getId()), buscarRestaurante(item.getIdRestaurante()));
+	private ItemOutputCoreDto toItemOutputDto(Restaurante restaurante, Item item) {
+		return ItemPresenter.toItemDto(item, ImagemUtils.prepararLinkDownloadImagem(restaurante.getId(), item.getId()));
 	}
 	
-	private Item buscarItem(UUID id) {
-		return itemGateway.buscarPorId(id);
+	private Optional<Item> buscarItem(Restaurante restaurante, UUID idItem) {
+		return restaurante.getItens().stream().filter(i -> i.getId().equals(idItem)).findFirst();
 	}
 }

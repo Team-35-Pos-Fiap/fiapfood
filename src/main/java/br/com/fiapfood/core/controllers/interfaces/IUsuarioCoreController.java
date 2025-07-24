@@ -17,4 +17,7 @@ public interface IUsuarioCoreController {
 	void reativar(UUID id);
 	void atualizarPerfil(UUID id, Integer idPerfil);
 	void atualizarDadosEndereco(UUID id, DadosEnderecoDto dadosEndereco);
+	void atualizarMatricula(UUID id, String matricula);
+	void atualizarSenha(UUID id, String senha);
+	String validarAcesso(String matricula, String senha);
 }

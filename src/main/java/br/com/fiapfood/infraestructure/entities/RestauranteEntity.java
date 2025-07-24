@@ -7,7 +7,6 @@ import java.util.UUID;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -49,8 +48,9 @@ public class RestauranteEntity {
 	@Column(name = "ativo", columnDefinition = "tinyint")
 	private Boolean isAtivo;
 	
-	@OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY)
-	private List<ItemEntity> itens;
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "id_restaurante", referencedColumnName = "id", nullable = false)
+	private List<ItemEntity> itens = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_restaurante", referencedColumnName = "id", nullable = false)

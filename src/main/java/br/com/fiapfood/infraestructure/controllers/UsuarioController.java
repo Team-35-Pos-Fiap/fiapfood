@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiapfood.core.controllers.interfaces.IUsuarioCoreController;
 import br.com.fiapfood.infraestructure.controllers.request.endereco.DadosEnderecoDto;
+import br.com.fiapfood.infraestructure.controllers.request.login.LoginDto;
+import br.com.fiapfood.infraestructure.controllers.request.login.MatriculaDto;
+import br.com.fiapfood.infraestructure.controllers.request.login.SenhaDto;
 import br.com.fiapfood.infraestructure.controllers.request.usuario.CadastrarUsuarioDto;
 import br.com.fiapfood.infraestructure.controllers.request.usuario.DadosEmailDto;
 import br.com.fiapfood.infraestructure.controllers.request.usuario.DadosNomeDto;
@@ -111,5 +114,36 @@ public class UsuarioController {
 		usuarioCoreController.atualizarEmail(id, dados.email());
 		
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
+	}
+
+	@PatchMapping("/{id}/senha")
+	public ResponseEntity<MensagemResponse> atualizarSenha(@Valid @PathVariable @NotNull final UUID id, @Valid @RequestBody @NotNull final SenhaDto dados) {
+		log.info("trocar senha():id {} - senha {}", id, dados.senha());
+		
+		usuarioCoreController.atualizarSenha(id, dados.senha());
+
+		MensagemResponse sucessoResponse = new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_TROCA_SENHA_USUARIO));
+	
+		return ResponseEntity.ok(sucessoResponse);
+	}
+
+	@PatchMapping("/{id}/matricula")
+	public ResponseEntity<MensagemResponse> atualizarMatricula(@Valid @PathVariable @NotNull final UUID id, @Valid @RequestBody @NotNull final MatriculaDto dados) {
+		log.info("trocar senha():id {} - senha {}", id, dados.matricula());
+		
+		usuarioCoreController.atualizarMatricula(id, dados.matricula());
+
+		MensagemResponse sucessoResponse = new SucessoResponse(MensagensUtil.recuperarMensagem(MensagensUtil.SUCESSO_TROCA_MATRICULA_USUARIO));
+	
+		return ResponseEntity.ok(sucessoResponse);
+	}
+	
+	@PostMapping("/valida-acesso")
+	public ResponseEntity<MensagemResponse> validarAcesso(@RequestBody @Valid @NotNull final LoginDto dados) {
+		log.info("validar acesso():dados do login {}", dados);
+
+		MensagemResponse sucessoResponse = new SucessoResponse(usuarioCoreController.validarAcesso(dados.matricula(), dados.senha()));
+
+		return ResponseEntity.ok().body(sucessoResponse);
 	}
 }
