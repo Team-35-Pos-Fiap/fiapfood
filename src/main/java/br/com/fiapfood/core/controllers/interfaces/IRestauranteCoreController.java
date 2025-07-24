@@ -33,8 +33,8 @@ public interface IRestauranteCoreController {
 	void atualizarDisponibilidadeItem(UUID idRestaurante, UUID idItem, Boolean isDisponivel);
 	void atualizarImagemItem(UUID idRestaurante, UUID idItem, MultipartFile imagem);
 	void atualizarPrecoItem(UUID idRestaurante, UUID idItem, BigDecimal preco);
-	ImagemDto baixarImagemItem(UUID idItem);
 	ItemDto buscarItemPorId(UUID idRestaurante, UUID idItem);
 	List<ItemDto> buscarTodosItens(UUID idRestaurante);
 	void cadastrar(UUID idRestaurante, String nome, String descricao, BigDecimal preco, Boolean disponivelParaConsumoPresencial, MultipartFile imagem);
+	ImagemDto baixarImagemItem(UUID idRestaurante, UUID idItem);
 }

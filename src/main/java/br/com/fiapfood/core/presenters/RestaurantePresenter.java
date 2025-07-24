@@ -2,7 +2,6 @@ package br.com.fiapfood.core.presenters;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -16,12 +15,10 @@ import br.com.fiapfood.core.entities.dto.paginacao.PaginacaoCoreDto;
 import br.com.fiapfood.core.entities.dto.restaurante.CadastrarRestauranteCoreDto;
 import br.com.fiapfood.core.entities.dto.restaurante.DadosRestauranteCoreDto;
 import br.com.fiapfood.core.entities.dto.restaurante.DadosRestauranteDto;
-import br.com.fiapfood.core.entities.dto.restaurante.DadosRestauranteResumidoCoreDto;
 import br.com.fiapfood.core.entities.dto.restaurante.RestaurantePaginacaoCoreDto;
 import br.com.fiapfood.core.entities.dto.restaurante.RestaurantePaginacaoInputDto;
 import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioResumidoCoreDto;
 import br.com.fiapfood.infraestructure.controllers.request.restaurante.CadastrarRestauranteDto;
-import br.com.fiapfood.infraestructure.controllers.request.restaurante.DadosRestauranteResumidoDto;
 import br.com.fiapfood.infraestructure.controllers.request.restaurante.RestauranteDto;
 import br.com.fiapfood.infraestructure.controllers.request.restaurante.RestaurantePaginacaoDto;
 import br.com.fiapfood.infraestructure.entities.RestauranteEntity;
@@ -45,10 +42,6 @@ public class RestaurantePresenter {
 									   restaurante.getIdDonoRestaurante(), restaurante.getIdTipoCulinaria(), restaurante.getIsAtivo(), 
 									   AtendimentoPresenter.toListAtendimentoDto(restaurante.getAtendimentos()),
 									   ItemPresenter.toListItemDto(restaurante.getItens()));
-	}
-	
-	public static DadosRestauranteResumidoCoreDto toRestauranteResumidoDto(Restaurante restaurante) {
-		return new DadosRestauranteResumidoCoreDto(restaurante.getId(), restaurante.getNome(), restaurante.getIsAtivo());
 	}
 	
 	public static Restaurante toRestaurante(CadastrarRestauranteCoreDto restaurante) {
@@ -83,11 +76,7 @@ public class RestaurantePresenter {
 									 ItemPresenter.toListItemEntity(restaurante.itens()),
 									 AtendimentoPresenter.toListAtendimentoEntity(restaurante.atendimentos()));
 	}
-	
-	public static RestauranteEntity toRestauranteResumidoEntity(UUID idRestaurante) {
-		return new RestauranteEntity(idRestaurante, null, null, null, null, null, null, null);
-	}
-	
+
 	public static RestaurantePaginacaoInputDto toRestaurantePaginacaoInputDto(Page<RestauranteEntity> dados) {
 		List<DadosRestauranteDto> restaurantes = dados.toList()
 														   .stream()
@@ -105,10 +94,6 @@ public class RestaurantePresenter {
 	
 	public static RestaurantePaginacaoCoreDto toRestaurantePaginacaoOutputDto(List<DadosRestauranteCoreDto> restaurantes, PaginacaoCoreDto paginacao) {
 		return new RestaurantePaginacaoCoreDto(restaurantes, paginacao);
-	}
-
-	public static DadosRestauranteResumidoDto toDadosRestauranteResumidoDto(DadosRestauranteResumidoCoreDto restaurante) {
-		return new DadosRestauranteResumidoDto(restaurante.id(), restaurante.nome(), restaurante.isAtivo());
 	}
 
 	public static RestaurantePaginacaoDto toListDadosRestauranteDto(RestaurantePaginacaoCoreDto dados) {

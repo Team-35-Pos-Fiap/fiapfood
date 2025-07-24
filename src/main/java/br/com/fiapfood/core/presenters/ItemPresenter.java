@@ -42,11 +42,6 @@ public class ItemPresenter {
 		return Item.criar(null, nome, descricao, preco, disponivelParaConsumoPresencial, true, ImagemPresenter.toImagem(dadosImagem));
 	}
 
-	public static ItemEntity toItem(ItemOutputCoreDto item, ImagemCoreDto imagem) {
-		return new ItemEntity(item.id(), item.nome(), item.descricao(), item.preco(), 
-							  item.isDisponivelConsumoPresencial(), item.isDisponivel(), ImagemPresenter.toImagemEntity(imagem));
-	}
-
 	public static ItemDto toItemOutputDto(ItemOutputCoreDto item) {
 		return new ItemDto(item.id(), item.nome(), item.descricao(), item.preco(),
 								 item.isDisponivelConsumoPresencial(), item.isDisponivel(),

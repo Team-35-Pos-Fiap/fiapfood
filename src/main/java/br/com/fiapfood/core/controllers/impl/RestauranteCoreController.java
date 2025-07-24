@@ -200,8 +200,8 @@ public class RestauranteCoreController implements IRestauranteCoreController {
 	}
 	
 	@Override
-	public ImagemDto baixarImagemItem(UUID idItem) {
-		return ImagemPresenter.toImagemDto(baixarImagemItemUseCase.baixar(idItem));		
+	public ImagemDto baixarImagemItem(UUID idRestaurante, UUID idItem) {
+		return ImagemPresenter.toImagemDto(baixarImagemItemUseCase.baixar(idRestaurante, idItem));		
 	}
 	
 	@Override

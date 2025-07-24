@@ -2,23 +2,22 @@ package br.com.fiapfood.core.usecases.item.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import br.com.fiapfood.core.entities.Item;
 import br.com.fiapfood.core.entities.Restaurante;
 import br.com.fiapfood.core.exceptions.AtualizacaoStatusRestauranteNaoPermitidaException;
 import br.com.fiapfood.core.exceptions.item.AtualizacaoNomeItemNaoPermitidaException;
-import br.com.fiapfood.core.gateways.interfaces.IItemGateway;
+import br.com.fiapfood.core.exceptions.item.ItemNaoEncontradoException;
 import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
 import br.com.fiapfood.core.presenters.RestaurantePresenter;
 import br.com.fiapfood.core.usecases.item.interfaces.IAtualizarNomeItemUseCase;
 
 public class AtualizarNomeItemUseCase implements IAtualizarNomeItemUseCase {
-	private final IItemGateway itemGateway;
 	private final IRestauranteGateway restauranteGateway;
 
-	public AtualizarNomeItemUseCase(IItemGateway itemGateway, IRestauranteGateway restauranteGateway) {
-		this.itemGateway = itemGateway;
+	public AtualizarNomeItemUseCase(IRestauranteGateway restauranteGateway) {
 		this.restauranteGateway = restauranteGateway;
 	}
 	
@@ -28,7 +27,7 @@ public class AtualizarNomeItemUseCase implements IAtualizarNomeItemUseCase {
 
 		validarStatusRestaurante(restaurante);
 		
-		final Item item  = buscarItem(idItem);
+		final Item item  = buscarItem(restaurante, idItem);
 		
 		validarNome(item, nome);
 		atualizarNome(item, nome);
@@ -47,9 +46,20 @@ public class AtualizarNomeItemUseCase implements IAtualizarNomeItemUseCase {
 		}
 	}
 	
-	private Item buscarItem(final UUID id) {
-		return itemGateway.buscarPorId(id);
+	private Item buscarItem(Restaurante restaurante, final UUID idItem) {
+		Optional<Item> item = filtrarItem(restaurante, idItem);
+		
+		if(item != null) {
+			return item.get();
+		} else {
+			throw new ItemNaoEncontradoException("Não foi encontrado nenhum item com o id informado para o restaurante.");			
+		}
 	}
+	
+	private Optional<Item> filtrarItem(Restaurante restaurante, final UUID idItem) {
+		return restaurante.getItens().stream().filter(i -> i.getId().equals(idItem)).findFirst();
+	}
+	
 	
 	private Restaurante buscarRestaurante(UUID idRestaurante) {
 		return restauranteGateway.buscarPorId(idRestaurante);

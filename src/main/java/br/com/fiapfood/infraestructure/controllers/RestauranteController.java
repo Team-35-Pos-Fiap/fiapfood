@@ -231,10 +231,11 @@ public class RestauranteController {
 	}
        
     @GetMapping("/{id-restaurante}/itens/{id-item}/imagem/download")
-	public ResponseEntity<?> baixarImagemItem(@PathVariable(name = "id-item") @NotNull @Valid final UUID idItem) {
+	public ResponseEntity<?> baixarImagemItem(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante, 
+											  @PathVariable(name = "id-item") @NotNull @Valid final UUID idItem) {
     	log.info("baixarImagemItem(): id item: {}", idItem);
         
-    	ImagemDto imagem = restauranteCoreController.baixarImagemItem(idItem);
+    	ImagemDto imagem = restauranteCoreController.baixarImagemItem(idRestaurante, idItem);
 		
 		return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + imagem.nome() + "\"").body(imagem.conteudo());
 	}
@@ -255,14 +256,15 @@ public class RestauranteController {
 	}
     
     @PostMapping(value = "/{id-restaurante}/itens", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })	
-	public ResponseEntity<Void> cadastrarItem(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante,
-										  	  @Valid @NotNull @RequestParam final String nome, @RequestParam final String descricao, 
-										      @NotNull @RequestParam final BigDecimal preco, @NotNull @RequestParam final Boolean disponivelParaConsumoPresencial, 
-										      @NotNull @RequestParam final MultipartFile imagem) {
-    	log.info("cadastraritem() - id restaurante: {} - nome: {} - descricao: {} - preço: {} - disponivelParaConsumoPresencial: {}", idRestaurante, nome, descricao, preco, disponivelParaConsumoPresencial);
+	public ResponseEntity<Void> cadastrar(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante,
+										  @Valid @NotNull @RequestParam final String nome, @RequestParam final String descricao, 
+										  @NotNull @RequestParam final BigDecimal preco, @NotNull @RequestParam final Boolean disponivelParaConsumoPresencial, 
+										  @NotNull @RequestParam final MultipartFile imagem) {
+    	log.info("cadastrar item() - id restaurante: {} - nome: {} - descricao: {} - preço: {} - disponivelParaConsumoPresencial: {}", idRestaurante, nome, descricao, preco, disponivelParaConsumoPresencial);
     	
     	restauranteCoreController.cadastrar(idRestaurante, nome, descricao, preco, disponivelParaConsumoPresencial, imagem);
 
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
+
 }
