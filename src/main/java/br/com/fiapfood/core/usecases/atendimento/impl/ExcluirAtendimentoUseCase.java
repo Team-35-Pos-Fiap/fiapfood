@@ -56,7 +56,7 @@ public class ExcluirAtendimentoUseCase implements IExcluirAtendimentoUseCase {
 	}
 
 	private void limparAtendimentos(Restaurante restaurante) {
-		restaurante.limparItens();
+		restaurante.limparAtendimentos();
 	}
 
 	private void removerAtendimentoNaLista(List<Atendimento> atendimentos, Atendimento atendimento) {

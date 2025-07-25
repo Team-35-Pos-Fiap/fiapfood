@@ -136,17 +136,17 @@ public class RestauranteController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
     }
     
-    @PatchMapping("/{id-restaurante}/atendimentos/{id-atendimento}")
-    public ResponseEntity<MensagemResponse> atualizarAtendimento(@PathVariable @NotNull @Valid final UUID id, @RequestBody @Valid @NotNull final AtendimentoDto atendimento) {
-        log.info("atualizarAtendimento(): id {} - dados do atendimento: {}", id, atendimento);
+    @PatchMapping("/{id-restaurante}/atendimentos")
+    public ResponseEntity<MensagemResponse> atualizarAtendimento(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante, @RequestBody @NotNull final AtendimentoDto atendimento) {
+        log.info("atualizarAtendimento(): id {} - dados do atendimento: {}", idRestaurante, atendimento);
         
-        restauranteCoreController.atualizarAtendimento(id, atendimento);
+        restauranteCoreController.atualizarAtendimento(idRestaurante, atendimento);
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
     }
     
     @PostMapping("/{id-restaurante}/atendimentos")
-    public ResponseEntity<MensagemResponse> adicionarAtendimento(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante, @RequestBody @Valid @NotNull final AtendimentoDto atendimento) {
+    public ResponseEntity<MensagemResponse> adicionarAtendimento(@PathVariable(name = "id-restaurante") @NotNull @Valid final UUID idRestaurante, @RequestBody @NotNull final AtendimentoDto atendimento) {
         log.info("adicionarAtendimento(): id {} - dados do atendimento: {}", idRestaurante, atendimento);
         
         restauranteCoreController.adicionarAtendimento(idRestaurante, atendimento);

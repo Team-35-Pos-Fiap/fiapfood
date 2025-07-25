@@ -61,7 +61,7 @@ public class AtualizarAtendimentoUseCase implements IAtualizarAtendimentoUseCase
 	}
 
 	private void limparAtendimentos(Restaurante restaurante) {
-		restaurante.limparItens();
+		restaurante.limparAtendimentos();
 	}
 
 	private void atualizarAtendimentoNaLista(List<Atendimento> atendimentos, int indice, Atendimento atendimento) {
