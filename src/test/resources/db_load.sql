@@ -9,6 +9,16 @@ VALUES (2,
         'Cliente',
         current_timestamp,
         null);
+INSERT INTO perfil (id, nome, data_criacao, data_inativacao)
+VALUES (3,
+        'Administrador',
+        current_timestamp,
+        current_timestamp);
+INSERT INTO perfil (id, nome, data_criacao, data_inativacao)
+VALUES (4,
+        'Entregador',
+        current_timestamp,
+        null);
 
 ---- USUARIO 1 ----
 INSERT INTO endereco (id, cidade, bairro, estado, endereco, numero, complemento, cep)
