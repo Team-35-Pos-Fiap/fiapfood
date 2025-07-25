@@ -1,13 +1,11 @@
 package br.com.fiapfood.infrastructure.controllers.integracao;
 
 import br.com.fiapfood.infraestructure.controllers.request.perfil.NomeDto;
-import br.com.fiapfood.infraestructure.repositories.impl.PerfilRepository;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
@@ -24,8 +22,6 @@ public class PerfilControllerIT {
 
     @LocalServerPort
     private int port;
-    @Autowired
-    private PerfilRepository perfilRepository1;
 
     @BeforeEach
     public void setUp() {
@@ -39,7 +35,6 @@ public class PerfilControllerIT {
         @Test
         void deveRetornarListaComPerfisCadastrados() throws Exception {
             // Arrange
-
 
             // Act & Assert
             given()
