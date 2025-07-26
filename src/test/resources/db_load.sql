@@ -23,7 +23,8 @@ VALUES (4,
 ---- USUARIO 1 ----
 INSERT INTO endereco (id, cidade, bairro, estado, endereco, numero, complemento, cep)
 VALUES ('de6762a9-e373-4a05-a6bb-d345a759b26f',
-        'São Gonçalo', 'Nova Cidade',
+        'São Gonçalo',
+        'Nova Cidade',
         'Rio de Janeiro',
         'Rua Aquidabã',
         '79',

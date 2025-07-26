@@ -198,14 +198,13 @@ public class UsuarioControllerTest {
             verify(usuarioCoreController, times(0)).cadastrar(any(CadastrarUsuarioDto.class));
         }
 
-        // Nao estamos fazendo essa validacao na use case
         @DisplayName("Cadastrar novo usuário com erro. Perfil informado não cadastrado.")
         @Test
         void deveLancarExcecaoSePerfilNaoCadstrado() throws Exception {
             // Arrange
             CadastrarUsuarioDto dadosUsuarioInvalidos = new CadastrarUsuarioDto("John Doe", 10, loginDtoValido(), "john.doe@email.com", dadosEnderecoDtoValido());
 
-            doThrow(new PerfilNaoEncontradoException("Perfil não encontrado na base de dados.")).when(usuarioCoreController).cadastrar(any(CadastrarUsuarioDto.class));
+            doThrow(new PerfilNaoEncontradoException("Não foi encontrado nenhum perfil com o id informado.")).when(usuarioCoreController).cadastrar(any(CadastrarUsuarioDto.class));
 
             // Act & Assert
             mockMvc.perform(post("/usuarios")
@@ -213,7 +212,7 @@ public class UsuarioControllerTest {
                             .content(asJsonString(dadosUsuarioInvalidos)))
                     .andDo(print())
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.*").value(hasItem("Perfil não encontrado na base de dados.")));
+                    .andExpect(jsonPath("$.*").value(hasItem("Não foi encontrado nenhum perfil com o id informado.")));
             verify(usuarioCoreController, times(1)).cadastrar(any(CadastrarUsuarioDto.class));
         }
     }
