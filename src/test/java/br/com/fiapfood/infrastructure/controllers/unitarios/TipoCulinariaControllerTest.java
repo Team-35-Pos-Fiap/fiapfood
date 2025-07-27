@@ -1,9 +1,9 @@
 package br.com.fiapfood.infrastructure.controllers.unitarios;
 
 import br.com.fiapfood.core.controllers.interfaces.ITipoCulinariaCoreController;
-import br.com.fiapfood.core.exceptions.NomePerfilDuplicadoException;
-import br.com.fiapfood.core.exceptions.TipoCulinariaInvalidoException;
-import br.com.fiapfood.core.exceptions.TipoCulinariaNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.perfil.NomePerfilDuplicadoException;
+import br.com.fiapfood.core.exceptions.tipo_culinaria.TipoCulinariaInvalidoException;
+import br.com.fiapfood.core.exceptions.tipo_culinaria.TipoCulinariaNaoEncontradoException;
 import br.com.fiapfood.infraestructure.controllers.TipoCulinariaController;
 import br.com.fiapfood.infraestructure.controllers.exceptions.ErrorHandler;
 import br.com.fiapfood.infraestructure.controllers.request.perfil.NomeDto;

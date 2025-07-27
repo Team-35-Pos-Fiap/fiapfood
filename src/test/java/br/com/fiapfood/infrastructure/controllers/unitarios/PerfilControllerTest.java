@@ -1,9 +1,9 @@
 package br.com.fiapfood.infrastructure.controllers.unitarios;
 
 import br.com.fiapfood.core.controllers.interfaces.IPerfilCoreController;
-import br.com.fiapfood.core.exceptions.ExclusaoPerfilNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.NomePerfilDuplicadoException;
-import br.com.fiapfood.core.exceptions.PerfilInvalidoException;
+import br.com.fiapfood.core.exceptions.perfil.ExclusaoPerfilNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.perfil.NomePerfilDuplicadoException;
+import br.com.fiapfood.core.exceptions.perfil.PerfilInvalidoException;
 import br.com.fiapfood.infraestructure.controllers.PerfilController;
 import br.com.fiapfood.infraestructure.controllers.exceptions.ErrorHandler;
 import br.com.fiapfood.infraestructure.controllers.request.perfil.NomeDto;

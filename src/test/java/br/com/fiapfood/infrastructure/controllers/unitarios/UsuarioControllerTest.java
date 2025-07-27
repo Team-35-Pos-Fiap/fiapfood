@@ -1,9 +1,8 @@
 package br.com.fiapfood.infrastructure.controllers.unitarios;
 
 import br.com.fiapfood.core.controllers.interfaces.IUsuarioCoreController;
-import br.com.fiapfood.core.exceptions.*;
-import br.com.fiapfood.core.exceptions.usuario.AtualizacaoEmailUsuarioNaoPermitidoException;
-import br.com.fiapfood.core.exceptions.usuario.AtualizacaoNomeUsuarioNaoPermitidoException;
+import br.com.fiapfood.core.exceptions.perfil.PerfilNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.usuario.*;
 import br.com.fiapfood.infraestructure.controllers.UsuarioController;
 import br.com.fiapfood.infraestructure.controllers.exceptions.ErrorHandler;
 import br.com.fiapfood.infraestructure.controllers.request.endereco.DadosEnderecoDto;
@@ -701,7 +700,7 @@ public class UsuarioControllerTest {
             UUID id = UUID.randomUUID();
             DadosEnderecoDto novoEndereco = dadosEnderecoDtoValido();
 
-            doThrow(new EnderecoUsuarioInvalidoException("Não foi encontrado nenhum endereço com o id informado.")).when(usuarioCoreController).atualizarDadosEndereco(any(UUID.class), any(DadosEnderecoDto.class));
+            doThrow(new Exception("Não foi encontrado nenhum endereço com o id informado.")).when(usuarioCoreController).atualizarDadosEndereco(any(UUID.class), any(DadosEnderecoDto.class));
 
             // Act & Assert
             mockMvc.perform(patch("/usuarios/{id}/endereco", id)
