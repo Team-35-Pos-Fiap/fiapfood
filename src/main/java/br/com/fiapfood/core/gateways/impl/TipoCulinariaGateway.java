@@ -1,7 +1,5 @@
 package br.com.fiapfood.core.gateways.impl;
 
-import java.util.List;
-
 import br.com.fiapfood.core.entities.TipoCulinaria;
 import br.com.fiapfood.core.entities.dto.tipo_culinaria.TipoCulinariaCoreDto;
 import br.com.fiapfood.core.exceptions.tipo_culinaria.TipoCulinariaInvalidoException;
@@ -9,6 +7,8 @@ import br.com.fiapfood.core.exceptions.tipo_culinaria.TipoCulinariaNaoEncontrado
 import br.com.fiapfood.core.gateways.interfaces.ITipoCulinariaGateway;
 import br.com.fiapfood.core.presenters.TipoCulinariaPresenter;
 import br.com.fiapfood.infraestructure.repositories.interfaces.ITipoCulinariaRepository;
+
+import java.util.List;
 
 public class TipoCulinariaGateway implements ITipoCulinariaGateway {
 
@@ -28,7 +28,7 @@ public class TipoCulinariaGateway implements ITipoCulinariaGateway {
 		if(tiposCulinaria.size() > 0) {
 			return TipoCulinariaPresenter.toListTipoCulinaria(tiposCulinaria);
 		} else {
-			throw new TipoCulinariaNaoEncontradoException(TIPO_CULINARIA_NAO_ENCONTRADO);			
+			throw new TipoCulinariaNaoEncontradoException(TIPOS_CULINARIA_NAO_ENCONTRADOS);
 		}
 	}
 	
@@ -39,7 +39,7 @@ public class TipoCulinariaGateway implements ITipoCulinariaGateway {
 		if(TipoCulinaria != null) {
 			return TipoCulinariaPresenter.toTipoCulinaria(TipoCulinaria);
 		} else {
-			throw new TipoCulinariaInvalidoException(TIPOS_CULINARIA_NAO_ENCONTRADOS);			
+			throw new TipoCulinariaInvalidoException(TIPO_CULINARIA_NAO_ENCONTRADO);
 		}
 	}
 

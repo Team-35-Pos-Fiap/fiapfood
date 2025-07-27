@@ -1,5 +1,6 @@
 package br.com.fiapfood.utils;
 
+import br.com.fiapfood.core.entities.dto.tipo_culinaria.TipoCulinariaCoreDto;
 import br.com.fiapfood.infraestructure.controllers.request.endereco.DadosEnderecoDto;
 import br.com.fiapfood.infraestructure.controllers.request.endereco.EnderecoDto;
 import br.com.fiapfood.infraestructure.controllers.request.login.LoginDto;
@@ -82,6 +83,10 @@ public class DtoDataGenerator {
 
     public static TipoCulinariaDto tipoCulinariaDtoValido() {
         return new TipoCulinariaDto(1, "Brasileira");
+    }
+
+    public static TipoCulinariaCoreDto tipoCulinariaCoreDtoValido() {
+        return new TipoCulinariaCoreDto(1, "Brasileira");
     }
 
 
