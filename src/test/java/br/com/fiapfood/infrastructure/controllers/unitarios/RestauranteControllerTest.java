@@ -1,15 +1,20 @@
 package br.com.fiapfood.infrastructure.controllers.unitarios;
 
 import br.com.fiapfood.core.controllers.interfaces.IRestauranteCoreController;
-import br.com.fiapfood.core.entities.dto.item.ImagemCoreDto;
+import br.com.fiapfood.core.entities.TipoCulinaria;
 import br.com.fiapfood.core.exceptions.item.ItemNaoEncontradoException;
 import br.com.fiapfood.infraestructure.controllers.RestauranteController;
 import br.com.fiapfood.infraestructure.controllers.exceptions.ErrorHandler;
+import br.com.fiapfood.infraestructure.controllers.request.atendimento.AtendimentoDto;
+import br.com.fiapfood.infraestructure.controllers.request.endereco.DadosEnderecoDto;
 import br.com.fiapfood.infraestructure.controllers.request.endereco.EnderecoDto;
-import br.com.fiapfood.infraestructure.controllers.request.item.DescricaoDto;
-import br.com.fiapfood.infraestructure.controllers.request.item.ItemDto;
-import br.com.fiapfood.infraestructure.controllers.request.item.ItemPaginacaoDto;
+import br.com.fiapfood.infraestructure.controllers.request.item.*;
 import br.com.fiapfood.infraestructure.controllers.request.paginacao.PaginacaoDto;
+import br.com.fiapfood.infraestructure.controllers.request.restaurante.CadastrarRestauranteDto;
+import br.com.fiapfood.infraestructure.controllers.request.restaurante.RestauranteDto;
+import br.com.fiapfood.infraestructure.controllers.request.restaurante.RestaurantePaginacaoDto;
+import br.com.fiapfood.infraestructure.controllers.request.tipo_culinaria.TipoCulinariaDto;
+import br.com.fiapfood.infraestructure.controllers.request.usuario.DadosUsuarioDto;
 import br.com.fiapfood.infraestructure.controllers.request.usuario.UsuarioDto;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
@@ -22,12 +27,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import static br.com.fiapfood.utils.JsonToString.asJsonString;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -42,6 +48,24 @@ class RestauranteControllerTest {
 
     @Mock
     private IRestauranteCoreController restauranteCoreController;
+
+    @Mock
+    RestauranteDto restauranteDto;
+
+    @Mock
+    EnderecoDto enderecoDto;
+
+    @Mock
+    DadosEnderecoDto dadosEnderecoDto;
+
+    @Mock
+    DadosUsuarioDto dadosUsuarioDto;
+
+    @Mock
+    TipoCulinariaDto tipoCulinariaDto;
+
+    @Mock
+    AtendimentoDto atendimentoDto;
 
     @Mock
     ItemDto itemDto;
@@ -67,77 +91,66 @@ class RestauranteControllerTest {
         mock.close();
     }
 
-//    @Test
-//    @DisplayName("Deve buscar restaurantes com paginação")
-//    void deveBuscarRestaurantes() throws Exception {
-//        // Arrange
-//        List<RestauranteDto> restauranteDtos = List.of(
-//                new RestauranteDto(UUID.randomUUID(),
-//                        "Restaurante Teste",
-//                        enderecoDto,
-//                        "vegetariano",
-//                        LocalDateTime.now(),
-//                        usuarioDto),
-//                new RestauranteDto(UUID.randomUUID(),
-//                        "Bom demais",
-//                        enderecoDto,
-//                        "mineira",
-//                        LocalDateTime.now(),
-//                        usuarioDto)
-//
-//        );
-//
-//        PaginacaoDto paginacao = new PaginacaoDto(1,1,2);
-//
-//        DadosRestauranteComPaginacaoDto dadosRestaurante = new DadosRestauranteComPaginacaoDto(restauranteDtos, paginacao);
-//        when(restauranteCoreController.buscarTodos(anyInt())).thenReturn(dadosRestaurante);
-//
-//        mockMvc.perform(get("/restaurantes?page=1"))
-//                .andExpect(status().isOk())
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.restaurantes.length()").value(2));
-//    }
-//
-//    @Test
-//    @DisplayName("Deve buscar restaurante por id")
-//    void deveBuscarRestaurantePorId() throws Exception {
-//        UUID id = UUID.randomUUID();
-//        RestauranteDto restauranteDto = new RestauranteDto(id,
-//                "Restaurante Teste",
-//                enderecoDto,
-//                "vegetariano",
-//                LocalDateTime.now(),
-//                usuarioDto);
-//        when(restauranteCoreController.buscarPorId(eq(id))).thenReturn(restauranteDto);
-//
-//        mockMvc.perform(get("/restaurantes/{id}", id))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.nome").value("Restaurante Teste"))
-//                .andExpect(jsonPath("$.tipoCozinha").value("vegetariano"))
-//                .andDo(print());
-//    }
-//
-//    @Test
-//    @DisplayName("Deve cadastrar restaurante")
-//    void deveCadastrarRestaurante() throws Exception {
-//        String restauranteJson = "{\n" +
-//                "    \"nome\": \"Restaurante novo\"\n" +
-//                "    \", endereco\": " + UUID.randomUUID() +
-//                "    \", tipoCozinha\": \"exótica\"\n" +
-//                "    \", horarioFuncionamento\": \"2024-06-01T18:00:00\"\n" +
-//                "    \", donoRestaurante\": " + UUID.randomUUID() +
-//                "    }\n" +
-//                "}";
-//
-//        doNothing().when(restauranteCoreController).cadastrar(any(DadosRestauranteDto.class));
-//
-//        mockMvc.perform(post("/restaurantes")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(restauranteJson))
-//                .andExpect(status().isCreated());
-//    }
-//
+    @Nested
+    class GerenciarRestauranteRequest {
+
+        @Test
+        @DisplayName("Deve buscar restaurantes com paginação")
+        void deveBuscarRestaurantes() throws Exception {
+            // Arrange
+            List<RestauranteDto> restauranteDtos = List.of(restauranteDto, restauranteDto);
+
+            PaginacaoDto paginacao = new PaginacaoDto(1, 1, 2);
+
+            RestaurantePaginacaoDto dadosRestaurante = new RestaurantePaginacaoDto(restauranteDtos, paginacao);
+            when(restauranteCoreController.buscarTodos(anyInt())).thenReturn(dadosRestaurante);
+
+            mockMvc.perform(get("/restaurantes?page=1"))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.restaurantes.length()").value(2));
+        }
+
+    @Test
+    @DisplayName("Deve buscar restaurante por id")
+    void deveBuscarRestaurantePorId() throws Exception {
+        UUID idRestaurante = UUID.randomUUID();
+        List<AtendimentoDto> atendimentos = List.of(atendimentoDto, atendimentoDto);
+        RestauranteDto restauranteDto = new RestauranteDto(idRestaurante,
+                "Restaurante Teste",
+                enderecoDto,
+                true,
+                dadosUsuarioDto,
+                tipoCulinariaDto,
+                atendimentos);
+        when(restauranteCoreController.buscarPorId(any())).thenReturn(restauranteDto);
+
+        mockMvc.perform(get("/restaurantes/{id}", idRestaurante))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nome").value("Restaurante Teste"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Deve cadastrar restaurante")
+    void deveCadastrarRestaurante() throws Exception {
+        List<AtendimentoDto> atendimentos = List.of(atendimentoDto, atendimentoDto);
+        CadastrarRestauranteDto dadosRestauranteDto = new CadastrarRestauranteDto(
+                "Restaurante novo",
+                dadosEnderecoDto,
+                UUID.randomUUID(),
+                anyInt(),
+                atendimentos);
+
+        doNothing().when(restauranteCoreController).cadastrar(any(CadastrarRestauranteDto.class));
+
+        mockMvc.perform(post("/restaurantes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(dadosRestauranteDto)))
+                .andExpect(status().isCreated());
+    }
+
 //    @Test
 //    @DisplayName("Deve atualizar restaurante")
 //    void deveAtualizarRestaurante() throws Exception {
@@ -169,6 +182,8 @@ class RestauranteControllerTest {
 //        mockMvc.perform(delete("/restaurantes/{id}", id))
 //                .andExpect(status().isNoContent());
 //    }
+
+    }
 
     @Nested
     class GerenciarItemRequest {
@@ -286,116 +301,135 @@ class RestauranteControllerTest {
                     .andDo(print())
                     .andExpect(status().isNoContent());
 
-//            verify(restauranteCoreController, times(1)).atualizarDescricaoItem(eq(idRestaurante), eq(idItem), any(DescricaoDto.class));
+            verify(restauranteCoreController, times(1)).atualizarDescricaoItem(any(UUID.class), any(UUID.class), anyString());
         }
 
-//        @Test
-//        @DisplayName("Deve atualizar o nome do item com sucesso")
-//        void deveAtualizarNomeItem() throws Exception {
-//            UUID id = UUID.randomUUID();
-//            String novoNome = "Feijoada Especial";
-//
-//            // Mock do core controller
-//            doNothing().when(itemCoreController).atualizarNome(eq(id), eq(novoNome));
-//
-//            mockMvc.perform(patch("/itens/{id}/nome", id)
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .content("{\"nome\":\"" + novoNome + "\"}"))
-//                    .andExpect(status().isNoContent());
-//
-//            verify(itemCoreController, times(1)).atualizarNome(eq(id), eq(novoNome));
-//        }
-//
-//        @Test
-//        @DisplayName("Deve atualizar o preco do item com sucesso")
-//        void deveAtualizarPrecoItem() throws Exception {
-//            UUID id = UUID.randomUUID();
-//            BigDecimal novoPreco = BigDecimal.valueOf(33.25);
-//
-//            // Mock do core controller
-//            doNothing().when(itemCoreController).atualizarPreco(eq(id), eq(novoPreco));
-//
-//            mockMvc.perform(patch("/itens/{id}/preco", id)
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .content("{\"preco\":\"" + novoPreco + "\"}"))
-//                    .andExpect(status().isNoContent());
-//
-//            verify(itemCoreController, times(1)).atualizarPreco(eq(id), eq(novoPreco));
-//        }
-//
-//        @Test
-//        @DisplayName("Deve atualizar o disponibilidadeConsumoPresencial do item com sucesso")
-//        void deveAtualizarDisponibilidadeConsumoPresencialItem() throws Exception {
-//            UUID id = UUID.randomUUID();
-//            Boolean disponibilidadeConsumoPresencial = false;
-//
-//            // Mock do core controller
-//            doNothing().when(itemCoreController).atualizarDisponibilidadeConsumoPresencial(
-//                    eq(id),
-//                    eq(disponibilidadeConsumoPresencial)
-//            );
-//
-//            mockMvc.perform(patch("/itens/{id}/disponibilidade-consumo-presencial", id)
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .content("{\"isDisponivel\":\"" + disponibilidadeConsumoPresencial + "\"}"))
-//                    .andExpect(status().isNoContent());
-//
-//            verify(itemCoreController, times(1)).atualizarDisponibilidadeConsumoPresencial(
-//                    eq(id),
-//                    eq(disponibilidadeConsumoPresencial)
-//            );
-//        }
-//
-//        @Test
-//        @DisplayName("Deve atualizar o disponibilidade do item com sucesso")
-//        void deveAtualizarDisponibilidade() throws Exception {
-//            UUID id = UUID.randomUUID();
-//            Boolean disponibilidade = false;
-//
-//            // Mock do core controller
-//            doNothing().when(itemCoreController).atualizarDisponibilidade( eq(id), eq(disponibilidade));
-//
-//            mockMvc.perform(patch("/itens/{id}/disponibilidade", id)
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .content("{\"isDisponivel\":\"" + disponibilidade + "\"}"))
-//                    .andExpect(status().isNoContent());
-//
-//            verify(itemCoreController, times(1)).atualizarDisponibilidade( eq(id), eq(disponibilidade));
-//        }
-//
-//        @Test
-//        @DisplayName("Deve atualizar a imagem do item com sucesso")
-//        void deveAtualizarImagemDoItem() throws Exception {
-//            UUID id = UUID.randomUUID();
-//            MockMultipartFile imagem = new MockMultipartFile("imagem", "imagem.jpg", "image/jpeg", "conteudo".getBytes());
-//
-//            doNothing().when(itemCoreController).atualizarImagem(eq(id), any(MultipartFile.class));
-//
-//            mockMvc.perform(multipart("/itens/{id}/imagem", id)
-//                            .file(imagem)
-//                            .with(request -> { request.setMethod("PATCH"); return request; }))
-//                    .andExpect(status().isNoContent());
-//
-//            verify(itemCoreController, times(1)).atualizarImagem(eq(id), any(MultipartFile.class));
-//        }
-//
-//        @Test
-//        @DisplayName("Deve baixar a imagem do item com sucesso")
-//        void deveBaixarImagemDoItem() throws Exception {
-//            UUID id = UUID.randomUUID();
-//            String nomeArquivo = "imagem.jpg";
-//            byte[] conteudo = "conteudo da imagem".getBytes();
-//            ImagemCoreDto imagemCoreDto = new ImagemCoreDto(id, nomeArquivo, conteudo, "image/jpeg");
-//
-//            when(itemCoreController.baixarImagem(eq(id))).thenReturn(imagemCoreDto);
-//
-//            mockMvc.perform(get("/itens/{id}/imagem", id))
-//                    .andExpect(status().isOk())
-//                    .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nomeArquivo + "\""))
-//                    .andExpect(content().bytes(conteudo));
-//
-//            verify(itemCoreController, times(1)).baixarImagem(eq(id));
-//        }
+        @Test
+        @DisplayName("Deve atualizar o nome do item com sucesso")
+        void deveAtualizarNomeItem() throws Exception {
+
+            UUID idRestaurante = UUID.randomUUID();
+            UUID idItem = UUID.randomUUID();
+            NomeDto novoNome = new NomeDto("Feijoada");
+
+            // Mock do core controller
+            doNothing().when(restauranteCoreController).atualizarNomeItem(any(), any(), any());
+
+            mockMvc.perform(patch("/restaurantes/{id-restaurante}/itens/{id-item}/nome", idRestaurante, idItem)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(novoNome)))
+                    .andDo(print())
+                    .andExpect(status().isNoContent());
+
+            verify(restauranteCoreController, times(1)).atualizarNomeItem(any(UUID.class), any(UUID.class), anyString());
+        }
+
+        @Test
+        @DisplayName("Deve atualizar o preco do item com sucesso")
+        void deveAtualizarPrecoItem() throws Exception {
+
+            UUID idRestaurante = UUID.randomUUID();
+            UUID idItem = UUID.randomUUID();
+            PrecoDto novoPreco = new PrecoDto(BigDecimal.valueOf(30.32));
+
+            // Mock do core controller
+            doNothing().when(restauranteCoreController).atualizarPrecoItem(any(), any(), any(BigDecimal.class));
+
+            mockMvc.perform(patch("/restaurantes/{id-restaurante}/itens/{id-item}/preco", idRestaurante, idItem)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(novoPreco)))
+                    .andDo(print())
+                    .andExpect(status().isNoContent());
+
+            verify(restauranteCoreController, times(1)).atualizarPrecoItem(any(UUID.class), any(UUID.class), any(BigDecimal.class));
+        }
+
+        @Test
+        @DisplayName("Deve atualizar o disponibilidadeConsumoPresencial do item com sucesso")
+        void deveAtualizarDisponibilidadeConsumoPresencialItem() throws Exception {
+
+            UUID idRestaurante = UUID.randomUUID();
+            UUID idItem = UUID.randomUUID();
+            DisponibilidadeDto disponibilidadeConsumoPresencial = new DisponibilidadeDto(true);
+
+            // Mock do core controller
+            doNothing().when(restauranteCoreController)
+                    .atualizarDisponibilidadeConsumoPresencialItem(any(), any(), anyBoolean());
+
+            mockMvc.perform(
+                    patch("/restaurantes/{id-restaurante}/itens/{id-item}/disponibilidade-consumo-presencial", idRestaurante, idItem)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(disponibilidadeConsumoPresencial)))
+                    .andDo(print())
+                    .andExpect(status().isNoContent());
+
+            verify(restauranteCoreController, times(1))
+                    .atualizarDisponibilidadeConsumoPresencialItem(any(UUID.class), any(UUID.class), anyBoolean());
+        }
+
+
+        @Test
+        @DisplayName("Deve atualizar o disponibilidade do item com sucesso")
+        void deveAtualizarDisponibilidade() throws Exception {
+
+            UUID idRestaurante = UUID.randomUUID();
+            UUID idItem = UUID.randomUUID();
+            DisponibilidadeDto disponibilidade = new DisponibilidadeDto(false);
+
+            // Mock do core controller
+            doNothing().when(restauranteCoreController)
+                    .atualizarDisponibilidadeItem(any(), any(), anyBoolean());
+
+            mockMvc.perform(
+                            patch("/restaurantes/{id-restaurante}/itens/{id-item}/disponibilidade", idRestaurante, idItem)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(asJsonString(disponibilidade)))
+                    .andDo(print())
+                    .andExpect(status().isNoContent());
+
+            verify(restauranteCoreController, times(1))
+                    .atualizarDisponibilidadeItem(any(UUID.class), any(UUID.class), anyBoolean());
+        }
+
+        @Test
+        @DisplayName("Deve atualizar a imagem do item com sucesso")
+        void deveAtualizarImagemDoItem() throws Exception {
+            UUID idRestaurante = UUID.randomUUID();
+            UUID idItem = UUID.randomUUID();
+            MockMultipartFile imagem = new MockMultipartFile(
+                    "imagem",
+                    "imagem.jpg",
+                    "image/jpeg",
+                    "conteudo".getBytes());
+
+            doNothing().when(restauranteCoreController).atualizarImagemItem(any(), any(), any(MultipartFile.class));
+
+            mockMvc.perform(multipart("/restaurantes/{id-restaurante}/itens/{id-item}/imagem", idRestaurante, idItem)
+                            .file(imagem)
+                            .with(request -> { request.setMethod("PATCH"); return request; }))
+                    .andExpect(status().isNoContent());
+
+            verify(restauranteCoreController, times(1)).atualizarImagemItem(any(), any(), any(MultipartFile.class));
+        }
+
+        @Test
+        @DisplayName("Deve baixar a imagem do item com sucesso")
+        void deveBaixarImagemDoItem() throws Exception {
+            UUID idRestaurante = UUID.randomUUID();
+            UUID idItem = UUID.randomUUID();
+            String nomeArquivo = "imagem.jpg";
+            byte[] conteudo = "conteudo da imagem".getBytes();
+            ImagemDto imagem = new ImagemDto(UUID.randomUUID(), nomeArquivo, conteudo, "image/jpeg");
+
+            when(restauranteCoreController.baixarImagemItem(any(), any())).thenReturn(imagem);
+
+            mockMvc.perform(get("/restaurantes/{id-restaurante}/itens/{id-item}/imagem/download", idRestaurante, idItem))
+                    .andExpect(status().isOk())
+                    .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nomeArquivo + "\""))
+                    .andExpect(content().bytes(conteudo));
+
+            verify(restauranteCoreController, times(1)).baixarImagemItem(any(), any());
+        }
 
     }
 }
