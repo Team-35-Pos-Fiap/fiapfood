@@ -2,7 +2,7 @@ package br.com.fiapfood.core.entities;
 
 import org.apache.commons.lang3.StringUtils;
 
-import br.com.fiapfood.core.exceptions.NomeTipoCulinariaInvalidoException;
+import br.com.fiapfood.core.exceptions.tipo_culinaria.NomeTipoCulinariaInvalidoException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

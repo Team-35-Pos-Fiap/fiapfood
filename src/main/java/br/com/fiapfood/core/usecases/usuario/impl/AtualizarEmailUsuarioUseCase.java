@@ -13,7 +13,11 @@ import br.com.fiapfood.core.usecases.usuario.interfaces.IAtualizarEmailUsuarioUs
 public class AtualizarEmailUsuarioUseCase implements IAtualizarEmailUsuarioUseCase {
 	private final IUsuarioGateway usuarioGateway;
 	private final IPerfilGateway perfilGateway;
-
+	
+	private final String USUARIO_INATIVO = "Não é possível alterar o nome de um usuário inativo.";
+	private final String USUARIO_CADASTRADO = "Já existe um usuário com o email informado.";
+	private final String EMAIL_DUPLICADO = "Não é possível alterar o email do usuário, pois ele já é igual ao email atual.";
+	
 	public AtualizarEmailUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
 		this.usuarioGateway = usuarioGateway;
 		this.perfilGateway = perfilGateway;
@@ -38,22 +42,21 @@ public class AtualizarEmailUsuarioUseCase implements IAtualizarEmailUsuarioUseCa
 
 	private void validarUsuario(final Usuario usuario) {
 		if (!usuario.getIsAtivo()) {
-			throw new AtualizacaoEmailUsuarioNaoPermitidoException("Não é possível alterar o email de um usuário inativo.");
+			throw new AtualizacaoEmailUsuarioNaoPermitidoException(USUARIO_INATIVO);
 		} 
 	}
 
 	private void validarEmailExistente(final String email) {
 		if(usuarioGateway.emailJaCadastrado(email)){
-			throw new AtualizacaoEmailUsuarioNaoPermitidoException("Já existe um usuário com o email informado.");
+			throw new AtualizacaoEmailUsuarioNaoPermitidoException(USUARIO_CADASTRADO);
 		}
 	}
 
 	private void validarEmail(final Usuario usuario, final String email) {
 		if(usuario.getEmail().equals(email)){
-			throw new AtualizacaoEmailUsuarioNaoPermitidoException("Não é possível alterar o email do usuário, pois ele já é igual ao email atual.");
+			throw new AtualizacaoEmailUsuarioNaoPermitidoException(EMAIL_DUPLICADO);
 		}
 	}
-
 	
 	private void salvar(final Usuario usuario) {
 		usuarioGateway.salvar(UsuarioPresenter.toUsuarioDto(usuario, 

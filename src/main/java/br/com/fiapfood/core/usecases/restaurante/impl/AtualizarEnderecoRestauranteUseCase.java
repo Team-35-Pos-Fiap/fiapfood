@@ -5,7 +5,7 @@ import java.util.UUID;
 import br.com.fiapfood.core.entities.Endereco;
 import br.com.fiapfood.core.entities.Restaurante;
 import br.com.fiapfood.core.entities.dto.endereco.DadosEnderecoCoreDto;
-import br.com.fiapfood.core.exceptions.AtualizacaoEnderecoRestauranteNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.restaurante.AtualizacaoEnderecoRestauranteNaoPermitidaException;
 import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
 import br.com.fiapfood.core.presenters.RestaurantePresenter;
 import br.com.fiapfood.core.usecases.restaurante.interfaces.IAtualizarEnderecoRestauranteUseCase;
@@ -13,6 +13,8 @@ import br.com.fiapfood.core.usecases.restaurante.interfaces.IAtualizarEnderecoRe
 public class AtualizarEnderecoRestauranteUseCase implements IAtualizarEnderecoRestauranteUseCase {
 	private final IRestauranteGateway restauranteGateway;
 
+	private final String RESTAURANTE_INATIVO = "Não é possível alterar o nome do restaurante, pois ele se encontra inativo.";
+	
 	public AtualizarEnderecoRestauranteUseCase(IRestauranteGateway restauranteGateway) {
 		this.restauranteGateway = restauranteGateway;
 	}
@@ -47,7 +49,7 @@ public class AtualizarEnderecoRestauranteUseCase implements IAtualizarEnderecoRe
 	
 	private void validarStatusRestaurante(final Restaurante restaurante) {
 		if (!restaurante.getIsAtivo()) {
-			throw new AtualizacaoEnderecoRestauranteNaoPermitidaException("Não é possível alterar o endereço do restaurante pois ele se encontra inativo.");
+			throw new AtualizacaoEnderecoRestauranteNaoPermitidaException(RESTAURANTE_INATIVO);
 		} 
 	}
 

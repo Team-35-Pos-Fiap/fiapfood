@@ -15,6 +15,8 @@ import br.com.fiapfood.core.usecases.item.interfaces.IBaixarImagemItemUseCase;
 public class BaixarImagemItemUseCase implements IBaixarImagemItemUseCase {
 
 	private final IRestauranteGateway restauranteGateway;
+	
+	private final String ITEM_NAO_ENCONTRADO = "Não foi encontrado nenhum item com o id informado para o restaurante.";
 
 	public BaixarImagemItemUseCase(IRestauranteGateway restauranteGateway) {
 		this.restauranteGateway = restauranteGateway;
@@ -34,7 +36,7 @@ public class BaixarImagemItemUseCase implements IBaixarImagemItemUseCase {
 		if(item != null) {
 			return item.get();
 		} else {
-			throw new ItemNaoEncontradoException("Não foi encontrado nenhum item com o id informado para o restaurante.");			
+			throw new ItemNaoEncontradoException(ITEM_NAO_ENCONTRADO);			
 		}
 	}
 	

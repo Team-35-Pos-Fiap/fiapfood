@@ -5,9 +5,9 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
-import br.com.fiapfood.core.exceptions.EmailUsuarioInvalidoException;
-import br.com.fiapfood.core.exceptions.NomeUsuarioInvalidoException;
-import br.com.fiapfood.core.exceptions.PerfilInvalidoException;
+import br.com.fiapfood.core.exceptions.perfil.PerfilInvalidoException;
+import br.com.fiapfood.core.exceptions.usuario.EmailUsuarioInvalidoException;
+import br.com.fiapfood.core.exceptions.usuario.NomeUsuarioInvalidoException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

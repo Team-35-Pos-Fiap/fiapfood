@@ -7,8 +7,8 @@ import java.util.UUID;
 
 import br.com.fiapfood.core.entities.Atendimento;
 import br.com.fiapfood.core.entities.Restaurante;
-import br.com.fiapfood.core.exceptions.AtualizacaoStatusRestauranteNaoPermitidaException;
 import br.com.fiapfood.core.exceptions.atendimento.AtendimentoRestauranteNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.atendimento.ExclusaoAtendimentoRestauranteNaoPermitidoException;
 import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
 import br.com.fiapfood.core.presenters.RestaurantePresenter;
 import br.com.fiapfood.core.usecases.atendimento.interfaces.IExcluirAtendimentoUseCase;
@@ -16,6 +16,9 @@ import br.com.fiapfood.core.usecases.atendimento.interfaces.IExcluirAtendimentoU
 public class ExcluirAtendimentoUseCase implements IExcluirAtendimentoUseCase {
 
 	private final IRestauranteGateway restauranteGateway;
+	
+	private final String ATENDIMENTO_NAO_ENCONTRADO = "Não foi encontrado nenhum atendimento com o identificador informado para o restaurante.";
+	private final String RESTAURANTE_INATIVO = "Não é possível excluir o atendimento pois o restaurante se encontra inativo.";
 
 	public ExcluirAtendimentoUseCase(IRestauranteGateway restauranteGateway) {
 		this.restauranteGateway = restauranteGateway;
@@ -69,7 +72,7 @@ public class ExcluirAtendimentoUseCase implements IExcluirAtendimentoUseCase {
 		if (dados.isPresent()) {
 			return dados.get();
 		} else {
-			throw new AtendimentoRestauranteNaoEncontradoException("Não foi encontrado nenhum atendimento com o identificador informado para o restaurante.");
+			throw new AtendimentoRestauranteNaoEncontradoException(ATENDIMENTO_NAO_ENCONTRADO);
 		}
 	}
 
@@ -79,7 +82,7 @@ public class ExcluirAtendimentoUseCase implements IExcluirAtendimentoUseCase {
 
 	private void validarStatusRestaurante(final Restaurante restaurante) {
 		if (!restaurante.getIsAtivo()) {
-			throw new AtualizacaoStatusRestauranteNaoPermitidaException("Não é possível inativar o restaurante pois ele já se encontra inativo.");
+			throw new ExclusaoAtendimentoRestauranteNaoPermitidoException(RESTAURANTE_INATIVO);
 		} 
 	}
 

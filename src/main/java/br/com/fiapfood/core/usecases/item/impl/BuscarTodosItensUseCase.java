@@ -36,6 +36,5 @@ public class BuscarTodosItensUseCase implements IBuscarTodosItensUseCase{
 
 	private ItemOutputCoreDto toItemOutputDto(Restaurante restaurante, Item item) {
 		return ItemPresenter.toItemDto(item, ImagemUtils.prepararLinkDownloadImagem(restaurante.getId(), item.getId()));
-	}
-	
+	}	
 }

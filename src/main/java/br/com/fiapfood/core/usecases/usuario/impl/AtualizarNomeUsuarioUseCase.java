@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import br.com.fiapfood.core.entities.Perfil;
 import br.com.fiapfood.core.entities.Usuario;
-import br.com.fiapfood.core.exceptions.UsuarioInativoException;
 import br.com.fiapfood.core.exceptions.usuario.AtualizacaoNomeUsuarioNaoPermitidoException;
+import br.com.fiapfood.core.exceptions.usuario.UsuarioInativoException;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
 import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
 import br.com.fiapfood.core.presenters.UsuarioPresenter;
@@ -15,6 +15,9 @@ public class AtualizarNomeUsuarioUseCase implements IAtualizarNomeUsuarioUseCase
 	private final IUsuarioGateway usuarioGateway;
 	private final IPerfilGateway perfilGateway;
 
+	private final String USUARIO_DUPLICADO = "Não é possível alterar o nome do usuário, pois ele é igual ao nome do usuário.";
+	private final String USUARIO_INATIVO = "Não é possível alterar o nome de um usuário inativo.";
+	
 	public AtualizarNomeUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
 		this.usuarioGateway = usuarioGateway;
 		this.perfilGateway = perfilGateway;
@@ -34,7 +37,7 @@ public class AtualizarNomeUsuarioUseCase implements IAtualizarNomeUsuarioUseCase
 
 	private void validarNome(Usuario usuario, String nome) {
 		if (usuario.getNome().equals(nome)) {
-			throw new AtualizacaoNomeUsuarioNaoPermitidoException("Não é possível alterar o nome do usuário pois ele é igual ao nome do usuário.");
+			throw new AtualizacaoNomeUsuarioNaoPermitidoException(USUARIO_DUPLICADO);
 		} 
 	}
 
@@ -44,7 +47,7 @@ public class AtualizarNomeUsuarioUseCase implements IAtualizarNomeUsuarioUseCase
 
 	private void validarUsuario(final Usuario usuario) {
 		if (!usuario.getIsAtivo()) {
-			throw new UsuarioInativoException("Não é possível alterar o nome de um usuário inativo.");
+			throw new UsuarioInativoException(USUARIO_INATIVO);
 		} 
 	}
 

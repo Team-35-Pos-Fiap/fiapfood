@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import br.com.fiapfood.core.entities.Perfil;
 import br.com.fiapfood.core.entities.Usuario;
-import br.com.fiapfood.core.exceptions.AtualizacaoStatusUsuarioNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.usuario.AtualizacaoStatusUsuarioNaoPermitidaException;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
 import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
 import br.com.fiapfood.core.presenters.UsuarioPresenter;
@@ -14,6 +14,8 @@ public class InativarUsuarioUseCase implements IInativarUsuarioUseCase {
 	private final IUsuarioGateway usuarioGateway;
 	private final IPerfilGateway perfilGateway;
 
+	private final String INATIVACAO_NAO_PERMITIDA = "Não é possível inativar um usuário.[, pois ele já se encontra ativo.";
+	
 	public InativarUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
 		this.usuarioGateway = usuarioGateway;
 		this.perfilGateway = perfilGateway;
@@ -36,7 +38,7 @@ public class InativarUsuarioUseCase implements IInativarUsuarioUseCase {
 
 	private void validarUsuario(final Usuario usuario) {
 		if (!usuario.getIsAtivo()) {
-			throw new AtualizacaoStatusUsuarioNaoPermitidaException("Não é possível inativar o usuário pois ele já se encontra inativo.");
+			throw new AtualizacaoStatusUsuarioNaoPermitidaException(INATIVACAO_NAO_PERMITIDA);
 		} 
 	}
 

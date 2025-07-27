@@ -7,8 +7,8 @@ import java.util.UUID;
 import br.com.fiapfood.core.entities.Atendimento;
 import br.com.fiapfood.core.entities.Restaurante;
 import br.com.fiapfood.core.entities.dto.atendimento.AtendimentoCoreDto;
-import br.com.fiapfood.core.exceptions.AtualizacaoStatusRestauranteNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.atendimento.DiaAtendimentoRestauranteInvalidoException;
+import br.com.fiapfood.core.exceptions.atendimento.AdicionarAtendimentoRestauranteNaoPermitidoException;
+import br.com.fiapfood.core.exceptions.atendimento.ExclusaoAtendimentoRestauranteNaoPermitidoException;
 import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
 import br.com.fiapfood.core.presenters.AtendimentoPresenter;
 import br.com.fiapfood.core.presenters.RestaurantePresenter;
@@ -17,7 +17,10 @@ import br.com.fiapfood.core.usecases.atendimento.interfaces.IAdicionarAtendiment
 public class AdicionarAtendimentoUseCase implements IAdicionarAtendimentoUseCase {
 
 	private final IRestauranteGateway restauranteGateway;
-
+	private final String ATENDIMENTO_DUPLICADO = "Não é possível adicionar o atendimento, pois já existe um outro atendimento para o mesmo dia.\"";
+	private final String RESTAURANTE_INATIVO = "Não é possível adicionar o atendimento pois o restaurante se encontra inativo.";
+	
+	
 	public AdicionarAtendimentoUseCase(IRestauranteGateway restauranteGateway) {
 		this.restauranteGateway = restauranteGateway;
 	}
@@ -67,13 +70,13 @@ public class AdicionarAtendimentoUseCase implements IAdicionarAtendimentoUseCase
 
 	private void validaDiaAtendimento(List<Atendimento> atendimentos, AtendimentoCoreDto atendimento) {
 		if(atendimentos.stream().filter(a -> a.getDia().equals(atendimento.dia())).findAny().isPresent()) {
-			throw new DiaAtendimentoRestauranteInvalidoException("Não é possível atualizar o atendimento, pois já existe um outro atendimento para o mesmo dia.");
+			throw new AdicionarAtendimentoRestauranteNaoPermitidoException(ATENDIMENTO_DUPLICADO);
 		}
 	}
 
 	private void validarStatusRestaurante(final Restaurante restaurante) {
 		if (!restaurante.getIsAtivo()) {
-			throw new AtualizacaoStatusRestauranteNaoPermitidaException("Não é possível inativar o restaurante pois ele já se encontra inativo.");
+			throw new ExclusaoAtendimentoRestauranteNaoPermitidoException(RESTAURANTE_INATIVO);
 		} 
 	}
 

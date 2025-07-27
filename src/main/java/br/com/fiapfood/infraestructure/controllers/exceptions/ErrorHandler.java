@@ -1,14 +1,8 @@
 package br.com.fiapfood.infraestructure.controllers.exceptions;
 
-import br.com.fiapfood.core.exceptions.*;
-import br.com.fiapfood.core.exceptions.item.ItemNaoEncontradoException;
-import br.com.fiapfood.core.exceptions.usuario.AtualizacaoEmailUsuarioNaoPermitidoException;
-import br.com.fiapfood.core.exceptions.usuario.AtualizacaoNomeUsuarioNaoPermitidoException;
-import br.com.fiapfood.infraestructure.controllers.response.ErroResponse;
-import br.com.fiapfood.infraestructure.controllers.response.MensagemResponse;
-import br.com.fiapfood.infraestructure.utils.MensagensUtil;
-import jakarta.validation.ValidationException;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +16,60 @@ import org.springframework.web.client.HttpServerErrorException.InternalServerErr
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.util.HashMap;
-import java.util.Map;
+import br.com.fiapfood.core.exceptions.atendimento.AdicionarAtendimentoRestauranteNaoPermitidoException;
+import br.com.fiapfood.core.exceptions.atendimento.AtendimentoRestauranteNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.atendimento.DiaAtendimentoRestauranteInvalidoException;
+import br.com.fiapfood.core.exceptions.atendimento.ExclusaoAtendimentoRestauranteNaoPermitidoException;
+import br.com.fiapfood.core.exceptions.item.AtualizacaoDescricaoItemNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.item.AtualizacaoDisponibilidadeConsumoPresencialItemNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.item.AtualizacaoDisponibilidadeItemNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.item.AtualizacaoImagemItemNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.item.AtualizacaoNomeItemNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.item.AtualizacaoPrecoItemNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.item.CadastrarItemNaoPermitidoException;
+import br.com.fiapfood.core.exceptions.item.ImagemItemInvalidaException;
+import br.com.fiapfood.core.exceptions.item.ItemNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.item.NomeImagemItemInvalidoException;
+import br.com.fiapfood.core.exceptions.item.TamanhoNomeImagemItemInvalidoException;
+import br.com.fiapfood.core.exceptions.item.TipoImagemItemInvalidoException;
+import br.com.fiapfood.core.exceptions.item.ValorItemInvalidoException;
+import br.com.fiapfood.core.exceptions.perfil.ExclusaoPerfilNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.perfil.NomePerfilDuplicadoException;
+import br.com.fiapfood.core.exceptions.perfil.NomePerfilInvalidoException;
+import br.com.fiapfood.core.exceptions.perfil.PerfilInvalidoException;
+import br.com.fiapfood.core.exceptions.perfil.PerfilNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.restaurante.AtualizacaoDonoRestauranteNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.restaurante.AtualizacaoEnderecoRestauranteNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.restaurante.AtualizacaoNomeRestauranteNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.restaurante.AtualizacaoStatusRestauranteNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.restaurante.AtualizacaoTipoCulinariaRestauranteNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.restaurante.CadastrarRestauranteNaoPermitidoException;
+import br.com.fiapfood.core.exceptions.restaurante.DonoRestauranteInvalidoException;
+import br.com.fiapfood.core.exceptions.restaurante.InativacaoRestauranteNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.restaurante.NomeRestauranteInvalidoException;
+import br.com.fiapfood.core.exceptions.restaurante.ReativacaoRestauranteNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.restaurante.RestauranteNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.tipo_culinaria.NomeTipoCulinariaInvalidoException;
+import br.com.fiapfood.core.exceptions.tipo_culinaria.TipoCulinariaInvalidoException;
+import br.com.fiapfood.core.exceptions.tipo_culinaria.TipoCulinariaNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.usuario.AtualizacaoEmailUsuarioNaoPermitidoException;
+import br.com.fiapfood.core.exceptions.usuario.AtualizacaoNomeUsuarioNaoPermitidoException;
+import br.com.fiapfood.core.exceptions.usuario.AtualizacaoPerfilNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.usuario.AtualizacaoStatusUsuarioNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.usuario.EmailDuplicadoException;
+import br.com.fiapfood.core.exceptions.usuario.EmailUsuarioInvalidoException;
+import br.com.fiapfood.core.exceptions.usuario.MatriculaDuplicadaException;
+import br.com.fiapfood.core.exceptions.usuario.MatriculaInvalidaException;
+import br.com.fiapfood.core.exceptions.usuario.NomeUsuarioInvalidoException;
+import br.com.fiapfood.core.exceptions.usuario.SenhaUsuarioInvalidaException;
+import br.com.fiapfood.core.exceptions.usuario.UsuarioInativoException;
+import br.com.fiapfood.core.exceptions.usuario.UsuarioNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.usuario.UsuarioSemAcessoException;
+import br.com.fiapfood.infraestructure.controllers.response.ErroResponse;
+import br.com.fiapfood.infraestructure.controllers.response.MensagemResponse;
+import br.com.fiapfood.infraestructure.utils.MensagensUtil;
+import jakarta.validation.ValidationException;
+import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
 @Slf4j
@@ -78,29 +124,8 @@ public class ErrorHandler {
 		return getResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 	}
 
-	@ExceptionHandler(LoginNaoEncontradoException.class)
-	public ResponseEntity<MensagemResponse> trataLoginNaoEncontradoException(LoginNaoEncontradoException e) {
-		log.error(e.getMessage(), e);
-		
-		return getResponse(HttpStatus.NOT_FOUND, e.getMessage());
-	}
-	
 	@ExceptionHandler(EmailDuplicadoException.class)
 	public ResponseEntity<MensagemResponse> trataEmailDuplicadoException(EmailDuplicadoException e) {
-		log.error(e.getMessage(), e);
-		
-		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
-	}
-
-	@ExceptionHandler(AtualizacaoEmailUsuarioNaoPermitidoException.class)
-	public ResponseEntity<MensagemResponse> trataAtualizacaoEmailUsuarioNaoPermitidoException(AtualizacaoEmailUsuarioNaoPermitidoException e) {
-		log.error(e.getMessage(), e);
-
-		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
-	}
-
-	@ExceptionHandler(AtualizacaoPerfilUsuarioNaoPermitidaException.class)
-	public ResponseEntity<MensagemResponse> trataAtualizacaoPerfilUsuarioNaoPermitidaException(AtualizacaoPerfilUsuarioNaoPermitidaException e) {
 		log.error(e.getMessage(), e);
 		
 		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -115,20 +140,6 @@ public class ErrorHandler {
 	
 	@ExceptionHandler(EmailUsuarioInvalidoException.class)
 	public ResponseEntity<MensagemResponse> trataEmailUsuarioInvalidoException(EmailUsuarioInvalidoException e) {
-		log.error(e.getMessage(), e);
-		
-		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
-	}
-
-	@ExceptionHandler(EnderecoUsuarioInvalidoException.class)
-	public ResponseEntity<MensagemResponse> trataEnderecoUsuarioInvalidoException(EnderecoUsuarioInvalidoException e) {
-		log.error(e.getMessage(), e);
-		
-		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
-	}
-	
-	@ExceptionHandler(LoginInvalidoException.class)
-	public ResponseEntity<MensagemResponse> trataLoginInvalidoException(LoginInvalidoException e) {
 		log.error(e.getMessage(), e);
 		
 		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -161,13 +172,6 @@ public class ErrorHandler {
 		
 		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
 	}
-
-	@ExceptionHandler(AtualizacaoNomeUsuarioNaoPermitidoException.class)
-	public ResponseEntity<MensagemResponse> trataAtualizacaoNomeUsuarioNaoPermitidoException(AtualizacaoNomeUsuarioNaoPermitidoException e) {
-		log.error(e.getMessage(), e);
-
-		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
-	}
 	
 	@ExceptionHandler(PerfilInvalidoException.class)
 	public ResponseEntity<MensagemResponse> trataPerfilInvalidoException(PerfilInvalidoException e) {
@@ -183,8 +187,8 @@ public class ErrorHandler {
 		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
 	}
 	
-	@ExceptionHandler(SenhaInvalidaException.class)
-	public ResponseEntity<MensagemResponse> trataSenhaInvalidaException(SenhaInvalidaException e) {
+	@ExceptionHandler(SenhaUsuarioInvalidaException.class)
+	public ResponseEntity<MensagemResponse> trataSenhaInvalidaException(SenhaUsuarioInvalidaException e) {
 		log.error(e.getMessage(), e);
 		
 		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -238,11 +242,222 @@ public class ErrorHandler {
 		
 		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
 	}
+	
+	@ExceptionHandler(AtendimentoRestauranteNaoEncontradoException.class)
+	public ResponseEntity<MensagemResponse> trataAtendimentoRestauranteNaoEncontradoException(AtendimentoRestauranteNaoEncontradoException e) {
+		log.error(e.getMessage(), e);
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
 
+	@ExceptionHandler(DiaAtendimentoRestauranteInvalidoException.class)
+	public ResponseEntity<MensagemResponse> trataDiaAtendimentoRestauranteInvalidoException(DiaAtendimentoRestauranteInvalidoException e) {
+		log.error(e.getMessage(), e);
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+
+	@ExceptionHandler(AtualizacaoNomeItemNaoPermitidaException.class)
+	public ResponseEntity<MensagemResponse> trataAtualizacaoNomeItemNaoPermitidaException(AtualizacaoNomeItemNaoPermitidaException e) {
+		log.error(e.getMessage(), e);
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(AtualizacaoPrecoItemNaoPermitidaException.class)
+	public ResponseEntity<MensagemResponse> trataAtualizacaoPrecoItemNaoPermitidaException(AtualizacaoPrecoItemNaoPermitidaException e) {
+		log.error(e.getMessage(), e);
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(ImagemItemInvalidaException.class)
+	public ResponseEntity<MensagemResponse> trataImagemItemInvalidaException(ImagemItemInvalidaException e) {
+		log.error(e.getMessage(), e);
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
 	@ExceptionHandler(ItemNaoEncontradoException.class)
 	public ResponseEntity<MensagemResponse> trataItemNaoEncontradoException(ItemNaoEncontradoException e) {
 		log.error(e.getMessage(), e);
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(NomeImagemItemInvalidoException.class)
+	public ResponseEntity<MensagemResponse> trataNomeImagemItemInvalidoException(NomeImagemItemInvalidoException e) {
+		log.error(e.getMessage(), e);
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(TamanhoNomeImagemItemInvalidoException.class)
+	public ResponseEntity<MensagemResponse> trataTamanhoNomeImagemItemInvalidoException(TamanhoNomeImagemItemInvalidoException e) {
+		log.error(e.getMessage(), e);
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(TipoImagemItemInvalidoException.class)
+	public ResponseEntity<MensagemResponse> trataTipoImagemItemInvalidoException(TipoImagemItemInvalidoException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(ValorItemInvalidoException.class)
+	public ResponseEntity<MensagemResponse> trataValorItemInvalidoException(ValorItemInvalidoException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
 
+	@ExceptionHandler(AtualizacaoDonoRestauranteNaoPermitidaException.class)
+	public ResponseEntity<MensagemResponse> trataAtualizacaoDonoRestauranteNaoPermitidaException(AtualizacaoDonoRestauranteNaoPermitidaException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(AtualizacaoEnderecoRestauranteNaoPermitidaException.class)
+	public ResponseEntity<MensagemResponse> trataAtualizacaoEnderecoRestauranteNaoPermitidaException(AtualizacaoEnderecoRestauranteNaoPermitidaException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(AtualizacaoNomeRestauranteNaoPermitidaException.class)
+	public ResponseEntity<MensagemResponse> trataAtualizacaoNomeRestauranteNaoPermitidaException(AtualizacaoNomeRestauranteNaoPermitidaException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(AtualizacaoStatusRestauranteNaoPermitidaException.class)
+	public ResponseEntity<MensagemResponse> trataAtualizacaoStatusRestauranteNaoPermitidaException(AtualizacaoStatusRestauranteNaoPermitidaException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(AtualizacaoTipoCulinariaRestauranteNaoPermitidaException.class)
+	public ResponseEntity<MensagemResponse> trataAtualizacaoTipoCulinariaRestauranteNaoPermitidaException(AtualizacaoTipoCulinariaRestauranteNaoPermitidaException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(CadastrarRestauranteNaoPermitidoException.class)
+	public ResponseEntity<MensagemResponse> trataCadastrarRestauranteNaoPermitidoException(CadastrarRestauranteNaoPermitidoException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(DonoRestauranteInvalidoException.class)
+	public ResponseEntity<MensagemResponse> trataDonoRestauranteInvalidoException(DonoRestauranteInvalidoException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+
+	@ExceptionHandler(NomeRestauranteInvalidoException.class)
+	public ResponseEntity<MensagemResponse> trataNomeRestauranteInvalidoException(NomeRestauranteInvalidoException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+
+	@ExceptionHandler(NomeTipoCulinariaInvalidoException.class)
+	public ResponseEntity<MensagemResponse> trataNomeTipoCulinariaInvalidoException(NomeTipoCulinariaInvalidoException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(AtualizacaoEmailUsuarioNaoPermitidoException.class)
+	public ResponseEntity<MensagemResponse> trataAtualizacaoEmailUsuarioNaoPermitidoException(AtualizacaoEmailUsuarioNaoPermitidoException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(AtualizacaoNomeUsuarioNaoPermitidoException.class)
+	public ResponseEntity<MensagemResponse> trataAtualizacaoNomeUsuarioNaoPermitidoException(AtualizacaoNomeUsuarioNaoPermitidoException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(ExclusaoAtendimentoRestauranteNaoPermitidoException.class)
+	public ResponseEntity<MensagemResponse> trataExclusaoAtendimentoRestauranteNaoPermitidoException(ExclusaoAtendimentoRestauranteNaoPermitidoException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(AdicionarAtendimentoRestauranteNaoPermitidoException.class)
+	public ResponseEntity<MensagemResponse> trataAdicionarAtendimentoRestauranteNaoPermitidoException(AdicionarAtendimentoRestauranteNaoPermitidoException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(AtualizacaoDescricaoItemNaoPermitidaException.class)
+	public ResponseEntity<MensagemResponse> trataAtualizacaoDescricaoItemNaoPermitidaException(AtualizacaoDescricaoItemNaoPermitidaException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(AtualizacaoDisponibilidadeConsumoPresencialItemNaoPermitidaException.class)
+	public ResponseEntity<MensagemResponse> trataAtualizacaoDisponibilidadeConsumoPresencialItemNaoPermitidaException(AtualizacaoDisponibilidadeConsumoPresencialItemNaoPermitidaException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(AtualizacaoDisponibilidadeItemNaoPermitidaException.class)
+	public ResponseEntity<MensagemResponse> trataAtualizacaoDisponibilidadeItemNaoPermitidaException(AtualizacaoDisponibilidadeItemNaoPermitidaException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(AtualizacaoImagemItemNaoPermitidaException.class)
+	public ResponseEntity<MensagemResponse> trataAtualizacaoImagemItemNaoPermitidaException(AtualizacaoImagemItemNaoPermitidaException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(CadastrarItemNaoPermitidoException.class)
+	public ResponseEntity<MensagemResponse> trataCadastrarItemNaoPermitidoException(CadastrarItemNaoPermitidoException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	
+	@ExceptionHandler(InativacaoRestauranteNaoPermitidaException.class)
+	public ResponseEntity<MensagemResponse> trataInativacaoRestauranteNaoPermitidaException(InativacaoRestauranteNaoPermitidaException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+	
+	@ExceptionHandler(ReativacaoRestauranteNaoPermitidaException.class)
+	public ResponseEntity<MensagemResponse> trataReativacaoRestauranteNaoPermitidaException(ReativacaoRestauranteNaoPermitidaException e) {
+		log.error(e.getMessage(), e);	
+		
+		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+
+	@ExceptionHandler(AtualizacaoPerfilNaoPermitidaException.class)
+	public ResponseEntity<MensagemResponse> trataAtualizacaoPerfilNaoPermitidaException(AtualizacaoPerfilNaoPermitidaException e) {
+		log.error(e.getMessage(), e);	
+		
 		return getResponse(HttpStatus.BAD_REQUEST, e.getMessage());
 	}
 	
@@ -275,7 +490,7 @@ public class ErrorHandler {
 			errors.put(field, error.getDefaultMessage());
 		});
 		
-		return getResponse(HttpStatus.BAD_REQUEST, errors);
+		return getResponse(HttpStatus.INTERNAL_SERVER_ERROR, errors);
 	}
 
 	@ExceptionHandler(Exception.class)

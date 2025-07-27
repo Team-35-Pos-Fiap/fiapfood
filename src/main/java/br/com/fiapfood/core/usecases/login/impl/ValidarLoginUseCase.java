@@ -1,7 +1,7 @@
 package br.com.fiapfood.core.usecases.login.impl;
 
 import br.com.fiapfood.core.entities.Usuario;
-import br.com.fiapfood.core.exceptions.UsuarioSemAcessoException;
+import br.com.fiapfood.core.exceptions.usuario.UsuarioSemAcessoException;
 import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
 import br.com.fiapfood.core.usecases.login.interfaces.IValidarAcessoUseCase;
 
@@ -10,7 +10,7 @@ public class ValidarLoginUseCase implements IValidarAcessoUseCase {
 	private final IUsuarioGateway usuarioGateway;
 	
 	private final String ACESSO_LIBERADO = "Acesso liberado para o usuário ";
-
+	private final String USUARIO_INATIVO = "Não é possível realizar o login para usuários inativos.";
 	
 	public ValidarLoginUseCase(IUsuarioGateway usuarioGateway) {
 		this.usuarioGateway = usuarioGateway;
@@ -27,7 +27,7 @@ public class ValidarLoginUseCase implements IValidarAcessoUseCase {
 	
 	private void validarUsuario(final Usuario usuario) {
 		if (!usuario.getIsAtivo()) {
-			throw new UsuarioSemAcessoException("Não é possível realizar o login para usuários inativos.");
+			throw new UsuarioSemAcessoException(USUARIO_INATIVO);
 		} 
 	}
 	

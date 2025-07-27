@@ -15,7 +15,8 @@ import br.com.fiapfood.core.utils.ImagemUtils;
 public class BuscarItemPorIdUseCase implements IBuscarItemPorIdUseCase{
 
 	private final IRestauranteGateway restauranteGateway;
-	
+	private final String ITEM_NAO_ENCONTRADO = "Não foi encontrado nenhum item com o id informado para o restaurante.";
+
 	public BuscarItemPorIdUseCase(IRestauranteGateway restauranteGateway) {
 		this.restauranteGateway = restauranteGateway;
 	}
@@ -29,7 +30,7 @@ public class BuscarItemPorIdUseCase implements IBuscarItemPorIdUseCase{
 		if(item.isPresent()) {
 			return toItemOutputDto(restaurante, item.get());			
 		} else {
-			throw new ItemNaoEncontradoException("Não foi encontrado nenhum item com o id informado para o restaurante.");			
+			throw new ItemNaoEncontradoException(ITEM_NAO_ENCONTRADO);			
 		}
 	}
 

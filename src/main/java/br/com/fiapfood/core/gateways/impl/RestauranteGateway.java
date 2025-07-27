@@ -5,7 +5,7 @@ import java.util.UUID;
 import br.com.fiapfood.core.entities.Restaurante;
 import br.com.fiapfood.core.entities.dto.restaurante.DadosRestauranteDto;
 import br.com.fiapfood.core.entities.dto.restaurante.RestaurantePaginacaoInputDto;
-import br.com.fiapfood.core.exceptions.RestauranteNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.restaurante.RestauranteNaoEncontradoException;
 import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
 import br.com.fiapfood.core.presenters.RestaurantePresenter;
 import br.com.fiapfood.infraestructure.repositories.interfaces.IRestauranteRepository;
@@ -13,7 +13,10 @@ import br.com.fiapfood.infraestructure.repositories.interfaces.IRestauranteRepos
 public class RestauranteGateway implements IRestauranteGateway{
 
 	private final IRestauranteRepository restauranteRepository;
-	
+
+	private final String RESTAURANTE_NAO_ENCONTRADO = "Não foi encontrado nenhum restaurante com o id informado.";
+	private final String RESTAURANTES_NAO_ENCONTRADOS = "Não foram encontrados restaurantes na base de dados para a página informada.";
+
 	public RestauranteGateway(IRestauranteRepository restauranteRepository) {
 		this.restauranteRepository = restauranteRepository;
 	}
@@ -25,7 +28,7 @@ public class RestauranteGateway implements IRestauranteGateway{
 		if(restaurante != null) {		 
 			return RestaurantePresenter.toRestaurante(restaurante);
 		} else {
-			throw new RestauranteNaoEncontradoException("Não foi encontrado nenhum restaurante com o id informado.");
+			throw new RestauranteNaoEncontradoException(RESTAURANTE_NAO_ENCONTRADO);
 		}
 	}
 
@@ -36,7 +39,7 @@ public class RestauranteGateway implements IRestauranteGateway{
 		if(dados != null) {
 			return dados;
 		} else {
-			throw new RestauranteNaoEncontradoException("Não foram encontrados restaurantes na base de dados para a página informada.");
+			throw new RestauranteNaoEncontradoException(RESTAURANTES_NAO_ENCONTRADOS);
 		}
 	}
 

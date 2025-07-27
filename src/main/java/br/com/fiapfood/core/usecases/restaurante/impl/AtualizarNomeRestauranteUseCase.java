@@ -3,13 +3,16 @@ package br.com.fiapfood.core.usecases.restaurante.impl;
 import java.util.UUID;
 
 import br.com.fiapfood.core.entities.Restaurante;
-import br.com.fiapfood.core.exceptions.AtualizacaoNomeRestauranteNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.restaurante.AtualizacaoNomeRestauranteNaoPermitidaException;
 import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
 import br.com.fiapfood.core.presenters.RestaurantePresenter;
 import br.com.fiapfood.core.usecases.restaurante.interfaces.IAtualizarNomeRestauranteUseCase;
 
 public class AtualizarNomeRestauranteUseCase implements IAtualizarNomeRestauranteUseCase {
 	private final IRestauranteGateway restauranteGateway;
+
+	private final String RESTAURANTE_INATIVO = "Não é possível alterar o nome do restaurante, pois ele se encontra inativo.";
+	private final String NOME_DUPLICADO = "Não é possível atualizar o nome do restaurante, pois o nome informado é igual ao nome atual do restaurante.";
 
 	public AtualizarNomeRestauranteUseCase(IRestauranteGateway restauranteGateway) {
 		this.restauranteGateway = restauranteGateway;
@@ -37,13 +40,13 @@ public class AtualizarNomeRestauranteUseCase implements IAtualizarNomeRestaurant
 	
 	private void validarStatusRestaurante(final Restaurante restaurante) {
 		if (!restaurante.getIsAtivo()) {
-			throw new AtualizacaoNomeRestauranteNaoPermitidaException("Não é possível alterar o nome do restaurante pois ele se encontra inativo.");
+			throw new AtualizacaoNomeRestauranteNaoPermitidaException(RESTAURANTE_INATIVO);
 		} 
 	}
 	
 	private void validarNome(final String nome, Restaurante restaurante) {
 		if(restaurante.getNome().trim().equals(nome.trim())){
-			throw new AtualizacaoNomeRestauranteNaoPermitidaException("Não é possível atualizar o nome do restaurante, pois o nome informado é igual ao nome atual do restaurante.");
+			throw new AtualizacaoNomeRestauranteNaoPermitidaException(NOME_DUPLICADO);
 		}
 	}
 	

@@ -5,8 +5,8 @@ import java.util.UUID;
 import br.com.fiapfood.core.entities.Login;
 import br.com.fiapfood.core.entities.Perfil;
 import br.com.fiapfood.core.entities.Usuario;
-import br.com.fiapfood.core.exceptions.MatriculaDuplicadaException;
-import br.com.fiapfood.core.exceptions.UsuarioInativoException;
+import br.com.fiapfood.core.exceptions.usuario.MatriculaDuplicadaException;
+import br.com.fiapfood.core.exceptions.usuario.UsuarioInativoException;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
 import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
 import br.com.fiapfood.core.presenters.UsuarioPresenter;
@@ -16,7 +16,10 @@ public class AtualizarMatriculaUseCase implements IAtualizarMatriculaUseCase {
 
 	private final IUsuarioGateway usuarioGateway;
 	private final IPerfilGateway perfilGateway;
-
+	
+	private final String USUARIO_INATIVO = "Não é possível alterar a matrícula, pois o usuário está inativo.";
+	private final String MATRICULA_DUPLICADA = "Já existe um usuário com a matrícula informada.";
+	
 	public AtualizarMatriculaUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
 		this.usuarioGateway = usuarioGateway;
 		this.perfilGateway = perfilGateway;
@@ -47,13 +50,13 @@ public class AtualizarMatriculaUseCase implements IAtualizarMatriculaUseCase {
 	
 	private void validarUsuario(final Usuario usuario) {
 		if (!usuario.getIsAtivo()) {
-			throw new UsuarioInativoException("Não é possível alterar a matrícula de um usuário inativo.");
+			throw new UsuarioInativoException(USUARIO_INATIVO);
 		} 
 	}
 	
 	private void validarMatricula(final String matricula) {
 		if(usuarioGateway.matriculaJaCadastrada(matricula)){
-			throw new MatriculaDuplicadaException("Já existe um usuário com a matrícula informada.");
+			throw new MatriculaDuplicadaException(MATRICULA_DUPLICADA);
 		}
 	}
 

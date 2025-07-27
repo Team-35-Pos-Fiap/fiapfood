@@ -7,7 +7,7 @@ import br.com.fiapfood.core.entities.Usuario;
 import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioCoreDto;
 import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioInputDto;
 import br.com.fiapfood.core.entities.dto.usuario.UsuarioPaginacaoInputDto;
-import br.com.fiapfood.core.exceptions.UsuarioNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.usuario.UsuarioNaoEncontradoException;
 import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
 import br.com.fiapfood.core.presenters.PerfilPresenter;
 import br.com.fiapfood.core.presenters.UsuarioPresenter;
@@ -16,6 +16,9 @@ import br.com.fiapfood.infraestructure.repositories.interfaces.IUsuarioRepositor
 public class UsuarioGateway implements IUsuarioGateway {
 
 	private final IUsuarioRepository usuarioRepository;
+
+	private final String USUARIO_NAO_ENCONTRADO = "Não foi encontrado nenhum usuário.";
+	private final String USUARIOS_NAO_ENCONTRADOS = "Não foram encontrados usuários na base de dados para a página informada.";
 	
 	public UsuarioGateway(IUsuarioRepository usuarioRepository) {
 		this.usuarioRepository = usuarioRepository;
@@ -28,7 +31,7 @@ public class UsuarioGateway implements IUsuarioGateway {
 		if(usuario != null) {
 			return UsuarioPresenter.toUsuario(usuario);
 		} else {
-			throw new UsuarioNaoEncontradoException("Não foi encontrado nenhum usuário com o id informado.");
+			throw new UsuarioNaoEncontradoException(USUARIO_NAO_ENCONTRADO);
 		}
 	}
 
@@ -39,7 +42,7 @@ public class UsuarioGateway implements IUsuarioGateway {
 		if(dados != null) {
 			return dados;
 		} else {
-			throw new UsuarioNaoEncontradoException("Não foram encontrados usuários na base de dados para a página informada.");
+			throw new UsuarioNaoEncontradoException(USUARIOS_NAO_ENCONTRADOS);
 		}
 	}
 
@@ -71,7 +74,7 @@ public class UsuarioGateway implements IUsuarioGateway {
 		if(usuario != null) {
 			return UsuarioPresenter.toUsuario(usuario);
 		} else {
-			throw new UsuarioNaoEncontradoException("Não foi encontrado nenhum usuário com a matrícula e senha informados.");
+			throw new UsuarioNaoEncontradoException(USUARIO_NAO_ENCONTRADO);
 		}
 	}
 	

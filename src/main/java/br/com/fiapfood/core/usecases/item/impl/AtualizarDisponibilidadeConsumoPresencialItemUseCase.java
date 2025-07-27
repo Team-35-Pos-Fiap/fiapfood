@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import br.com.fiapfood.core.entities.Item;
 import br.com.fiapfood.core.entities.Restaurante;
-import br.com.fiapfood.core.exceptions.AtualizacaoStatusRestauranteNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.item.AtualizacaoDisponibilidadeConsumoPresencialItemNaoPermitidaException;
 import br.com.fiapfood.core.exceptions.item.ItemNaoEncontradoException;
 import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
 import br.com.fiapfood.core.presenters.RestaurantePresenter;
@@ -17,6 +17,9 @@ public class AtualizarDisponibilidadeConsumoPresencialItemUseCase implements IAt
 	
 	private final IRestauranteGateway restauranteGateway;
 
+	private final String RESTAURANTE_INATIVO = "Não é possível atualizar a disponibilidade para consumo do item, pois o restaurante se encontra inativo.";
+	private final String ITEM_NAO_ENCONTRADO = "Não foi encontrado nenhum item com o id informado para o restaurante.";
+	
 	public AtualizarDisponibilidadeConsumoPresencialItemUseCase(IRestauranteGateway restauranteGateway) {
 		this.restauranteGateway = restauranteGateway;
 	}
@@ -41,7 +44,7 @@ public class AtualizarDisponibilidadeConsumoPresencialItemUseCase implements IAt
 		if(item != null) {
 			return item.get();
 		} else {
-			throw new ItemNaoEncontradoException("Não foi encontrado nenhum item com o id informado para o restaurante.");			
+			throw new ItemNaoEncontradoException(ITEM_NAO_ENCONTRADO);			
 		}
 	}
 	
@@ -55,7 +58,7 @@ public class AtualizarDisponibilidadeConsumoPresencialItemUseCase implements IAt
 
 	private void validarStatusRestaurante(final Restaurante restaurante) {
 		if (!restaurante.getIsAtivo()) {
-			throw new AtualizacaoStatusRestauranteNaoPermitidaException("Não é possível inativar o restaurante pois ele já se encontra inativo.");
+			throw new AtualizacaoDisponibilidadeConsumoPresencialItemNaoPermitidaException(RESTAURANTE_INATIVO);
 		} 
 	}
 	

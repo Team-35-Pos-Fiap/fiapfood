@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 
 import br.com.fiapfood.core.exceptions.item.NomeImagemItemInvalidoException;
-import br.com.fiapfood.core.exceptions.item.TamanhoImagemItemInvalidoException;
+import br.com.fiapfood.core.exceptions.item.TamanhoNomeImagemItemInvalidoException;
 import br.com.fiapfood.core.exceptions.item.TipoImagemItemInvalidoException;
 import br.com.fiapfood.core.utils.ImagemUtils;
 import lombok.Getter;
@@ -64,7 +64,7 @@ public class Imagem {
 	
 	private static void validarTamanhoNome(String nome) {
 		if(nome.length() > 50) {
-			throw new TamanhoImagemItemInvalidoException("O tamanho da imagem excede a quantidade de 50 caracteres.");
+			throw new TamanhoNomeImagemItemInvalidoException("O tamanho da imagem excede a quantidade de 50 caracteres.");
 		}
 	}
 }

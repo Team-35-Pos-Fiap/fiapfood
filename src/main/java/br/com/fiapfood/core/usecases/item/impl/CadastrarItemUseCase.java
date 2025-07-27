@@ -8,7 +8,7 @@ import java.util.UUID;
 import br.com.fiapfood.core.entities.Item;
 import br.com.fiapfood.core.entities.Restaurante;
 import br.com.fiapfood.core.entities.dto.item.ImagemCoreDto;
-import br.com.fiapfood.core.exceptions.AtualizacaoStatusRestauranteNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.item.CadastrarItemNaoPermitidoException;
 import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
 import br.com.fiapfood.core.presenters.ItemPresenter;
 import br.com.fiapfood.core.presenters.RestaurantePresenter;
@@ -17,6 +17,7 @@ import br.com.fiapfood.core.usecases.item.interfaces.ICadastrarItemUseCase;
 public class CadastrarItemUseCase implements ICadastrarItemUseCase{
 
 	private final IRestauranteGateway restauranteGateway;
+	private final String RESTAURANTE_INATIVO = "Não é possível cadastrar o item, pois o restaurante se encontra inativo.";
 	
 	public CadastrarItemUseCase(IRestauranteGateway restauranteGateway) {
 		this.restauranteGateway = restauranteGateway;
@@ -40,7 +41,7 @@ public class CadastrarItemUseCase implements ICadastrarItemUseCase{
 	
 	private void validarStatusRestaurante(final Restaurante restaurante) {
 		if (!restaurante.getIsAtivo()) {
-			throw new AtualizacaoStatusRestauranteNaoPermitidaException("Não é possível inativar o restaurante pois ele já se encontra inativo.");
+			throw new CadastrarItemNaoPermitidoException(RESTAURANTE_INATIVO);
 		} 
 	}
 	

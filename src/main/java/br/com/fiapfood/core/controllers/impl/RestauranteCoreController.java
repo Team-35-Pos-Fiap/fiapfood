@@ -69,6 +69,8 @@ public class RestauranteCoreController implements IRestauranteCoreController {
 	private final IBuscarTodosItensUseCase buscarTodosItensUseCase;
 	private final ICadastrarItemUseCase cadastrarItemUseCase;
 	
+	private final String ERRO_CARREGAR_DADOS_IMAGEM = "Ocorreu um erro inesperado ao recuperar os dados da imagem do item.";
+	
 	public RestauranteCoreController(IBuscarRestaurantePorId buscarRestaurantePorId, IBuscarTodosRestaurantesUseCase buscarTodosRestaurantesUseCase,
 									 ICadastrarRestauranteUseCase cadastrarRestauranteUseCase, IReativarRestauranteUseCase reativarRestauranteUseCase,
 									 IInativarRestauranteUseCase inativarRestauranteUseCase, IAtualizarDonoRestauranteUseCase atualizarDonoRestauranteUseCase,
@@ -190,7 +192,7 @@ public class RestauranteCoreController implements IRestauranteCoreController {
 		try {
 			atualizarImagemItemUseCase.atualizar(idRestaurante, idItem, ImagemPresenter.toImagemDto(imagem));
 		} catch (IOException e) {
-			throw new ImagemItemInvalidaException("Ocorreu um erro inesperado ao recuperar os dados do item.");
+			throw new ImagemItemInvalidaException(ERRO_CARREGAR_DADOS_IMAGEM);
 		}	 
 	}
 
@@ -221,7 +223,7 @@ public class RestauranteCoreController implements IRestauranteCoreController {
 		try {
 			cadastrarItemUseCase.cadastrar(idRestaurante, nome, descricao, preco, disponivelParaConsumoPresencial, ImagemPresenter.toImagemDto(imagem));
 		} catch (IOException e) {
-			throw new ImagemItemInvalidaException("Ocorreu um erro inesperado ao recuperar os dados do item.");
+			throw new ImagemItemInvalidaException(ERRO_CARREGAR_DADOS_IMAGEM);
 		}		
 	}
 }

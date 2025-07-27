@@ -8,8 +8,8 @@ import java.util.UUID;
 import br.com.fiapfood.core.entities.Atendimento;
 import br.com.fiapfood.core.entities.Restaurante;
 import br.com.fiapfood.core.entities.dto.atendimento.AtendimentoCoreDto;
-import br.com.fiapfood.core.exceptions.AtualizacaoStatusRestauranteNaoPermitidaException;
 import br.com.fiapfood.core.exceptions.atendimento.AtendimentoRestauranteNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.atendimento.AtualizacaoAtendimentoRestauranteNaoPermitidoException;
 import br.com.fiapfood.core.exceptions.atendimento.DiaAtendimentoRestauranteInvalidoException;
 import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
 import br.com.fiapfood.core.presenters.RestaurantePresenter;
@@ -18,6 +18,10 @@ import br.com.fiapfood.core.usecases.atendimento.interfaces.IAtualizarAtendiment
 public class AtualizarAtendimentoUseCase implements IAtualizarAtendimentoUseCase {
 
 	private final IRestauranteGateway restauranteGateway;
+	
+	private final String ATENDIMENTO_NAO_ENCONTRADO = "Não foi encontrado nenhum atendimento com o identificador informado para o restaurante.";
+	private final String RESTAURANTE_INATIVO = "Não é possível atualizar a imagem do item, pois o restaurante se encontra inativo.";
+	private final String ATENDIMENTO_DUPLICADO = "Não é possível atualizar o atendimento, pois já existe um outro atendimento para o mesmo dia.";
 
 	public AtualizarAtendimentoUseCase(IRestauranteGateway restauranteGateway) {
 		this.restauranteGateway = restauranteGateway;
@@ -78,7 +82,7 @@ public class AtualizarAtendimentoUseCase implements IAtualizarAtendimentoUseCase
 
 	private void validaDiaAtendimento(List<Atendimento> atendimentos, AtendimentoCoreDto atendimento) {
 		if(atendimentos.stream().filter(a -> a.getDia().equals(atendimento.dia()) && !a.getId().equals(atendimento.id())).findAny().isPresent()) {
-			throw new DiaAtendimentoRestauranteInvalidoException("Não é possível atualizar o atendimento, pois já existe um outro atendimento para o mesmo dia.");
+			throw new DiaAtendimentoRestauranteInvalidoException(ATENDIMENTO_DUPLICADO);
 		}
 	}
 
@@ -88,7 +92,7 @@ public class AtualizarAtendimentoUseCase implements IAtualizarAtendimentoUseCase
 		if (dados.isPresent()) {
 			return dados.get();
 		} else {
-			throw new AtendimentoRestauranteNaoEncontradoException("Não foi encontrado nenhum atendimento com o identificador informado para o restaurante.");
+			throw new AtendimentoRestauranteNaoEncontradoException(ATENDIMENTO_NAO_ENCONTRADO);
 		}
 	}
 
@@ -98,7 +102,7 @@ public class AtualizarAtendimentoUseCase implements IAtualizarAtendimentoUseCase
 
 	private void validarStatusRestaurante(final Restaurante restaurante) {
 		if (!restaurante.getIsAtivo()) {
-			throw new AtualizacaoStatusRestauranteNaoPermitidaException("Não é possível inativar o restaurante pois ele já se encontra inativo.");
+			throw new AtualizacaoAtendimentoRestauranteNaoPermitidoException(RESTAURANTE_INATIVO);
 		} 
 	}
 

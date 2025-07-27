@@ -3,7 +3,7 @@ package br.com.fiapfood.core.usecases.restaurante.impl;
 import java.util.UUID;
 
 import br.com.fiapfood.core.entities.Restaurante;
-import br.com.fiapfood.core.exceptions.AtualizacaoStatusRestauranteNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.restaurante.InativacaoRestauranteNaoPermitidaException;
 import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
 import br.com.fiapfood.core.presenters.RestaurantePresenter;
 import br.com.fiapfood.core.usecases.restaurante.interfaces.IInativarRestauranteUseCase;
@@ -11,6 +11,8 @@ import br.com.fiapfood.core.usecases.restaurante.interfaces.IInativarRestaurante
 public class InativarRestauranteUseCase implements IInativarRestauranteUseCase {
 	private final IRestauranteGateway restauranteGateway;
 
+	private final String INATIVACAO_NAO_PERMITIDA = "Não é possível inativar o restaurante pois ele já se encontra inativo.";
+	
 	public InativarRestauranteUseCase(IRestauranteGateway restauranteGateway) {
 		this.restauranteGateway = restauranteGateway;
 	}
@@ -31,7 +33,7 @@ public class InativarRestauranteUseCase implements IInativarRestauranteUseCase {
 
 	private void validarStatusRestaurante(final Restaurante restaurante) {
 		if (!restaurante.getIsAtivo()) {
-			throw new AtualizacaoStatusRestauranteNaoPermitidaException("Não é possível inativar o restaurante pois ele já se encontra inativo.");
+			throw new InativacaoRestauranteNaoPermitidaException(INATIVACAO_NAO_PERMITIDA);
 		} 
 	}
 

@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import br.com.fiapfood.core.entities.Item;
 import br.com.fiapfood.core.entities.Restaurante;
-import br.com.fiapfood.core.exceptions.AtualizacaoStatusRestauranteNaoPermitidaException;
 import br.com.fiapfood.core.exceptions.item.AtualizacaoNomeItemNaoPermitidaException;
 import br.com.fiapfood.core.exceptions.item.ItemNaoEncontradoException;
 import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
@@ -17,6 +16,10 @@ import br.com.fiapfood.core.usecases.item.interfaces.IAtualizarNomeItemUseCase;
 public class AtualizarNomeItemUseCase implements IAtualizarNomeItemUseCase {
 	private final IRestauranteGateway restauranteGateway;
 
+	private final String RESTAURANTE_INATIVO = "Não é possível atualizar o nome do item, pois o restaurante se encontra inativo.";
+	private final String ITEM_NAO_ENCONTRADO = "Não foi encontrado nenhum item com o id informado para o restaurante.";
+	private final String NOME_DUPLICADO = "Não é possível atualizar o nome do item para o mesmo valor.";
+	
 	public AtualizarNomeItemUseCase(IRestauranteGateway restauranteGateway) {
 		this.restauranteGateway = restauranteGateway;
 	}
@@ -42,7 +45,7 @@ public class AtualizarNomeItemUseCase implements IAtualizarNomeItemUseCase {
 
 	private void validarNome(Item item, String nome) {
 		if(item.getNome().equals(nome)) {
-			throw new AtualizacaoNomeItemNaoPermitidaException("Não é possível atualizar o nome do item para o mesmo valor.");
+			throw new AtualizacaoNomeItemNaoPermitidaException(NOME_DUPLICADO);
 		}
 	}
 	
@@ -52,7 +55,7 @@ public class AtualizarNomeItemUseCase implements IAtualizarNomeItemUseCase {
 		if(item != null) {
 			return item.get();
 		} else {
-			throw new ItemNaoEncontradoException("Não foi encontrado nenhum item com o id informado para o restaurante.");			
+			throw new ItemNaoEncontradoException(ITEM_NAO_ENCONTRADO);			
 		}
 	}
 	
@@ -67,7 +70,7 @@ public class AtualizarNomeItemUseCase implements IAtualizarNomeItemUseCase {
 	
 	private void validarStatusRestaurante(final Restaurante restaurante) {
 		if (!restaurante.getIsAtivo()) {
-			throw new AtualizacaoStatusRestauranteNaoPermitidaException("Não é possível inativar o restaurante pois ele já se encontra inativo.");
+			throw new AtualizacaoNomeItemNaoPermitidaException(RESTAURANTE_INATIVO);
 		} 
 	}
 	

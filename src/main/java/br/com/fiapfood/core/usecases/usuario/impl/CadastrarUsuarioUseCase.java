@@ -3,8 +3,8 @@ package br.com.fiapfood.core.usecases.usuario.impl;
 import br.com.fiapfood.core.entities.Perfil;
 import br.com.fiapfood.core.entities.Usuario;
 import br.com.fiapfood.core.entities.dto.usuario.CadastrarUsuarioCoreDto;
-import br.com.fiapfood.core.exceptions.EmailDuplicadoException;
-import br.com.fiapfood.core.exceptions.MatriculaDuplicadaException;
+import br.com.fiapfood.core.exceptions.usuario.EmailDuplicadoException;
+import br.com.fiapfood.core.exceptions.usuario.MatriculaDuplicadaException;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
 import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
 import br.com.fiapfood.core.presenters.UsuarioPresenter;
@@ -14,6 +14,9 @@ public class CadastrarUsuarioUseCase implements ICadastrarUsuarioUseCase {
 
 	private final IUsuarioGateway usuarioGateway;
 	private final IPerfilGateway perfilGateway;
+	
+	private final String EMAIL_DUPLICADO = "Já existe um usuário com o email informado.";
+	private final String MATRICULA_DUPLICADA = "Já existe um usuário com a matrícula informada.";
 	
 	public CadastrarUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
 		this.usuarioGateway = usuarioGateway;
@@ -45,13 +48,13 @@ public class CadastrarUsuarioUseCase implements ICadastrarUsuarioUseCase {
 	
 	private void validarEmail(final String email) {
 		if(usuarioGateway.emailJaCadastrado(email)){
-			throw new EmailDuplicadoException("Já existe um usuário com o email informado.");
+			throw new EmailDuplicadoException(EMAIL_DUPLICADO);
 		}
 	}
 	
 	private void validarMatricula(final String matricula) {
 		if(usuarioGateway.matriculaJaCadastrada(matricula)){
-			throw new MatriculaDuplicadaException("Já existe um usuário com a matrícula informada.");
+			throw new MatriculaDuplicadaException(MATRICULA_DUPLICADA);
 		}
 	}
 }

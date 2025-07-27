@@ -4,8 +4,8 @@ import java.util.List;
 
 import br.com.fiapfood.core.entities.TipoCulinaria;
 import br.com.fiapfood.core.entities.dto.tipo_culinaria.TipoCulinariaCoreDto;
-import br.com.fiapfood.core.exceptions.TipoCulinariaInvalidoException;
-import br.com.fiapfood.core.exceptions.TipoCulinariaNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.tipo_culinaria.TipoCulinariaInvalidoException;
+import br.com.fiapfood.core.exceptions.tipo_culinaria.TipoCulinariaNaoEncontradoException;
 import br.com.fiapfood.core.gateways.interfaces.ITipoCulinariaGateway;
 import br.com.fiapfood.core.presenters.TipoCulinariaPresenter;
 import br.com.fiapfood.infraestructure.repositories.interfaces.ITipoCulinariaRepository;
@@ -13,7 +13,10 @@ import br.com.fiapfood.infraestructure.repositories.interfaces.ITipoCulinariaRep
 public class TipoCulinariaGateway implements ITipoCulinariaGateway {
 
 	private final ITipoCulinariaRepository tipoCulinariaRepository;
-	
+
+	private final String TIPO_CULINARIA_NAO_ENCONTRADO = "Não foi encontrado nenhum tipo de culinária com o id informado.";
+	private final String TIPOS_CULINARIA_NAO_ENCONTRADOS = "Não foi encontrado nenhum tipo de culinária na base de dados.";
+
 	public TipoCulinariaGateway(ITipoCulinariaRepository tipoCulinariaRepository) {
 		this.tipoCulinariaRepository = tipoCulinariaRepository;
 	}
@@ -25,7 +28,7 @@ public class TipoCulinariaGateway implements ITipoCulinariaGateway {
 		if(tiposCulinaria.size() > 0) {
 			return TipoCulinariaPresenter.toListTipoCulinaria(tiposCulinaria);
 		} else {
-			throw new TipoCulinariaNaoEncontradoException("Não foi encontrado nenhum tipo de culinária na base de dados.");			
+			throw new TipoCulinariaNaoEncontradoException(TIPO_CULINARIA_NAO_ENCONTRADO);			
 		}
 	}
 	
@@ -36,7 +39,7 @@ public class TipoCulinariaGateway implements ITipoCulinariaGateway {
 		if(TipoCulinaria != null) {
 			return TipoCulinariaPresenter.toTipoCulinaria(TipoCulinaria);
 		} else {
-			throw new TipoCulinariaInvalidoException("Não foi encontrado nenhum tipo de culinária com o id informado.");			
+			throw new TipoCulinariaInvalidoException(TIPOS_CULINARIA_NAO_ENCONTRADOS);			
 		}
 	}
 

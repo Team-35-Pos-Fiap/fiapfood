@@ -4,7 +4,7 @@ import java.util.List;
 
 import br.com.fiapfood.core.entities.Perfil;
 import br.com.fiapfood.core.entities.Usuario;
-import br.com.fiapfood.core.exceptions.ExclusaoPerfilNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.perfil.ExclusaoPerfilNaoPermitidaException;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
 import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
 import br.com.fiapfood.core.presenters.PerfilPresenter;
@@ -14,6 +14,8 @@ public class InativarPerfilUseCase implements IInativarPerfilUseCase {
 
 	private final IPerfilGateway perfilGateway;
 	private final IUsuarioGateway usuarioGateway;
+	
+	private final String USUARIOS_ATIVOS = "Não é possível inativar o perfil pois há usuário ativo associado ao perfil.";
 	
 	public InativarPerfilUseCase(IPerfilGateway perfilGateway, IUsuarioGateway usuarioGateway) {
 		this.perfilGateway = perfilGateway;
@@ -47,7 +49,7 @@ public class InativarPerfilUseCase implements IInativarPerfilUseCase {
 		List<Usuario> usuarios = usuarioGateway.buscarPorIdPerfil(id);
 		
 		if(usuarios != null && possuiUsuariosAtivos(usuarios)) {
-			throw new ExclusaoPerfilNaoPermitidaException("Não é possível inativar o perfil pois há usuário ativo associado ao perfil.");
+			throw new ExclusaoPerfilNaoPermitidaException(USUARIOS_ATIVOS);
 		}
 	}
 

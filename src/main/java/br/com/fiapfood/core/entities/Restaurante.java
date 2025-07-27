@@ -6,9 +6,9 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
-import br.com.fiapfood.core.exceptions.DonoRestauranteInvalidoException;
-import br.com.fiapfood.core.exceptions.NomeRestauranteInvalidoException;
-import br.com.fiapfood.core.exceptions.TipoCulinariaInvalidoException;
+import br.com.fiapfood.core.exceptions.restaurante.DonoRestauranteInvalidoException;
+import br.com.fiapfood.core.exceptions.restaurante.NomeRestauranteInvalidoException;
+import br.com.fiapfood.core.exceptions.tipo_culinaria.TipoCulinariaInvalidoException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

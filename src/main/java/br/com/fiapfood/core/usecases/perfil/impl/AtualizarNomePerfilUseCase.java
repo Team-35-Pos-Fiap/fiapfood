@@ -1,7 +1,7 @@
 package br.com.fiapfood.core.usecases.perfil.impl;
 
 import br.com.fiapfood.core.entities.Perfil;
-import br.com.fiapfood.core.exceptions.NomePerfilDuplicadoException;
+import br.com.fiapfood.core.exceptions.perfil.NomePerfilDuplicadoException;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
 import br.com.fiapfood.core.presenters.PerfilPresenter;
 import br.com.fiapfood.core.usecases.perfil.interfaces.IAtualizarNomePerfilUseCase;
@@ -10,6 +10,8 @@ public class AtualizarNomePerfilUseCase implements IAtualizarNomePerfilUseCase {
 
 	private final IPerfilGateway perfilGateway;
 	
+	private final String PERFIL_DUPLICADO = "Já existe um perfil com o nome informado.";
+
 	public AtualizarNomePerfilUseCase(IPerfilGateway perfilGateway) {
 		this.perfilGateway = perfilGateway;
 	}
@@ -31,7 +33,7 @@ public class AtualizarNomePerfilUseCase implements IAtualizarNomePerfilUseCase {
 
 	private void validaNomeJaCadastrado(final String nome) {
 		if(perfilGateway.nomeJaCadastrado(nome)) {
-			throw new NomePerfilDuplicadoException("Já existe um perfil com o nome informado.");
+			throw new NomePerfilDuplicadoException(PERFIL_DUPLICADO);
 		}
 	}
 

@@ -5,7 +5,7 @@ import java.util.UUID;
 import br.com.fiapfood.core.entities.Login;
 import br.com.fiapfood.core.entities.Perfil;
 import br.com.fiapfood.core.entities.Usuario;
-import br.com.fiapfood.core.exceptions.UsuarioInativoException;
+import br.com.fiapfood.core.exceptions.usuario.UsuarioInativoException;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
 import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
 import br.com.fiapfood.core.presenters.UsuarioPresenter;
@@ -15,6 +15,8 @@ public class AtualizarSenhaUseCase implements IAtualizarSenhaUseCase {
 
 	private final IUsuarioGateway usuarioGateway;
 	private final IPerfilGateway perfilGateway;
+	
+	private final String USUARIO_INATIVO = "Não é possível alterar a senha, pois o usuário está inativo.";
 
 	public AtualizarSenhaUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
 		this.usuarioGateway = usuarioGateway;
@@ -45,7 +47,7 @@ public class AtualizarSenhaUseCase implements IAtualizarSenhaUseCase {
 	
 	private void validarUsuario(final Usuario usuario) {
 		if (!usuario.getIsAtivo()) {
-			throw new UsuarioInativoException("Não é possível alterar a senha de um usuário inativo.");
+			throw new UsuarioInativoException(USUARIO_INATIVO);
 		} 
 	}
 

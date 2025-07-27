@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import br.com.fiapfood.core.entities.Item;
 import br.com.fiapfood.core.entities.Restaurante;
-import br.com.fiapfood.core.exceptions.AtualizacaoStatusRestauranteNaoPermitidaException;
 import br.com.fiapfood.core.exceptions.item.AtualizacaoPrecoItemNaoPermitidaException;
 import br.com.fiapfood.core.exceptions.item.ItemNaoEncontradoException;
 import br.com.fiapfood.core.gateways.interfaces.IRestauranteGateway;
@@ -18,7 +17,10 @@ import br.com.fiapfood.core.usecases.item.interfaces.IAtualizarPrecoItemUseCase;
 public class AtualizarPrecoItemUseCase implements IAtualizarPrecoItemUseCase {
 	
 	private final IRestauranteGateway restauranteGateway;
-
+	private final String RESTAURANTE_INATIVO = "Não é possível atualizar o preço do item, pois o restaurante se encontra inativo.";
+	private final String ITEM_NAO_ENCONTRADO = "Não foi encontrado nenhum item com o id informado para o restaurante.";
+	private final String PRECO_DUPLICADO = "Não é possível atualizar o preço do item para o mesmo valor.";
+	
 	public AtualizarPrecoItemUseCase(IRestauranteGateway restauranteGateway) {
 		this.restauranteGateway = restauranteGateway;
 	}
@@ -44,7 +46,7 @@ public class AtualizarPrecoItemUseCase implements IAtualizarPrecoItemUseCase {
 		if(item != null) {
 			return item.get();
 		} else {
-			throw new ItemNaoEncontradoException("Não foi encontrado nenhum item com o id informado para o restaurante.");			
+			throw new ItemNaoEncontradoException(ITEM_NAO_ENCONTRADO);			
 		}
 	}
 	
@@ -59,7 +61,7 @@ public class AtualizarPrecoItemUseCase implements IAtualizarPrecoItemUseCase {
 
 	private void validaPreco(Item item, BigDecimal preco) {
 		if(item.getPreco().equals(preco)) {
-			throw new AtualizacaoPrecoItemNaoPermitidaException("Não é possível atualizar o preço do item para o mesmo valor.");
+			throw new AtualizacaoPrecoItemNaoPermitidaException(PRECO_DUPLICADO);
 		}
 	}
 
@@ -69,7 +71,7 @@ public class AtualizarPrecoItemUseCase implements IAtualizarPrecoItemUseCase {
 	
 	private void validarStatusRestaurante(final Restaurante restaurante) {
 		if (!restaurante.getIsAtivo()) {
-			throw new AtualizacaoStatusRestauranteNaoPermitidaException("Não é possível inativar o restaurante pois ele já se encontra inativo.");
+			throw new AtualizacaoPrecoItemNaoPermitidaException(RESTAURANTE_INATIVO);
 		} 
 	}
 	

@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import org.apache.commons.lang3.StringUtils;
 
-import br.com.fiapfood.core.exceptions.NomePerfilInvalidoException;
+import br.com.fiapfood.core.exceptions.perfil.NomePerfilInvalidoException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

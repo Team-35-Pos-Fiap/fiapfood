@@ -4,8 +4,8 @@ import java.util.List;
 
 import br.com.fiapfood.core.entities.Perfil;
 import br.com.fiapfood.core.entities.dto.perfil.PerfilCoreDto;
-import br.com.fiapfood.core.exceptions.PerfilInvalidoException;
-import br.com.fiapfood.core.exceptions.PerfilNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.perfil.PerfilInvalidoException;
+import br.com.fiapfood.core.exceptions.perfil.PerfilNaoEncontradoException;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
 import br.com.fiapfood.core.presenters.PerfilPresenter;
 import br.com.fiapfood.infraestructure.repositories.interfaces.IPerfilRepository;
@@ -14,6 +14,9 @@ public class PerfilGateway implements IPerfilGateway {
 
 	private final IPerfilRepository perfilRepository;
 	
+	private final String PERFIL_NAO_ENCONTRADO = "Não foi encontrado nenhum perfil na base de dados.";
+	private final String PERFIS_NAO_ENCONTRADOS = "Não foi encontrado nenhum perfil com o id informado.";
+
 	public PerfilGateway(IPerfilRepository perfilRepository) {
 		this.perfilRepository = perfilRepository;
 	}
@@ -25,7 +28,7 @@ public class PerfilGateway implements IPerfilGateway {
 		if(perfis.size() > 0) {
 			return PerfilPresenter.toListPerfil(perfis);
 		} else {
-			throw new PerfilNaoEncontradoException("Não foi encontrado nenhum perfil na base de dados.");			
+			throw new PerfilNaoEncontradoException(PERFIL_NAO_ENCONTRADO);			
 		}
 	}
 	
@@ -36,7 +39,7 @@ public class PerfilGateway implements IPerfilGateway {
 		if(perfil != null) {
 			return PerfilPresenter.toPerfil(perfil);
 		} else {
-			throw new PerfilInvalidoException("Não foi encontrado nenhum perfil com o id informado.");			
+			throw new PerfilInvalidoException(PERFIS_NAO_ENCONTRADOS);			
 		}
 	}
 
