@@ -1,8 +1,21 @@
 package br.com.fiapfood.infraestructure.controllers.exceptions;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import br.com.fiapfood.core.exceptions.atendimento.AdicionarAtendimentoRestauranteNaoPermitidoException;
+import br.com.fiapfood.core.exceptions.atendimento.AtendimentoRestauranteNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.atendimento.DiaAtendimentoRestauranteInvalidoException;
+import br.com.fiapfood.core.exceptions.atendimento.ExclusaoAtendimentoRestauranteNaoPermitidoException;
+import br.com.fiapfood.core.exceptions.item.*;
+import br.com.fiapfood.core.exceptions.perfil.*;
+import br.com.fiapfood.core.exceptions.restaurante.*;
+import br.com.fiapfood.core.exceptions.tipo_culinaria.NomeTipoCulinariaInvalidoException;
+import br.com.fiapfood.core.exceptions.tipo_culinaria.TipoCulinariaInvalidoException;
+import br.com.fiapfood.core.exceptions.tipo_culinaria.TipoCulinariaNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.usuario.*;
+import br.com.fiapfood.infraestructure.controllers.response.ErroResponse;
+import br.com.fiapfood.infraestructure.controllers.response.MensagemResponse;
+import br.com.fiapfood.infraestructure.utils.MensagensUtil;
+import jakarta.validation.ValidationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,60 +29,8 @@ import org.springframework.web.client.HttpServerErrorException.InternalServerErr
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import br.com.fiapfood.core.exceptions.atendimento.AdicionarAtendimentoRestauranteNaoPermitidoException;
-import br.com.fiapfood.core.exceptions.atendimento.AtendimentoRestauranteNaoEncontradoException;
-import br.com.fiapfood.core.exceptions.atendimento.DiaAtendimentoRestauranteInvalidoException;
-import br.com.fiapfood.core.exceptions.atendimento.ExclusaoAtendimentoRestauranteNaoPermitidoException;
-import br.com.fiapfood.core.exceptions.item.AtualizacaoDescricaoItemNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.item.AtualizacaoDisponibilidadeConsumoPresencialItemNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.item.AtualizacaoDisponibilidadeItemNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.item.AtualizacaoImagemItemNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.item.AtualizacaoNomeItemNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.item.AtualizacaoPrecoItemNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.item.CadastrarItemNaoPermitidoException;
-import br.com.fiapfood.core.exceptions.item.ImagemItemInvalidaException;
-import br.com.fiapfood.core.exceptions.item.ItemNaoEncontradoException;
-import br.com.fiapfood.core.exceptions.item.NomeImagemItemInvalidoException;
-import br.com.fiapfood.core.exceptions.item.TamanhoNomeImagemItemInvalidoException;
-import br.com.fiapfood.core.exceptions.item.TipoImagemItemInvalidoException;
-import br.com.fiapfood.core.exceptions.item.ValorItemInvalidoException;
-import br.com.fiapfood.core.exceptions.perfil.ExclusaoPerfilNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.perfil.NomePerfilDuplicadoException;
-import br.com.fiapfood.core.exceptions.perfil.NomePerfilInvalidoException;
-import br.com.fiapfood.core.exceptions.perfil.PerfilInvalidoException;
-import br.com.fiapfood.core.exceptions.perfil.PerfilNaoEncontradoException;
-import br.com.fiapfood.core.exceptions.restaurante.AtualizacaoDonoRestauranteNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.restaurante.AtualizacaoEnderecoRestauranteNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.restaurante.AtualizacaoNomeRestauranteNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.restaurante.AtualizacaoStatusRestauranteNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.restaurante.AtualizacaoTipoCulinariaRestauranteNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.restaurante.CadastrarRestauranteNaoPermitidoException;
-import br.com.fiapfood.core.exceptions.restaurante.DonoRestauranteInvalidoException;
-import br.com.fiapfood.core.exceptions.restaurante.InativacaoRestauranteNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.restaurante.NomeRestauranteInvalidoException;
-import br.com.fiapfood.core.exceptions.restaurante.ReativacaoRestauranteNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.restaurante.RestauranteNaoEncontradoException;
-import br.com.fiapfood.core.exceptions.tipo_culinaria.NomeTipoCulinariaInvalidoException;
-import br.com.fiapfood.core.exceptions.tipo_culinaria.TipoCulinariaInvalidoException;
-import br.com.fiapfood.core.exceptions.tipo_culinaria.TipoCulinariaNaoEncontradoException;
-import br.com.fiapfood.core.exceptions.usuario.AtualizacaoEmailUsuarioNaoPermitidoException;
-import br.com.fiapfood.core.exceptions.usuario.AtualizacaoNomeUsuarioNaoPermitidoException;
-import br.com.fiapfood.core.exceptions.usuario.AtualizacaoPerfilNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.usuario.AtualizacaoStatusUsuarioNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.usuario.EmailDuplicadoException;
-import br.com.fiapfood.core.exceptions.usuario.EmailUsuarioInvalidoException;
-import br.com.fiapfood.core.exceptions.usuario.MatriculaDuplicadaException;
-import br.com.fiapfood.core.exceptions.usuario.MatriculaInvalidaException;
-import br.com.fiapfood.core.exceptions.usuario.NomeUsuarioInvalidoException;
-import br.com.fiapfood.core.exceptions.usuario.SenhaUsuarioInvalidaException;
-import br.com.fiapfood.core.exceptions.usuario.UsuarioInativoException;
-import br.com.fiapfood.core.exceptions.usuario.UsuarioNaoEncontradoException;
-import br.com.fiapfood.core.exceptions.usuario.UsuarioSemAcessoException;
-import br.com.fiapfood.infraestructure.controllers.response.ErroResponse;
-import br.com.fiapfood.infraestructure.controllers.response.MensagemResponse;
-import br.com.fiapfood.infraestructure.utils.MensagensUtil;
-import jakarta.validation.ValidationException;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 @Slf4j
@@ -490,7 +451,7 @@ public class ErrorHandler {
 			errors.put(field, error.getDefaultMessage());
 		});
 		
-		return getResponse(HttpStatus.INTERNAL_SERVER_ERROR, errors);
+		return getResponse(HttpStatus.BAD_REQUEST, errors);
 	}
 
 	@ExceptionHandler(Exception.class)
