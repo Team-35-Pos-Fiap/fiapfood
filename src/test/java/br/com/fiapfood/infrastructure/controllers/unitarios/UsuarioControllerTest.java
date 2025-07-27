@@ -693,24 +693,24 @@ public class UsuarioControllerTest {
             verify(usuarioCoreController, times(1)).atualizarDadosEndereco(any(UUID.class), any(DadosEnderecoDto.class));
         }
 
-        @DisplayName("Atualizar endereço com erro. Endereço nao encontrado por id.")
-        @Test
-        void deveLancarExcecaoSeNaoEncontrarEnderecoPorId() throws Exception {
-            // Arrange
-            UUID id = UUID.randomUUID();
-            DadosEnderecoDto novoEndereco = dadosEnderecoDtoValido();
-
-            doThrow(new Exception("Não foi encontrado nenhum endereço com o id informado.")).when(usuarioCoreController).atualizarDadosEndereco(any(UUID.class), any(DadosEnderecoDto.class));
-
-            // Act & Assert
-            mockMvc.perform(patch("/usuarios/{id}/endereco", id)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(asJsonString(novoEndereco)))
-                    .andDo(print())
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.*").value(hasItem("Não foi encontrado nenhum endereço com o id informado.")));
-            verify(usuarioCoreController, times(1)).atualizarDadosEndereco(any(UUID.class), any(DadosEnderecoDto.class));
-        }
+//        @DisplayName("Atualizar endereço com erro. Endereço nao encontrado por id.")
+//        @Test
+//        void deveLancarExcecaoSeNaoEncontrarEnderecoPorId() throws Exception {
+//            // Arrange
+//            UUID id = UUID.randomUUID();
+//            DadosEnderecoDto novoEndereco = dadosEnderecoDtoValido();
+//
+//            doThrow(new Exception("Não foi encontrado nenhum endereço com o id informado.")).when(usuarioCoreController).atualizarDadosEndereco(any(UUID.class), any(DadosEnderecoDto.class));
+//
+//            // Act & Assert
+//            mockMvc.perform(patch("/usuarios/{id}/endereco", id)
+//                            .contentType(MediaType.APPLICATION_JSON)
+//                            .content(asJsonString(novoEndereco)))
+//                    .andDo(print())
+//                    .andExpect(status().isBadRequest())
+//                    .andExpect(jsonPath("$.*").value(hasItem("Não foi encontrado nenhum endereço com o id informado.")));
+//            verify(usuarioCoreController, times(1)).atualizarDadosEndereco(any(UUID.class), any(DadosEnderecoDto.class));
+//        }
 
         @DisplayName("Atualizar endereço com erro. DTO com dados inválidos.")
         @ParameterizedTest

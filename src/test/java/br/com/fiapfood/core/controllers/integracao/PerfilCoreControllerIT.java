@@ -2,10 +2,10 @@ package br.com.fiapfood.core.controllers.integracao;
 
 import br.com.fiapfood.core.controllers.impl.PerfilCoreController;
 import br.com.fiapfood.core.controllers.interfaces.IPerfilCoreController;
-import br.com.fiapfood.core.exceptions.ExclusaoPerfilNaoPermitidaException;
-import br.com.fiapfood.core.exceptions.NomePerfilDuplicadoException;
-import br.com.fiapfood.core.exceptions.PerfilInvalidoException;
-import br.com.fiapfood.core.exceptions.PerfilNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.perfil.ExclusaoPerfilNaoPermitidaException;
+import br.com.fiapfood.core.exceptions.perfil.NomePerfilDuplicadoException;
+import br.com.fiapfood.core.exceptions.perfil.PerfilInvalidoException;
+import br.com.fiapfood.core.exceptions.perfil.PerfilNaoEncontradoException;
 import br.com.fiapfood.core.gateways.impl.PerfilGateway;
 import br.com.fiapfood.core.gateways.impl.UsuarioGateway;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;

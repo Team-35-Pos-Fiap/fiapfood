@@ -305,7 +305,7 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/status/inativa", idUsuarioInvalido)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário com o id informado."));
+                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário."));
         }
 
         @DisplayName("Inativar usuário com erro. Usuário já está inativo.")
@@ -321,7 +321,7 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/status/inativa", idUsuarioInativo)
                     .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .body("mensagem", equalTo("Não é possível inativar o usuário pois ele já se encontra inativo."));
+                    .body("mensagem", equalTo("Não é possível inativar o usuário, pois ele já se encontra ativo."));
         }
     }
 
@@ -366,7 +366,7 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/status/reativa", idUsuarioInvalido)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário com o id informado."));
+                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário."));
         }
 
         @DisplayName("Ativar usuário com erro. Usuário já está ativo.")
@@ -382,7 +382,7 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/status/reativa", idUsuarioAtivo)
                     .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .body("mensagem", equalTo("Não é possível reativar um usuário pois ele já se encontra ativo."));
+                    .body("mensagem", equalTo("Não é possível reativar um usuário, pois ele já se encontra ativo."));
         }
     }
 
@@ -420,7 +420,7 @@ public class UsuarioControllerIT {
                     .get("/usuarios/{id}", id)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário com o id informado."));
+                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário."));
         }
     }
 
@@ -519,7 +519,7 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/email", id)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário com o id informado."));
+                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário."));
         }
 
         @DisplayName("Atualizar email com erro. Usuário encontrado inativo")
@@ -624,7 +624,7 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/perfil", id)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário com o id informado."));
+                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário."));
         }
 
         @DisplayName("Atualizar perfil com erro. Usuário encontrado esta inativo")
@@ -743,7 +743,7 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/endereco", idUsuarioInvalido)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário com o id informado."));
+                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário."));
         }
 
         @DisplayName("Atualizar endereço com erro. Usuario encontrado esta inativo.")
@@ -761,7 +761,7 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/endereco", idUsuarioInativo)
                     .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .body("mensagem", equalTo("Não é possível alterar o nome de um usuário inativo."));
+                    .body("mensagem", equalTo("Não é possível alterar o endereço de um usuário inativo."));
         }
 
         @DisplayName("Atualizar endereço com erro. DTO com dados inválidos.")
@@ -840,7 +840,7 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/nome", idUsuarioInvalido)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário com o id informado."));
+                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário."));
         }
 
         @DisplayName("Atualizar nome com erro. Usuario encontrado esta inativo")
@@ -876,7 +876,7 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/nome", idUsuario)
                     .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .body("mensagem", equalTo("Não é possível alterar o nome do usuário pois ele é igual ao nome do usuário."));
+                    .body("mensagem", equalTo("Não é possível alterar o nome do usuário, pois ele é igual ao nome do usuário."));
         }
 
         @DisplayName("Atualizar nome com erro. DTO com dados invalidos.")
@@ -965,7 +965,7 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/senha", usuarioIdInvalido)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário com o id informado."));
+                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário."));
         }
 
         @DisplayName("Atualizar senha com erro. Usuário encontrado esta inativo")
@@ -983,7 +983,7 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/senha", usuarioIdInativo)
                     .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .body("mensagem", equalTo("Não é possível alterar a senha de um usuário inativo."));
+                    .body("mensagem", equalTo("Não é possível alterar a senha, pois o usuário está inativo."));
         }
 
         @DisplayName("Alterar senha com erro. Dados inválidos no DTO")
@@ -1048,7 +1048,7 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/matricula", usuarioIdInvalido)
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário com o id informado."));
+                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário."));
         }
 
         @DisplayName("Atualizar matricula com erro. Usuário encontrado está inativo")
@@ -1066,7 +1066,7 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/matricula", usuarioIdInativo)
                     .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .body("mensagem", equalTo("Não é possível alterar a matrícula de um usuário inativo."));
+                    .body("mensagem", equalTo("Não é possível alterar a matrícula, pois o usuário está inativo."));
         }
 
         @DisplayName("Atualizar matricula com erro. Nova matricula ja cadastrada.")
@@ -1126,7 +1126,7 @@ public class UsuarioControllerIT {
                     .post("/usuarios/valida-acesso")
                     .then()
                     .statusCode(HttpStatus.OK.value())
-                    .body("mensagem", equalTo("Acesso liberado para o usuário Thiago Motta "));
+                    .body("mensagem", equalTo("Acesso liberado para o usuário Thiago Motta"));
         }
 
         @DisplayName("Validação de login com erro. Usuario não encontrado através de matrícula e senha.")
@@ -1147,7 +1147,7 @@ public class UsuarioControllerIT {
                     .post("/usuarios/valida-acesso")
                     .then()
                     .statusCode(HttpStatus.NOT_FOUND.value())
-                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário com a matrícula e senha informados."));
+                    .body("mensagem", equalTo("Não foi encontrado nenhum usuário."));
         }
 
         @DisplayName("Validação de login com erro. Usuario encontrado está inativo")

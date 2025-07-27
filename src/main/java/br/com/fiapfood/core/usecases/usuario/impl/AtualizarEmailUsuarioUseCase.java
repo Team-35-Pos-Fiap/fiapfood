@@ -1,7 +1,5 @@
 package br.com.fiapfood.core.usecases.usuario.impl;
 
-import java.util.UUID;
-
 import br.com.fiapfood.core.entities.Perfil;
 import br.com.fiapfood.core.entities.Usuario;
 import br.com.fiapfood.core.exceptions.usuario.AtualizacaoEmailUsuarioNaoPermitidoException;
@@ -10,11 +8,13 @@ import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
 import br.com.fiapfood.core.presenters.UsuarioPresenter;
 import br.com.fiapfood.core.usecases.usuario.interfaces.IAtualizarEmailUsuarioUseCase;
 
+import java.util.UUID;
+
 public class AtualizarEmailUsuarioUseCase implements IAtualizarEmailUsuarioUseCase {
 	private final IUsuarioGateway usuarioGateway;
 	private final IPerfilGateway perfilGateway;
 	
-	private final String USUARIO_INATIVO = "Não é possível alterar o nome de um usuário inativo.";
+	private final String USUARIO_INATIVO = "Não é possível alterar o email de um usuário inativo.";
 	private final String USUARIO_CADASTRADO = "Já existe um usuário com o email informado.";
 	private final String EMAIL_DUPLICADO = "Não é possível alterar o email do usuário, pois ele já é igual ao email atual.";
 	
