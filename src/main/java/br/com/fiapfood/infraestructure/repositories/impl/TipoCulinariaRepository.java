@@ -14,15 +14,15 @@ import br.com.fiapfood.infraestructure.repositories.interfaces.jpa.ITipoCulinari
 @Repository
 public class TipoCulinariaRepository implements ITipoCulinariaRepository {
 
-    private final ITipoCulinariaJpaRepository TipoCulinariaRepository;
+    private final ITipoCulinariaJpaRepository tipoCulinariaRepository;
 
 	public TipoCulinariaRepository(ITipoCulinariaJpaRepository TipoCulinariaRepository) {
-		this.TipoCulinariaRepository = TipoCulinariaRepository;
+		this.tipoCulinariaRepository = TipoCulinariaRepository;
 	}
 
 	@Override
 	public TipoCulinariaCoreDto buscarPorId(final Integer id) {
-		final Optional<TipoCulinariaEntity> dados = TipoCulinariaRepository.findById(id);
+		final Optional<TipoCulinariaEntity> dados = tipoCulinariaRepository.findById(id);
 		
 		if(dados.isPresent()) {
 			return TipoCulinariaPresenter.toTipoCulinariaDto(dados.get());
@@ -33,16 +33,16 @@ public class TipoCulinariaRepository implements ITipoCulinariaRepository {
 
 	@Override
 	public List<TipoCulinariaCoreDto> buscarTodos() {
-		return TipoCulinariaPresenter.toListTipoCulinariaDto(TipoCulinariaRepository.findAll());
+		return TipoCulinariaPresenter.toListTipoCulinariaDto(tipoCulinariaRepository.findAll());
 	}
 
 	@Override
 	public void salvar(final TipoCulinariaEntity TipoCulinaria) {
-		TipoCulinariaRepository.save(TipoCulinaria);		
+		tipoCulinariaRepository.save(TipoCulinaria);
 	}
 
 	@Override
 	public boolean nomeJaCadastrado(final String nome) {
-		return TipoCulinariaRepository.existsByNomeIgnoreCase(nome);
+		return tipoCulinariaRepository.existsByNomeIgnoreCase(nome);
 	}
 }
