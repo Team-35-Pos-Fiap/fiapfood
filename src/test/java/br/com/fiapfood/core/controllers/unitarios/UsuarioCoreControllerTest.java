@@ -7,7 +7,7 @@ import br.com.fiapfood.core.entities.dto.paginacao.PaginacaoCoreDto;
 import br.com.fiapfood.core.entities.dto.usuario.CadastrarUsuarioCoreDto;
 import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioCoreDto;
 import br.com.fiapfood.core.entities.dto.usuario.UsuarioPaginacaoCoreDto;
-import br.com.fiapfood.core.exceptions.perfil.PerfilNaoEncontradoException;
+import br.com.fiapfood.core.exceptions.perfil.PerfilInvalidoException;
 import br.com.fiapfood.core.exceptions.usuario.*;
 import br.com.fiapfood.core.usecases.login.interfaces.IAtualizarMatriculaUseCase;
 import br.com.fiapfood.core.usecases.login.interfaces.IAtualizarSenhaUseCase;
@@ -67,10 +67,10 @@ public class UsuarioCoreControllerTest {
                 buscarTodosUsuariosUseCase,
                 cadastrarUsuarioUseCase,
                 atualizarEmailUsuarioUseCase,
-                atualizarNomeUsuarioUseCase
-                ,inativarUsuarioUseCase
-                ,reativarUsuarioUseCase
-                ,atualizarPerfilUsuarioUseCase,
+                atualizarNomeUsuarioUseCase,
+                inativarUsuarioUseCase,
+                reativarUsuarioUseCase,
+                atualizarPerfilUsuarioUseCase,
                 atualizarEnderecoUsuarioUseCase,
                 validarAcessoUseCase,
                 atualizarSenhaUseCase,
@@ -139,11 +139,11 @@ public class UsuarioCoreControllerTest {
             // Arrange
             CadastrarUsuarioDto dadosUsuarioController = cadastrarUsuarioDtoValido();
 
-            doThrow(new PerfilNaoEncontradoException("Não foi encontrado nenhum perfil com o id informado.")).when(cadastrarUsuarioUseCase).cadastrar(any(CadastrarUsuarioCoreDto.class));
+            doThrow(new PerfilInvalidoException("Não foi encontrado nenhum perfil com o id informado.")).when(cadastrarUsuarioUseCase).cadastrar(any(CadastrarUsuarioCoreDto.class));
 
             //Act & Assert
             assertThatThrownBy(() -> usuarioCoreController.cadastrar(dadosUsuarioController))
-                    .isInstanceOf(PerfilNaoEncontradoException.class)
+                    .isInstanceOf(PerfilInvalidoException.class)
                     .hasMessage("Não foi encontrado nenhum perfil com o id informado.");
             verify(cadastrarUsuarioUseCase, times(1)).cadastrar(any(CadastrarUsuarioCoreDto.class));
         }

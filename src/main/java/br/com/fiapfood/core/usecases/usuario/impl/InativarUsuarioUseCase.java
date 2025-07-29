@@ -14,7 +14,7 @@ public class InativarUsuarioUseCase implements IInativarUsuarioUseCase {
 	private final IUsuarioGateway usuarioGateway;
 	private final IPerfilGateway perfilGateway;
 
-	private final String INATIVACAO_NAO_PERMITIDA = "Não é possível inativar o usuário, pois ele já se encontra ativo.";
+	private final String INATIVACAO_NAO_PERMITIDA = "Não é possível inativar o usuário, pois ele já se encontra inativo.";
 	
 	public InativarUsuarioUseCase(IUsuarioGateway usuarioGateway, IPerfilGateway perfilGateway) {
 		this.usuarioGateway = usuarioGateway;
