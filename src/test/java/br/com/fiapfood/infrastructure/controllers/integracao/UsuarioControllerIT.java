@@ -321,7 +321,7 @@ public class UsuarioControllerIT {
                     .patch("/usuarios/{id}/status/inativa", idUsuarioInativo)
                     .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .body("mensagem", equalTo("Não é possível inativar o usuário, pois ele já se encontra ativo."));
+                    .body("mensagem", equalTo("Não é possível inativar o usuário, pois ele já se encontra inativo."));
         }
     }
 
