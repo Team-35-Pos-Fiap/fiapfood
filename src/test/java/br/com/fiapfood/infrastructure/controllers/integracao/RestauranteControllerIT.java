@@ -18,6 +18,8 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = {"/db_clean.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @Sql(scripts = {"/db_load.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
@@ -34,27 +36,20 @@ public class RestauranteControllerIT {
 
     @Nested
     class GerenciarItemRequest {
-        @DisplayName("Buscar cardapio por id com sucesso")
+        @DisplayName("Buscar restaurante por id com sucesso")
         @Test
-        void deveRetornarCardapioPorId() {
+        void deveRetornarRestaurantePorId() {
             // Arrange
-            UUID id = UUID.fromString("2d2e0bad-347d-40c6-824f-b7d7bbc65449");
-            ItemDto item = new ItemDto(id,
-                    "Feijoada",
-                    "Feijoada completa com acompanhamentos",
-                    BigDecimal.valueOf(39.9),
-                    Boolean.TRUE,
-                    Boolean.TRUE,
-                    "/var/lib/docker/volumes/images/_datafeijoada.jpg");
+            UUID id = UUID.fromString("a72181a6-7699-4686-a5ec-1a0431764e62");
 
             // Act & Assert
             given()
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .body(item)
                     .when()
-                    .get("/itens/{id}", id)
+                    .get("/restaurantes/{id}", id)
                     .then()
-                    .statusCode(HttpStatus.OK.value());
+                    .statusCode(HttpStatus.OK.value())
+                    .body("id", equalTo(id.toString()));
         }
     }
 

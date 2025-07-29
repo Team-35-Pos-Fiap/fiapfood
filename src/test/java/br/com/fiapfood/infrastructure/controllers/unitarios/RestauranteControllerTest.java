@@ -1,7 +1,6 @@
 package br.com.fiapfood.infrastructure.controllers.unitarios;
 
 import br.com.fiapfood.core.controllers.interfaces.IRestauranteCoreController;
-import br.com.fiapfood.core.entities.TipoCulinaria;
 import br.com.fiapfood.core.exceptions.item.ItemNaoEncontradoException;
 import br.com.fiapfood.infraestructure.controllers.RestauranteController;
 import br.com.fiapfood.infraestructure.controllers.exceptions.ErrorHandler;
@@ -14,8 +13,6 @@ import br.com.fiapfood.infraestructure.controllers.request.paginacao.PaginacaoDt
 import br.com.fiapfood.infraestructure.controllers.request.restaurante.*;
 import br.com.fiapfood.infraestructure.controllers.request.tipo_culinaria.TipoCulinariaDto;
 import br.com.fiapfood.infraestructure.controllers.request.usuario.DadosUsuarioDto;
-import br.com.fiapfood.infraestructure.controllers.request.usuario.UsuarioDto;
-import br.com.fiapfood.infraestructure.enums.Dia;
 import br.com.fiapfood.infraestructure.utils.MensagensUtil;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
@@ -29,7 +26,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
@@ -271,26 +267,62 @@ class RestauranteControllerTest {
             verify(restauranteCoreController, times(1)).atualizarEndereco(any(), any(DadosEnderecoDto.class));
         }
 
-//        @Test
-//        @DisplayName("Deve atualizar atendimento do restaurante")
-//        void deveAtualizarAtendimentoRestauranteComSucesso() throws Exception {
-//            UUID id = UUID.randomUUID();
-//            AtendimentoDto atendimentoDto = new AtendimentoDto(
-//                    UUID.randomUUID(),
-//                    "SEGUNDA-FEIRA",
-//                    LocalTime.now(),
-//                    LocalTime.now().plusHours(2)
-//            );
-//
-//            doNothing().when(restauranteCoreController).atualizarAtendimento(any(), any(AtendimentoDto.class));
-//
-//            mockMvc.perform(patch("/restaurantes/{id-restaurante}/atendimentos", id)
-//                            .contentType(MediaType.APPLICATION_JSON)
-//                            .content(asJsonString(atendimentoDto)))
-//                    .andExpect(status().isNoContent());
-//
-//            verify(restauranteCoreController, times(1)).atualizarAtendimento(any(), any(AtendimentoDto.class));
-//        }
+        @Test
+        @DisplayName("Deve atualizar atendimento do restaurante")
+        void deveAtualizarAtendimentoRestauranteComSucesso() throws Exception {
+            UUID id = UUID.randomUUID();
+            AtendimentoDto atendimentoDto = new AtendimentoDto(
+                    UUID.randomUUID(),
+                    "SEGUNDA-FEIRA",
+                    LocalTime.of(9, 0,0),
+                    LocalTime.of(16, 0,0)
+            );
+
+            doNothing().when(restauranteCoreController).atualizarAtendimento(any(), any(AtendimentoDto.class));
+
+            mockMvc.perform(patch("/restaurantes/{id-restaurante}/atendimentos", id)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(atendimentoDto)))
+                    .andExpect(status().isNoContent());
+
+            verify(restauranteCoreController, times(1)).atualizarAtendimento(any(), any(AtendimentoDto.class));
+        }
+
+        @Test
+        @DisplayName("Deve adicionar Atendimento do restaurante")
+        void deveAdicionarAtendimentoRestauranteComSucesso() throws Exception {
+            UUID id = UUID.randomUUID();
+            AtendimentoDto atendimentoDto = new AtendimentoDto(
+                    UUID.randomUUID(),
+                    "SEGUNDA-FEIRA",
+                    LocalTime.of(9, 0,0),
+                    LocalTime.of(16, 0,0)
+            );
+
+            doNothing().when(restauranteCoreController).adicionarAtendimento(any(), any(AtendimentoDto.class));
+
+            mockMvc.perform(post("/restaurantes/{id-restaurante}/atendimentos", id)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(asJsonString(atendimentoDto)))
+                    .andExpect(status().isNoContent());
+
+            verify(restauranteCoreController, times(1)).adicionarAtendimento(any(), any(AtendimentoDto.class));
+        }
+
+        @Test
+        @DisplayName("Deve excluir Atendimento do restaurante")
+        void deveExcluirAtendimentoRestauranteComSucesso() throws Exception {
+            UUID idRestaurante = UUID.randomUUID();
+            UUID idAtendimento = UUID.randomUUID();
+
+            doNothing().when(restauranteCoreController).excluirAtendimento(any(), any());
+
+            mockMvc.perform(delete("/restaurantes/{id-restaurante}/atendimentos/{id-atendimento}", idRestaurante, idAtendimento)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isNoContent());
+
+            verify(restauranteCoreController, times(1)).excluirAtendimento(any(), any());
+        }
 
     }
 

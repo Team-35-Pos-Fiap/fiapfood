@@ -1,14 +1,16 @@
 package br.com.fiapfood.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class JsonToString {
 
     public static String asJsonString(final Object obj) {
-        try{
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch(JsonProcessingException e){
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            return mapper.writeValueAsString(obj);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
