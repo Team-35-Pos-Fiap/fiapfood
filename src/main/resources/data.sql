@@ -721,6 +721,7 @@ VALUES
     '14:00:00'
   );
 
+---- IMAGEM 1: Feijoada ----
 INSERT INTO
   imagem (id, nome, conteudo, tipo)
 VALUES
@@ -837,7 +838,7 @@ VALUES
     'image/jpeg'
   );
 
----- IMAGEM 10: Tofu Grelhado ----
+---- IMAGEM 10: Prato vegano ----
 INSERT INTO
   imagem (id, nome, conteudo, tipo)
 VALUES
@@ -845,8 +846,8 @@ VALUES
     UNHEX (
       REPLACE('601ad0e7-9de1-4be4-a578-6a591e6cfdfb', '-', '')
     ),
-    'tofu.jpg',
-    'FFD8FFE000104A464946',
+    'prato_vegano.jpg',
+    X'FFD8FFE000104A464946',
     'image/jpeg'
   );
 
