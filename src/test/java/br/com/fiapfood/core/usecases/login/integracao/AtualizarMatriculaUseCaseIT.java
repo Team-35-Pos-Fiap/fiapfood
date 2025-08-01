@@ -32,7 +32,6 @@ public class AtualizarMatriculaUseCaseIT {
     private final String USUARIO_INATIVO = "Não é possível alterar a matrícula, pois o usuário está inativo.";
     private final String MATRICULA_DUPLICADA = "Já existe um usuário com a matrícula informada.";
     private final String USUARIO_NAO_ENCONTRADO = "Não foi encontrado nenhum usuário.";
-    private final String PERFIS_NAO_ENCONTRADOS = "Não foi encontrado nenhum perfil com o id informado.";
 
     private IAtualizarMatriculaUseCase atualizarMatriculaUseCase;
     private IPerfilGateway perfilGateway;
