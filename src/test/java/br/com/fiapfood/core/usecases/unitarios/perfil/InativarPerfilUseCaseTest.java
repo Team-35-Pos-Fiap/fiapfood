@@ -9,6 +9,7 @@ import br.com.fiapfood.core.usecases.perfil.impl.InativarPerfilUseCase;
 import br.com.fiapfood.core.usecases.perfil.interfaces.IInativarPerfilUseCase;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -45,6 +46,7 @@ public class InativarPerfilUseCaseTest {
         mock.close();
     }
 
+    @DisplayName("Deve inativar perfil com sucesso.")
     @Test
     void deveInativarPerfilComSucesso() {
         // Arrange
@@ -68,6 +70,7 @@ public class InativarPerfilUseCaseTest {
         assertThat(captor.getValue().dataInativacao()).isNotNull();
     }
 
+    @DisplayName("Deve inativar perfil com erro. Perfil não encontrado através do ID.")
     @Test
     void deveLancarExcecaoSeNaoEncontrarPerfilPorId() {
         // Arrange
@@ -86,6 +89,7 @@ public class InativarPerfilUseCaseTest {
         verify(perfilGateway, times(0)).salvar(any(PerfilCoreDto.class));
     }
 
+    @DisplayName("Deve inativar perfil com erro. Usuários ativos cadastrados com perfil.")
     @Test
     void deveLancarExcecaoSeUsuariosAtivosEstiveremRegistradosComPerfil() {
         // Arrange
