@@ -42,13 +42,13 @@ VALUES
     UNHEX (
       REPLACE('de6762a9-e373-4a05-a6bb-d345a759b26f', '-', '')
     ),
-    'São Gonçalo',
-    'Nova Cidade',
+    'Niterói',
+    'Barreto',
     'Rio de Janeiro',
-    'Rua Aquidabã',
-    '79',
-    'Casa 8',
-    '24455450'
+    'Avenida do Contorno',
+    '5',
+    'Quadra 2',
+    '24455786'
   );
 
 INSERT INTO
@@ -79,8 +79,8 @@ VALUES
     UNHEX (
       REPLACE('cf05db14-7993-4564-bff9-c258b5c7387c', '-', '')
     ),
-    'Thiago Motta',
-    'thiago@fiapfood.com',
+    'José Magalhaes',
+    'jose.magalhaes@fiapfood.com',
     TRUE,
     current_timestamp,
     null,

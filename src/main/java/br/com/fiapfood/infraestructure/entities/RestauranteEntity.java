@@ -33,7 +33,7 @@ public class RestauranteEntity {
     @Column(nullable = false)
     private String nome;
 
-	@OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_endereco")
     private EnderecoEntity endereco;
 
