@@ -6,10 +6,12 @@ import br.com.fiapfood.core.exceptions.perfil.PerfilInvalidoException;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
 import br.com.fiapfood.core.usecases.perfil.impl.AtualizarNomePerfilUseCase;
 import br.com.fiapfood.core.usecases.perfil.interfaces.IAtualizarNomePerfilUseCase;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -52,6 +54,7 @@ public class AtualizarNomePerfilUseCaseTest {
         when(perfilGateway.nomeJaCadastrado(anyString())).thenReturn(false); // Novo nome nao cadastrado
         when(perfilGateway.buscarPorId(anyInt())).thenReturn(perfilRetornado);
 
+        ArgumentCaptor<PerfilCoreDto> captor = ArgumentCaptor.forClass(PerfilCoreDto.class);
         // Act
         atualizarNomePerfilUseCase.atualizar(perfilId,novoNome);
 
@@ -59,7 +62,13 @@ public class AtualizarNomePerfilUseCaseTest {
         assertThat(perfilRetornado.getNome()).isEqualTo(novoNome);
         verify(perfilGateway, times(1)).nomeJaCadastrado(anyString());
         verify(perfilGateway, times(1)).buscarPorId(anyInt());
-        verify(perfilGateway, times(1)).salvar(any(PerfilCoreDto.class));
+        verify(perfilGateway, times(1)).salvar(captor.capture());
+        Assertions.assertThat(captor.getValue()).isNotNull();
+        Assertions.assertThat(captor.getValue().nome()).isEqualTo(novoNome);
+        Assertions.assertThat(captor.getValue().dataCriacao()).isNotNull();
+        Assertions.assertThat(captor.getValue().dataInativacao()).isNull();
+        Assertions.assertThat(captor.getValue().id()).isNotNull();
+        Assertions.assertThat(captor.getValue().id()).isEqualTo(perfilId);
     }
 
     @DisplayName("Deve atualizar nome do perfil com erro. Novo nome já cadastrado.")
