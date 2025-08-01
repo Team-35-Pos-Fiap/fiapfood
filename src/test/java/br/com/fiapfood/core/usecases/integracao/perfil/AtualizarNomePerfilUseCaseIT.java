@@ -1,44 +1,42 @@
-package br.com.fiapfood.core.usecases.unitarios.perfil;
+package br.com.fiapfood.core.usecases.integracao.perfil;
 
-import br.com.fiapfood.core.entities.dto.perfil.PerfilCoreDto;
+import br.com.fiapfood.core.entities.Perfil;
 import br.com.fiapfood.core.exceptions.perfil.NomePerfilDuplicadoException;
 import br.com.fiapfood.core.exceptions.perfil.PerfilInvalidoException;
+import br.com.fiapfood.core.gateways.impl.PerfilGateway;
 import br.com.fiapfood.core.gateways.interfaces.IPerfilGateway;
 import br.com.fiapfood.core.usecases.perfil.impl.AtualizarNomePerfilUseCase;
 import br.com.fiapfood.core.usecases.perfil.interfaces.IAtualizarNomePerfilUseCase;
-import org.junit.jupiter.api.AfterEach;
+import br.com.fiapfood.infraestructure.repositories.interfaces.IPerfilRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
-import static br.com.fiapfood.utils.CoreEntityDataGenerator.corePerfilEntityValido;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 
-public class AtualizarNomePerfilUseCaseTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Sql(scripts = {"/db_clean.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = {"/db_load.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+public class AtualizarNomePerfilUseCaseIT {
 
     private final String PERFIL_DUPLICADO = "Já existe um perfil com o nome informado.";
     private final String PERFIS_NAO_ENCONTRADOS = "Não foi encontrado nenhum perfil com o id informado.";
 
-    @Mock
-    private IPerfilGateway perfilGateway;
     private IAtualizarNomePerfilUseCase atualizarNomePerfilUseCase;
+    private IPerfilGateway perfilGateway;
 
-    AutoCloseable mock;
+    @Autowired
+    private IPerfilRepository perfilRepository;
 
     @BeforeEach
-    void setUp() {
-        mock = MockitoAnnotations.openMocks(this);
-        atualizarNomePerfilUseCase = new AtualizarNomePerfilUseCase(perfilGateway);
-    }
+    public void setUp() {
+        perfilGateway = new PerfilGateway(perfilRepository);
 
-    @AfterEach
-    void tearDown() throws Exception {
-        mock.close();
+        atualizarNomePerfilUseCase = new AtualizarNomePerfilUseCase(perfilGateway);
     }
 
     @DisplayName("Deve atualizar nome do perfil com sucesso.")
@@ -47,19 +45,18 @@ public class AtualizarNomePerfilUseCaseTest {
         // Arrange
         int perfilId = 1;
         String novoNome = "Funcionario";
-        var perfilRetornado = corePerfilEntityValido();
-
-        when(perfilGateway.nomeJaCadastrado(anyString())).thenReturn(false); // Novo nome nao cadastrado
-        when(perfilGateway.buscarPorId(anyInt())).thenReturn(perfilRetornado);
+        Perfil perfilAntesDeAtualizar = perfilGateway.buscarPorId(perfilId);
+        String perfilNomeAntesDeAtualizar = perfilAntesDeAtualizar.getNome();
 
         // Act
         atualizarNomePerfilUseCase.atualizar(perfilId,novoNome);
 
+        Perfil perfilAposAtualizar = perfilGateway.buscarPorId(perfilId);
+        String perfilNomeAposAtualizar = perfilAposAtualizar.getNome();
+
         // Assert
-        assertThat(perfilRetornado.getNome()).isEqualTo(novoNome);
-        verify(perfilGateway, times(1)).nomeJaCadastrado(anyString());
-        verify(perfilGateway, times(1)).buscarPorId(anyInt());
-        verify(perfilGateway, times(1)).salvar(any(PerfilCoreDto.class));
+        assertThat(perfilNomeAntesDeAtualizar).isNotEqualTo(perfilNomeAposAtualizar);
+        assertThat(perfilNomeAposAtualizar).isEqualTo(novoNome);
     }
 
     @DisplayName("Deve atualizar nome do perfil com erro. Novo nome já cadastrado.")
@@ -67,35 +64,24 @@ public class AtualizarNomePerfilUseCaseTest {
     void deveLancarExcecaoSeNovoNomeJaCadastrado() {
         // Arrange
         int perfilId = 1;
-        String novoNome = "Funcionario";
-
-        when(perfilGateway.nomeJaCadastrado(anyString())).thenReturn(true); // Novo nome nao cadastrado
+        String novoNome = "Cliente";
 
         // Act & Assert
         assertThatThrownBy(() -> atualizarNomePerfilUseCase.atualizar(perfilId, novoNome))
                 .isInstanceOf(NomePerfilDuplicadoException.class)
                 .hasMessage(PERFIL_DUPLICADO);
-        verify(perfilGateway, times(1)).nomeJaCadastrado(anyString());
-        verify(perfilGateway, times(0)).buscarPorId(anyInt());
-        verify(perfilGateway, times(0)).salvar(any(PerfilCoreDto.class));
     }
 
     @DisplayName("Deve atualizar nome do perfil com erro. Perfil náo encontrado através do ID.")
     @Test
     void deveLancarExcecaoSeNaoEncontrarPerfilAtravesDoId() {
         // Arrange
-        int perfilId = 1;
+        int perfilId = 10;
         String novoNome = "Funcionario";
-
-        when(perfilGateway.nomeJaCadastrado(anyString())).thenReturn(false); // Novo nome nao cadastrado
-        when(perfilGateway.buscarPorId(anyInt())).thenThrow(new PerfilInvalidoException(PERFIS_NAO_ENCONTRADOS));
 
         //Act & Assert
         assertThatThrownBy(() -> atualizarNomePerfilUseCase.atualizar(perfilId, novoNome))
                 .isInstanceOf(PerfilInvalidoException.class)
                 .hasMessage(PERFIS_NAO_ENCONTRADOS);
-        verify(perfilGateway, times(1)).nomeJaCadastrado(anyString());
-        verify(perfilGateway, times(1)).buscarPorId(anyInt());
-        verify(perfilGateway, times(0)).salvar(any(PerfilCoreDto.class));
     }
 }
