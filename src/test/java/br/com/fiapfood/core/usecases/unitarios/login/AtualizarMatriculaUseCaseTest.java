@@ -1,4 +1,4 @@
-package br.com.fiapfood.core.usecases.login.unitarios;
+package br.com.fiapfood.core.usecases.unitarios.login;
 
 import br.com.fiapfood.core.entities.Usuario;
 import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioCoreDto;

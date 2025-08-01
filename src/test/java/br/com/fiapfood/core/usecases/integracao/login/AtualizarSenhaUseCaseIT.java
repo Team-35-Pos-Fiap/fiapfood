@@ -1,4 +1,4 @@
-package br.com.fiapfood.core.usecases.login.integracao;
+package br.com.fiapfood.core.usecases.integracao.login;
 
 import br.com.fiapfood.core.entities.Usuario;
 import br.com.fiapfood.core.exceptions.usuario.UsuarioInativoException;

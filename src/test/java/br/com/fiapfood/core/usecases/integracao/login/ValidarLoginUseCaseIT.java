@@ -1,46 +1,42 @@
-package br.com.fiapfood.core.usecases.login.unitarios;
+package br.com.fiapfood.core.usecases.integracao.login;
 
-import br.com.fiapfood.core.entities.Usuario;
 import br.com.fiapfood.core.exceptions.usuario.UsuarioNaoEncontradoException;
 import br.com.fiapfood.core.exceptions.usuario.UsuarioSemAcessoException;
+import br.com.fiapfood.core.gateways.impl.UsuarioGateway;
 import br.com.fiapfood.core.gateways.interfaces.IUsuarioGateway;
 import br.com.fiapfood.core.usecases.login.impl.ValidarLoginUseCase;
 import br.com.fiapfood.core.usecases.login.interfaces.IValidarAcessoUseCase;
-import org.junit.jupiter.api.AfterEach;
+import br.com.fiapfood.infraestructure.repositories.interfaces.IUsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
-import static br.com.fiapfood.utils.CoreEntityDataGenerator.coreUsuarioEntityAtivoValido;
-import static br.com.fiapfood.utils.CoreEntityDataGenerator.coreUsuarioEntityInativoValido;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.*;
 
-public class ValidarLoginUseCaseTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Sql(scripts = {"/db_clean.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = {"/db_load.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+public class ValidarLoginUseCaseIT {
 
     private final String USUARIO_INATIVO = "Não é possível realizar o login para usuários inativos.";
     private final String USUARIO_NAO_ENCONTRADO = "Não foi encontrado nenhum usuário.";
     private final String ACESSO_LIBERADO = "Acesso liberado para o usuário ";
 
-    @Mock
+    private IValidarAcessoUseCase validarLoginUseCase;
     private IUsuarioGateway usuarioGateway;
 
-    IValidarAcessoUseCase validarLoginUseCase;
-
-    AutoCloseable mock;
+    @Autowired
+    IUsuarioRepository usuarioRepository;
 
     @BeforeEach
     void setUp() {
-        mock = MockitoAnnotations.openMocks(this);
-        validarLoginUseCase = new ValidarLoginUseCase(usuarioGateway);
-    }
+        usuarioGateway = new UsuarioGateway(usuarioRepository);
 
-    @AfterEach
-    void tearDown() throws Exception {
-        mock.close();
+        validarLoginUseCase = new ValidarLoginUseCase(usuarioGateway);
     }
 
     @DisplayName("Deve validar login com sucesso.")
@@ -48,50 +44,51 @@ public class ValidarLoginUseCaseTest {
     void deveValidarUsuarioSucesso() {
         // Arrange
         String matricula = "us0001";
-        String senha = "us0001";
+        String senha = "123";
 
-        Usuario usuarioRetornado = coreUsuarioEntityAtivoValido();
-
-        when(usuarioGateway.buscarPorMatriculaSenha(anyString(), anyString())).thenReturn(usuarioRetornado);
+        var usuario = usuarioGateway.buscarPorMatriculaSenha(matricula, senha);
 
         // Act
         var mensagem = validarLoginUseCase.validar(matricula, senha);
 
         // Assert
-        verify(usuarioGateway, times(1)).buscarPorMatriculaSenha(anyString(), anyString());
-        assertThat(mensagem).isEqualTo(ACESSO_LIBERADO + usuarioRetornado.getNome());
+        assertThat(mensagem).isEqualTo(ACESSO_LIBERADO + usuario.getNome());
     }
 
     @DisplayName("Deve validar login com erro. Usuário não encontrado através da matricula e senha.")
     @Test
     void deveLancarExcecaoSeUsuarioNaoEncontradoAtravesDaMatriculaESenha(){
         // Arrange
-        String matricula = "us0001";
-        String senha = "us0001";
-
-        when(usuarioGateway.buscarPorMatriculaSenha(anyString(), anyString())).thenThrow(new UsuarioNaoEncontradoException(USUARIO_NAO_ENCONTRADO));
+        String matricula = "us0010";
+        String senha = "us0002";
 
         // Act & Assert
         assertThatThrownBy(() -> validarLoginUseCase.validar(matricula, senha))
                 .isInstanceOf(UsuarioNaoEncontradoException.class)
                 .hasMessage(USUARIO_NAO_ENCONTRADO);
-        verify(usuarioGateway, times(1)).buscarPorMatriculaSenha(anyString(), anyString());
     }
 
     @DisplayName("Deve validar login com erro. Usuário encontrado está inativo.")
     @Test
     void deveLancarExcecaoSeUsuarioEstiverInativo(){
         // Arrange
-        String matricula = "us0001";
-        String senha = "us0001";
-        Usuario usuarioRetornado = coreUsuarioEntityInativoValido();
-
-        when(usuarioGateway.buscarPorMatriculaSenha(anyString(), anyString())).thenReturn(usuarioRetornado);
+        String matricula = "us0003";
+        String senha = "123";
 
         // Act & Assert
         assertThatThrownBy(() -> validarLoginUseCase.validar(matricula, senha))
                 .isInstanceOf(UsuarioSemAcessoException.class)
                 .hasMessage(USUARIO_INATIVO);
-        verify(usuarioGateway, times(1)).buscarPorMatriculaSenha(anyString(), anyString());
+    }
+
+    @DisplayName("Deve lançar exceção se a senha estiver incorreta")
+    @Test
+    void deveLancarExcecaoSeSenhaEstiverIncorreta() {
+        String matricula = "us0001";
+        String senhaErrada = "wrong";
+
+        assertThatThrownBy(() -> validarLoginUseCase.validar(matricula, senhaErrada))
+                .isInstanceOf(UsuarioNaoEncontradoException.class)
+                .hasMessage(USUARIO_NAO_ENCONTRADO);
     }
 }
