@@ -139,8 +139,8 @@ public class UsuarioRepositoryIT {
         // Assert
         assertThat(paginaUsuarios).isNotNull();
         assertThat(paginaUsuarios.usuarios()).isNotEmpty();
-        assertThat(paginaUsuarios.usuarios().size()).isLessThanOrEqualTo(4);
-        assertThat(paginaUsuarios.paginacao().totalItens()).isEqualTo(4);
+        assertThat(paginaUsuarios.usuarios().size()).isLessThanOrEqualTo(5);
+        assertThat(paginaUsuarios.paginacao().totalItens()).isEqualTo(5);
         assertThat(paginaUsuarios.paginacao().paginaAtual()).isEqualTo(1);
         assertThat(paginaUsuarios.paginacao().totalPaginas()).isEqualTo(1);
     }
@@ -196,7 +196,7 @@ public class UsuarioRepositoryIT {
         // Assert
         assertThat(usuariosEncontrados).isNotNull();
         assertThat(usuariosEncontrados).isNotEmpty();
-        assertThat(usuariosEncontrados.size()).isEqualTo(2);
+        assertThat(usuariosEncontrados.size()).isEqualTo(3);
         assertThat(usuariosEncontrados.getFirst().idPerfil()).isEqualTo(perfilIdExistente);
         assertThat(usuariosEncontrados.getLast().idPerfil()).isEqualTo(perfilIdExistente);
     }
