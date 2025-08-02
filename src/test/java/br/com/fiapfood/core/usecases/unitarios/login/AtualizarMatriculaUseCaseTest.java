@@ -108,7 +108,7 @@ public class AtualizarMatriculaUseCaseTest {
         Usuario usuarioRetornado = coreUsuarioEntityAtivoValido();
 
         when(usuarioGateway.buscarPorId(any(UUID.class))).thenReturn(usuarioRetornado);
-        when(usuarioGateway.matriculaJaCadastrada(anyString())).thenThrow(new MatriculaDuplicadaException(MATRICULA_DUPLICADA));
+        when(usuarioGateway.matriculaJaCadastrada(anyString())).thenReturn(true);
         when(perfilGateway.buscarPorId(anyInt())).thenReturn(corePerfilEntityValido());
         doNothing().when(usuarioGateway).salvar(any(DadosUsuarioCoreDto.class));
 
