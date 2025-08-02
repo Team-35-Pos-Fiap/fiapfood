@@ -1,42 +1,39 @@
-package br.com.fiapfood.core.usecases.unitarios.tipo_culinaria;
+package br.com.fiapfood.core.usecases.integracao.tipo_culinaria;
 
-import br.com.fiapfood.core.entities.dto.tipo_culinaria.TipoCulinariaCoreDto;
 import br.com.fiapfood.core.exceptions.perfil.NomePerfilDuplicadoException;
 import br.com.fiapfood.core.exceptions.tipo_culinaria.NomeTipoCulinariaInvalidoException;
+import br.com.fiapfood.core.gateways.impl.TipoCulinariaGateway;
 import br.com.fiapfood.core.gateways.interfaces.ITipoCulinariaGateway;
 import br.com.fiapfood.core.usecases.tipo_culinaria.impl.CadastrarTipoCulinariaUseCase;
 import br.com.fiapfood.core.usecases.tipo_culinaria.interfaces.ICadastrarTipoCulinariaUseCase;
-import org.junit.jupiter.api.AfterEach;
+import br.com.fiapfood.infraestructure.repositories.interfaces.ITipoCulinariaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 
-public class CadastrarTipoCulinariaUseCaseTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Sql(scripts = {"/db_clean.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = {"/db_load.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+public class CadastrarTipoCulinariaUseCaseIT {
     private final String PERFIL_DUPLICADO = "Já existe um tipo de culinária com o nome informado.";
 
-    @Mock
-    private ITipoCulinariaGateway tipoCulinariaGateway;
     private ICadastrarTipoCulinariaUseCase cadastrarTipoCulinariaUseCase;
+    private ITipoCulinariaGateway tipoCulinariaGateway;
 
-    AutoCloseable mock;
+    @Autowired
+    private ITipoCulinariaRepository tipoCulinariaRepository;
 
     @BeforeEach
-    void setUp() {
-        mock = MockitoAnnotations.openMocks(this);
-        cadastrarTipoCulinariaUseCase = new CadastrarTipoCulinariaUseCase(tipoCulinariaGateway);
-    }
+    public void setUp() {
+        tipoCulinariaGateway = new TipoCulinariaGateway(tipoCulinariaRepository);
 
-    @AfterEach
-    void tearDown() throws Exception {
-        mock.close();
+        cadastrarTipoCulinariaUseCase = new CadastrarTipoCulinariaUseCase(tipoCulinariaGateway);
     }
 
     @DisplayName("Deve cadastrar tipo culinária com sucesso.")
@@ -45,35 +42,25 @@ public class CadastrarTipoCulinariaUseCaseTest {
         // Arrange
         String novoNome = "Grega";
 
-        when(tipoCulinariaGateway.nomeJaCadastrado(anyString())).thenReturn(false); // Nome não cadastrado
-
-        ArgumentCaptor<TipoCulinariaCoreDto> captor = ArgumentCaptor.forClass(TipoCulinariaCoreDto.class);
-
         // Act
         cadastrarTipoCulinariaUseCase.cadastrar(novoNome);
+        var todosTiposCulinaria = tipoCulinariaGateway.buscarTodos();
+        boolean novoTipoRegisterado = todosTiposCulinaria.stream().anyMatch(tipo -> tipo.getNome().equals(novoNome));
 
         // Assert
-        verify(tipoCulinariaGateway, times(1)).nomeJaCadastrado(anyString());
-        verify(tipoCulinariaGateway, times(1)).salvar(captor.capture());
-        assertThat(captor.getValue()).isNotNull();
-        assertThat(captor.getValue().nome()).isEqualTo(novoNome);
-        assertThat(captor.getValue().id()).isNull();
+        assertThat(novoTipoRegisterado).isTrue();
     }
 
     @DisplayName("Deve cadastrar tipo culinária com erro. Novo nome já cadastrado.")
     @Test
     void deveLancarExcecaoSeNomeJaCadastrado() {
         // Arrange
-        String novoNome = "Grega";
-
-        when(tipoCulinariaGateway.nomeJaCadastrado(anyString())).thenReturn(true); // Nome ja cadastrado
+        String novoNome = "Brasileira";
 
         // Act & Assert
         assertThatThrownBy(() -> cadastrarTipoCulinariaUseCase.cadastrar(novoNome))
                 .isInstanceOf(NomePerfilDuplicadoException.class)
                 .hasMessage(PERFIL_DUPLICADO);
-        verify(tipoCulinariaGateway, times(1)).nomeJaCadastrado(anyString());
-        verify(tipoCulinariaGateway, times(0)).salvar(any(TipoCulinariaCoreDto.class));
     }
 
     @DisplayName("Deve cadastrar tipo culinária com erro. Novo nome inválido")
@@ -82,13 +69,9 @@ public class CadastrarTipoCulinariaUseCaseTest {
         // Arrange
         String novoNome = "";
 
-        when(tipoCulinariaGateway.nomeJaCadastrado(anyString())).thenReturn(false); // Nome não cadastrado
-
         // Act & Assert
         assertThatThrownBy(() -> cadastrarTipoCulinariaUseCase.cadastrar( novoNome))
                 .isInstanceOf(NomeTipoCulinariaInvalidoException.class)
                 .hasMessage("O nome do tipo de culinária é inválido.");
-        verify(tipoCulinariaGateway, times(1)).nomeJaCadastrado(anyString());
-        verify(tipoCulinariaGateway, times(0)).salvar(any(TipoCulinariaCoreDto.class));
     }
 }
