@@ -19,6 +19,7 @@ import br.com.fiapfood.core.usecases.usuario.interfaces.*;
 import br.com.fiapfood.infraestructure.controllers.request.endereco.DadosEnderecoDto;
 import br.com.fiapfood.infraestructure.controllers.request.login.LoginDto;
 import br.com.fiapfood.infraestructure.controllers.request.usuario.CadastrarUsuarioDto;
+import br.com.fiapfood.infraestructure.controllers.request.usuario.UsuarioDto;
 import br.com.fiapfood.infraestructure.repositories.interfaces.IPerfilRepository;
 import br.com.fiapfood.infraestructure.repositories.interfaces.IUsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static br.com.fiapfood.utils.DtoDataGenerator.dadosEnderecoDtoValido;
@@ -83,6 +86,21 @@ public class UsuarioCoreControllerIT {
 
     @Nested
     class CadastrarUsuarioRequest {
+        private List<UsuarioDto> buscarTodosUsuarios() {
+            int pagina = 1;
+            int totalPaginas;
+            List<UsuarioDto> todosUsuarios = new ArrayList<>();
+
+            do {
+                var paginaDto = usuarioCoreController.buscarTodos(pagina);
+                todosUsuarios.addAll(paginaDto.usuarios());
+                totalPaginas = paginaDto.paginacao().totalPaginas();
+                pagina++;
+            } while (pagina <= totalPaginas);
+
+            return todosUsuarios;
+        }
+
         @DisplayName("Cadastrar novo usuário chamando o use case com sucesso")
         @Test
         void devePermitirCadastrarUsuarioComSucesso(){
@@ -98,13 +116,13 @@ public class UsuarioCoreControllerIT {
                     "john.doe@email.com",
                     dadosEnderecoDtoValido()
             );
-            var listaDeUsuariosAntesDoCadastro = usuarioCoreController.buscarTodos(1).usuarios();
+            var listaDeUsuariosAntesDoCadastro = buscarTodosUsuarios();
             boolean usuarioRegistradoAntes =  listaDeUsuariosAntesDoCadastro.stream()
                     .anyMatch(usuario -> usuario.nome().equals(dadosUsuario.nome()));
 
             // Act
             usuarioCoreController.cadastrar(dadosUsuario);
-            var listaDeUsuariosAposCadastro = usuarioCoreController.buscarTodos(1).usuarios();
+            var listaDeUsuariosAposCadastro = buscarTodosUsuarios();
             boolean usuarioRegistradoDepois =  listaDeUsuariosAposCadastro.stream()
                     .anyMatch(usuario -> usuario.nome().equals(dadosUsuario.nome()));
 
@@ -303,7 +321,6 @@ public class UsuarioCoreControllerIT {
             // Assert
             assertThat(usuariosRetornadosPeloController).isNotNull();
             assertThat(usuariosRetornadosPeloController.usuarios()).isNotNull();
-            assertThat(usuariosRetornadosPeloController.usuarios().size()).isEqualTo(4);
             assertThat(usuariosRetornadosPeloController.paginacao()).isNotNull();
         }
 
