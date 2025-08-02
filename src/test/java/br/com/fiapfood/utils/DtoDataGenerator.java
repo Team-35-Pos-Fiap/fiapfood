@@ -1,22 +1,32 @@
 package br.com.fiapfood.utils;
 
+import br.com.fiapfood.core.entities.dto.atendimento.AtendimentoCoreDto;
 import br.com.fiapfood.core.entities.dto.endereco.DadosEnderecoCoreDto;
 import br.com.fiapfood.core.entities.dto.endereco.EnderecoCoreDto;
 import br.com.fiapfood.core.entities.dto.login.LoginCoreDto;
+import br.com.fiapfood.core.entities.dto.paginacao.PaginacaoCoreDto;
 import br.com.fiapfood.core.entities.dto.perfil.PerfilCoreDto;
+import br.com.fiapfood.core.entities.dto.restaurante.CadastrarRestauranteCoreDto;
+import br.com.fiapfood.core.entities.dto.restaurante.DadosRestauranteCoreDto;
+import br.com.fiapfood.core.entities.dto.restaurante.RestaurantePaginacaoCoreDto;
 import br.com.fiapfood.core.entities.dto.tipo_culinaria.TipoCulinariaCoreDto;
 import br.com.fiapfood.core.entities.dto.usuario.CadastrarUsuarioCoreDto;
 import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioCoreDto;
+import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioResumidoCoreDto;
+import br.com.fiapfood.infraestructure.controllers.request.atendimento.AtendimentoDto;
 import br.com.fiapfood.infraestructure.controllers.request.endereco.DadosEnderecoDto;
 import br.com.fiapfood.infraestructure.controllers.request.endereco.EnderecoDto;
 import br.com.fiapfood.infraestructure.controllers.request.login.LoginDto;
 import br.com.fiapfood.infraestructure.controllers.request.perfil.PerfilDto;
+import br.com.fiapfood.infraestructure.controllers.request.restaurante.CadastrarRestauranteDto;
 import br.com.fiapfood.infraestructure.controllers.request.tipo_culinaria.TipoCulinariaDto;
 import br.com.fiapfood.infraestructure.controllers.request.usuario.CadastrarUsuarioDto;
 import br.com.fiapfood.infraestructure.controllers.request.usuario.UsuarioDto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.UUID;
 
 public class DtoDataGenerator {
@@ -138,7 +148,7 @@ public class DtoDataGenerator {
         );
     }
 
-    public static DadosUsuarioCoreDto dadosUsuarioCoreDtoValido() {
+    public static DadosUsuarioCoreDto  dadosUsuarioCoreDtoValido() {
         return new DadosUsuarioCoreDto(
                 UUID.fromString("c626f4f2-9693-4fbd-9086-ee8b0bf5febb"),
                 "John Doe",
@@ -152,12 +162,99 @@ public class DtoDataGenerator {
         );
     }
 
+    public static DadosUsuarioResumidoCoreDto dadosUsuarioResumidoCoreDto() {
+        return new DadosUsuarioResumidoCoreDto(
+                UUID.fromString("c626f4f2-9693-4fbd-9086-ee8b0bf5febb"),
+                "John Doe",
+                "us0001",
+                "john.doe@email.com"
+        );
+    }
+
     public static TipoCulinariaDto tipoCulinariaDtoValido() {
         return new TipoCulinariaDto(1, "Brasileira");
     }
 
     public static TipoCulinariaCoreDto tipoCulinariaCoreDtoValido() {
         return new TipoCulinariaCoreDto(1, "Brasileira");
+    }
+
+    public static AtendimentoCoreDto atendimentoCoreDtoValido() {
+        return new AtendimentoCoreDto(
+                UUID.fromString("3cb55da2-47b5-4625-98d4-92bdd29cbf06"),
+                "Atendimento Teste",
+                LocalTime.of(9, 0),
+                LocalTime.of(18, 0)
+        );
+    }
+
+    public static AtendimentoDto atendimentoDtoValido() {
+        return new AtendimentoDto(
+                UUID.fromString("3cb55da2-47b5-4625-98d4-92bdd29cbf06"),
+                "Atendimento Teste",
+                LocalTime.of(9, 0),
+                LocalTime.of(18, 0)
+        );
+    }
+
+    public static DadosRestauranteCoreDto dadosRestauranteCoreDtoValido() {
+        List<AtendimentoCoreDto> atendimentos = List.of(atendimentoCoreDtoValido(), atendimentoCoreDtoValido());
+
+        return new DadosRestauranteCoreDto(
+                UUID.fromString("0ec1442d-71cf-4c31-b95c-7fc80af6682e"),
+                "Restaurante Teste",
+                enderecoCoreDtoValido(),
+                true,
+                dadosUsuarioResumidoCoreDto(),
+                tipoCulinariaCoreDtoValido(),
+                atendimentos
+        );
+
+    }
+
+    public static RestaurantePaginacaoCoreDto restaurantePaginacaoCoreDtoValido() {
+        List<AtendimentoCoreDto> atendimentos = List.of(atendimentoCoreDtoValido(), atendimentoCoreDtoValido());
+
+        DadosRestauranteCoreDto restauranteDto = new DadosRestauranteCoreDto(
+                UUID.randomUUID(),
+                "Restaurante Teste",
+                enderecoCoreDtoValido(),
+                true,
+                dadosUsuarioResumidoCoreDto(),
+                tipoCulinariaCoreDtoValido(),
+                atendimentos
+        );
+
+        List<DadosRestauranteCoreDto> restauranteDtos = List.of(restauranteDto, restauranteDto);
+        PaginacaoCoreDto paginacao = new PaginacaoCoreDto(1, 1, 2);
+        return new RestaurantePaginacaoCoreDto(restauranteDtos, paginacao);
+
+    }
+
+    public static CadastrarRestauranteDto cadastrarRestauranteDtoValido() {
+        List<AtendimentoDto> atendimentos = List.of(atendimentoDtoValido(), atendimentoDtoValido());
+
+        return new CadastrarRestauranteDto(
+                "Restaurante Teste",
+                dadosEnderecoDtoValido(),
+                dadosUsuarioResumidoCoreDto().id(),
+                tipoCulinariaDtoValido().id(),
+                atendimentos
+        );
+
+    }
+
+    public static CadastrarRestauranteCoreDto cadastrarRestauranteCoreDtoValido() {
+        List<AtendimentoCoreDto> atendimentos = List.of(atendimentoCoreDtoValido(), atendimentoCoreDtoValido());
+
+        return new CadastrarRestauranteCoreDto(
+                "Restaurante Teste",
+                dadosEnderecoCoreDtoValido(),
+                dadosUsuarioResumidoCoreDto().id(),
+                tipoCulinariaDtoValido().id(),
+                atendimentos
+        );
+
     }
 
 
