@@ -1,12 +1,13 @@
 package br.com.fiapfood.utils;
 
-import br.com.fiapfood.core.entities.Endereco;
-import br.com.fiapfood.core.entities.Login;
-import br.com.fiapfood.core.entities.Perfil;
-import br.com.fiapfood.core.entities.Usuario;
+import br.com.fiapfood.core.entities.*;
 
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.UUID;
 
 public class CoreEntityDataGenerator {
@@ -67,4 +68,55 @@ public class CoreEntityDataGenerator {
                 coreEnderecoEntityValido()
         );
     }
+
+    public static TipoCulinaria coreTipoCulinariaEntityValido() {
+        return TipoCulinaria.criar(
+                3,
+                "Mexicana"
+        );
+    }
+
+    public static Atendimento coreAtendimentoEntityValido() {
+        return Atendimento.criar(
+                UUID.fromString("3e459c60-f3cc-4d77-8547-58a1f4988cb2"),
+                "Sábado",
+                LocalTime.of(9, 0),
+                LocalTime.of(17, 0)
+        );
+    }
+
+    public static Imagem coreImagemEntityValido() {
+        return Imagem.criar(
+                UUID.fromString("0cbb0d76-90fb-4e78-a37c-e85c5f3ec28d"),
+                "imagem_teste.png",
+                "Conteúdo de imagem".getBytes(StandardCharsets.UTF_8),
+                "image/png"
+        );
+    }
+
+    public static Item coreItemEntityValido() {
+        return Item.criar(
+                UUID.fromString("63b2143b-1e3a-47b5-92f4-f8cc4a3f9a0b"),
+                "Hambúrguer Artesanal",
+                "Pão brioche, carne 180g, queijo cheddar, cebola caramelizada",
+                new BigDecimal("29.90"),
+                true,
+                true,
+                coreImagemEntityValido()
+        );
+    }
+
+    public static Restaurante coreRestauranteEntityValido() {
+        return Restaurante.criar(
+                UUID.fromString("9a53e79b-15ff-4426-8f5d-5356318050cb"),
+                "Restaurante da Esquina",
+                coreEnderecoEntityValido(),
+                UUID.fromString("c21e5cf4-b539-4c3b-a510-11d6c4a45f36"),
+                2,
+                true,
+                List.of(coreAtendimentoEntityValido()),
+                List.of(coreItemEntityValido())
+        );
+    }
+
 }
