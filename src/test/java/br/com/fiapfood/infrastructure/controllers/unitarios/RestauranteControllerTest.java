@@ -396,7 +396,7 @@ class RestauranteControllerTest {
             verify(restauranteCoreController, times(1)).buscarItemPorId(eq(idRestaurante), eq(idItem));
         }
 
-        @DisplayName("Deve cadastrar um novo cardápio com sucesso")
+        @DisplayName("Deve cadastrar um novo item com sucesso")
         @Test
         void deveCadastrarItemComSucesso() throws Exception {
 

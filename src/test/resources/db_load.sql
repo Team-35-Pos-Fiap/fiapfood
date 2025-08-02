@@ -119,6 +119,30 @@ VALUES ('60127300-b56a-4394-a208-d9ef8eb864c7',
         2,
         '1524d4a4-3f99-46d2-92cb-890f5e690f74',
         '2de80d8c-3665-4beb-858a-d5f242b822be');
+---- USUARIO 5 ----
+INSERT INTO endereco (id, cidade, bairro, estado, endereco, numero, complemento, cep)
+VALUES ('dda486c8-a590-4604-91b4-e5bf90cbc540',
+        'Belo Horizonte',
+        'Savassi',
+        'MG',
+        'Rua Pernambuco',
+        '1322',
+        null,
+        '30130151');
+INSERT INTO login (id, matricula, senha)
+VALUES ('ae8ce370-4403-40d9-b080-d084cbbf4820',
+        'us0134',
+        '321');
+INSERT INTO usuario (id, nome, email, ativo, data_criacao, data_atualizacao, id_perfil, id_endereco, id_login)
+VALUES ('507bd6e5-ab40-4e91-818d-c9567f8b534e',
+        'Juliana Faustino',
+        'juliana.faust@fiapfood.com',
+        TRUE,
+        current_timestamp,
+        current_timestamp,
+        1,
+        'dda486c8-a590-4604-91b4-e5bf90cbc540',
+        'ae8ce370-4403-40d9-b080-d084cbbf4820');
 
 ---- TIPOS DE CULINARIA ----
 INSERT INTO tipo_culinaria (id, nome)
