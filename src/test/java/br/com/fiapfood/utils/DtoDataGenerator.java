@@ -3,6 +3,7 @@ package br.com.fiapfood.utils;
 import br.com.fiapfood.core.entities.dto.atendimento.AtendimentoCoreDto;
 import br.com.fiapfood.core.entities.dto.endereco.DadosEnderecoCoreDto;
 import br.com.fiapfood.core.entities.dto.endereco.EnderecoCoreDto;
+import br.com.fiapfood.core.entities.dto.item.ItemOutputCoreDto;
 import br.com.fiapfood.core.entities.dto.login.LoginCoreDto;
 import br.com.fiapfood.core.entities.dto.paginacao.PaginacaoCoreDto;
 import br.com.fiapfood.core.entities.dto.perfil.PerfilCoreDto;
@@ -14,6 +15,7 @@ import br.com.fiapfood.core.entities.dto.usuario.*;
 import br.com.fiapfood.infraestructure.controllers.request.atendimento.AtendimentoDto;
 import br.com.fiapfood.infraestructure.controllers.request.endereco.DadosEnderecoDto;
 import br.com.fiapfood.infraestructure.controllers.request.endereco.EnderecoDto;
+import br.com.fiapfood.infraestructure.controllers.request.item.ItemDto;
 import br.com.fiapfood.infraestructure.controllers.request.login.LoginDto;
 import br.com.fiapfood.infraestructure.controllers.request.perfil.PerfilDto;
 import br.com.fiapfood.infraestructure.controllers.request.restaurante.CadastrarRestauranteDto;
@@ -21,6 +23,7 @@ import br.com.fiapfood.infraestructure.controllers.request.tipo_culinaria.TipoCu
 import br.com.fiapfood.infraestructure.controllers.request.usuario.CadastrarUsuarioDto;
 import br.com.fiapfood.infraestructure.controllers.request.usuario.UsuarioDto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -278,5 +281,29 @@ public class DtoDataGenerator {
 
     public static PaginacaoCoreDto paginacaoCoreDtoValido() {
         return new PaginacaoCoreDto(1,1,2);
+    }
+
+    public static ItemOutputCoreDto itemOutputCoreDtoValido() {
+        return new ItemOutputCoreDto(
+                UUID.fromString("1192a947-5a29-4d60-b110-51f2e3ef8fc4"),
+                "Item Teste",
+                "Descricao item teste",
+                BigDecimal.valueOf(10.35),
+                true,
+                true,
+                "/images/item-teste.jpg"
+        );
+    }
+
+    public static ItemDto itemDtoValido() {
+        return new ItemDto(
+                UUID.fromString("1192a947-5a29-4d60-b110-51f2e3ef8fc4"),
+                "Item Teste",
+                "Descricao item teste",
+                BigDecimal.valueOf(10.35),
+                true,
+                true,
+                "/images/item-teste.jpg"
+        );
     }
 }
