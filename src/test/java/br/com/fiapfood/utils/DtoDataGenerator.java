@@ -10,9 +10,7 @@ import br.com.fiapfood.core.entities.dto.restaurante.CadastrarRestauranteCoreDto
 import br.com.fiapfood.core.entities.dto.restaurante.DadosRestauranteCoreDto;
 import br.com.fiapfood.core.entities.dto.restaurante.RestaurantePaginacaoCoreDto;
 import br.com.fiapfood.core.entities.dto.tipo_culinaria.TipoCulinariaCoreDto;
-import br.com.fiapfood.core.entities.dto.usuario.CadastrarUsuarioCoreDto;
-import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioCoreDto;
-import br.com.fiapfood.core.entities.dto.usuario.DadosUsuarioResumidoCoreDto;
+import br.com.fiapfood.core.entities.dto.usuario.*;
 import br.com.fiapfood.infraestructure.controllers.request.atendimento.AtendimentoDto;
 import br.com.fiapfood.infraestructure.controllers.request.endereco.DadosEnderecoDto;
 import br.com.fiapfood.infraestructure.controllers.request.endereco.EnderecoDto;
@@ -257,5 +255,28 @@ public class DtoDataGenerator {
 
     }
 
+    public static UsuarioPaginacaoInputDto usuarioPaginacaoInputDtoValido() {
+        return new UsuarioPaginacaoInputDto(
+            List.of(dadosUsuarioInputDtoValido(), dadosUsuarioInputDtoValido()),
+                paginacaoCoreDtoValido()
+        );
+    }
 
+    public static DadosUsuarioInputDto dadosUsuarioInputDtoValido() {
+        return new DadosUsuarioInputDto(
+                UUID.fromString("c626f4f2-9693-4fbd-9086-ee8b0bf5febb"),
+                "John Doe",
+                1,
+                loginCoreDtoValido(),
+                true,
+                "john.doe@email.com",
+                LocalDateTime.now(),
+                null,
+                enderecoCoreDtoValido()
+        );
+    }
+
+    public static PaginacaoCoreDto paginacaoCoreDtoValido() {
+        return new PaginacaoCoreDto(1,1,2);
+    }
 }
