@@ -108,23 +108,6 @@ class RestauranteCoreControllerTest {
     @Mock
     private ICadastrarItemUseCase cadastrarItemUseCase;
 
-
-    @Mock
-    private DadosRestauranteCoreDto restauranteDto;
-
-    @Mock
-    private EnderecoCoreDto enderecoDto;
-
-    @Mock
-    private DadosUsuarioResumidoCoreDto donoRestauranteDto;
-
-    @Mock
-    private TipoCulinariaCoreDto tipoCulinariaCoreDto;
-
-    @Mock
-    private AtendimentoCoreDto atendimentoCoreDto;
-
-
     AutoCloseable mock;
 
     @BeforeEach

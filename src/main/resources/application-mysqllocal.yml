@@ -2,9 +2,9 @@ spring:
   application:
     name: fiapfood
   datasource:
-    url: jdbc:mysql://localhost:3306/fiapfood?useSSL=false&createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/fiapfood?useSSL=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
     username: root
-    password: root
+    password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
