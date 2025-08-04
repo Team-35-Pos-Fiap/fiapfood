@@ -165,7 +165,7 @@ public class DtoDataGenerator {
 
     public static DadosUsuarioResumidoCoreDto dadosUsuarioResumidoCoreDto() {
         return new DadosUsuarioResumidoCoreDto(
-                UUID.fromString("c626f4f2-9693-4fbd-9086-ee8b0bf5febb"),
+                UUID.fromString("cf05db14-7993-4564-bff9-c258b5c7387c"),
                 "John Doe",
                 "us0001",
                 "john.doe@email.com"
