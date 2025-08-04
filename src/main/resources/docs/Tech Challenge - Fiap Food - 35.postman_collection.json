@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "3ca02f44-86ae-42c5-92ce-b7514ba858c8",
+		"_postman_id": "e61c9296-7ac2-4c7d-a5bb-dd689e72bfa0",
 		"name": "Tech Challenge - Fiap Food - 35",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "33904363"
@@ -1195,8 +1195,7 @@
 											"listen": "prerequest",
 											"script": {
 												"exec": [
-													"pm.collectionVariables.set(\"id-restaurante\", \"efeb85f2-53b3-4a81-8220-f7c4ebdbec8c\");\r",
-													"pm.collectionVariables.set(\"id-item\", \"1a466bd6-5500-40f3-afd2-d747ac470f67\");"
+													"pm.collectionVariables.set(\"id-restaurante\", \"21adec7d-d4f7-4999-a4dd-eaf0c242b3bd\");"
 												],
 												"type": "text/javascript",
 												"packages": {}
@@ -1207,13 +1206,34 @@
 										"method": "POST",
 										"header": [],
 										"body": {
-											"mode": "raw",
-											"raw": "{\r\n    \"descricao\" : \"descrição do item\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "nome",
+													"value": "Espetinho",
+													"type": "text"
+												},
+												{
+													"key": "descricao",
+													"value": "Prato com 1 espertinho e acompanhamentos",
+													"type": "text"
+												},
+												{
+													"key": "preco",
+													"value": "25.00",
+													"type": "text"
+												},
+												{
+													"key": "disponivelParaConsumoPresencial",
+													"value": "true",
+													"type": "text"
+												},
+												{
+													"key": "imagem",
+													"type": "file",
+													"src": []
 												}
-											}
+											]
 										},
 										"url": {
 											"raw": "http://localhost:8080/fiapfood/restaurantes/{{id-restaurante}}/itens",

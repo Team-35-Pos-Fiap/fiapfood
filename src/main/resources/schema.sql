@@ -91,7 +91,7 @@ create table imagem (
 	id binary(16) not null,
 	nome varchar(50) not null,
 	tipo varchar(20) not null,
-	conteudo blob not null,
+	conteudo longblob not null,
 	primary key(id)
 );
 
